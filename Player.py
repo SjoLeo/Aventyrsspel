@@ -10,7 +10,6 @@ class Player():
         self.HP += Added_HP
         self.DEF += Added_DEF
 
-
     def add_LVL(self, Added_LVL):
         self.LVL += Added_LVL
 
