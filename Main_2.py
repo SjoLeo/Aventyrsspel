@@ -1,21 +1,12 @@
-from Items import *
-from Monster import *
-from Player import *
-from main import *
+import Items
 
-# weapon = 2 slot
-weapon = []
-
-# armour = 2 slot
-armour = []
-
-# potion = 2 slot
-potion = []
-
-# inventory = 6 slots
-Inventory = [LongSword, BroadSword, Axe, Chestplate, Potion_of_health]
-
+import Player
 
 # Add item stats to player
-for item in Inventory:
-    player.add_stats(item.STR, item.HP, item.DEF)
+for item in Items.Inventory:
+    Player.player.add_stats(item.STR, item.HP, item.DEF)
+print(Player.player.STR, Player.player.HP, Player.player.DEF)
+# Add items to inventory
+print(len(Items.Inventory))
+Items.LongSword.add_item_to_inventory()
+print(len(Items.Inventory))

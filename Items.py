@@ -1,4 +1,4 @@
-from Main_2 import *
+
 
 class Item():
     def __init__(self, STR, HP, DEF):
@@ -8,6 +8,7 @@ class Item():
 
     def add_item_to_inventory(self):
         Inventory.append(self)
+
 
 
 # weapons
@@ -22,3 +23,16 @@ Chestplate = Item(0, 0, 5)
 # potion
 
 Potion_of_health = Item(0, 5, 0)
+
+
+# weapon = 2 slot
+weapon = []
+
+# armour = 2 slot
+armour = []
+
+# potion = 2 slot
+potion = []
+
+# inventory = 6 slots
+Inventory = [LongSword, BroadSword, Axe, Chestplate, Potion_of_health]

@@ -1,4 +1,7 @@
 import random as rand
+
+
+
 class Monster():
     def __init__(self, typ, STR, HP):
         self.STR = STR

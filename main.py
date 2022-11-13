@@ -1,5 +1,8 @@
+
+
+
 import pygame
-from Main_2 import *
+
 
 # initierar pygame
 pygame.init()
@@ -17,7 +20,7 @@ pygame.display.set_caption("Test Caption")
 
 
 # Game Loop
-'''
+
 while running:
 
     screen.fill((60, 50, 217))
@@ -26,4 +29,4 @@ while running:
             running = False
 
     pygame.display.update()
-'''
+
