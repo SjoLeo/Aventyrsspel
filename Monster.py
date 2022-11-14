@@ -23,6 +23,6 @@ class Monster():
 
 # def HP(self):
 
-Zombie = Monster(3, 5)
-print(Zombie.typ())
+Monster = Monster(3, 5)
+print(Monster.typ())
 
