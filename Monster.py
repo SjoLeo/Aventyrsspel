@@ -3,10 +3,9 @@ import random as rand
 
 
 class Monster():
-    def __init__(self, typ, STR, HP):
+    def __init__(self, STR, HP):
         self.STR = STR
         self.HP = HP
-        self.typ = typ
 
 
     def typ(self):
@@ -14,14 +13,16 @@ class Monster():
         monster = rand.randint(1, 10)
 
         if monster in range(1, 5):
-            typ = "zombie"
+            return "zombie"
 
         else:
-            typ = "spindel"
+            return "spindel"
 
 # def STR(self):
 
 
 # def HP(self):
 
-Zombie = Monster("zombie", 3, 5)
+Zombie = Monster(3, 5)
+print(Zombie.typ())
+
