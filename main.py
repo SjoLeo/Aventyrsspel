@@ -21,7 +21,7 @@ inventory_image = pygame.image.load('Images/Inventory_slot.png').convert_alpha()
 exit_image = pygame.image.load('Images/exit.png').convert_alpha()
 
 inventory_button = Buttons.Button(inventory_image, 0, 0, 0.3)
-exit_button = Buttons.Button(exit_image, 1100, 0, 0.5)
+exit_button = Buttons.Button(exit_image, 1100, 0, 0.05)
 # Game Loop
 
 while running:
