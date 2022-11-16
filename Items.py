@@ -6,8 +6,7 @@ class Item():
         self.hp = hp
         self.defence = defence
 
-    def add_item_to_inventory(self):
-        Inventory.append(self)
+
 
 
 

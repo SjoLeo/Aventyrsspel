@@ -4,8 +4,8 @@ import Player
 
 class Monster():
     def __init__(self):
-        self.strength = Player.player.lvl*10*(rand.randint(9, 12)/10)
-        '''self.hp = hp'''
+        self.strength = Player.player.lvl*(rand.randint(9, 12))
+        self.hp = Player.player.lvl*(rand.randint(9,12))
 
 
     def typ(self):
@@ -25,5 +25,5 @@ class Monster():
 
 Monster = Monster()
 print(Monster.typ())
-print(Monster.strength)
+print(f'styrka:{Monster.strength} hp: {Monster.hp} ')
 
