@@ -23,15 +23,3 @@ Chestplate = Item(0, 0, 5)
 
 Potion_of_health = Item(0, 5, 0)
 
-
-# weapon = 2 slot
-weapon = []
-
-# armour = 2 slot
-armour = []
-
-# potion = 2 slot
-potion = []
-
-# inventory = 6 slots
-Inventory = [LongSword, BroadSword, Axe, Chestplate, Potion_of_health]
