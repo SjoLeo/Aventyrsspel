@@ -18,10 +18,6 @@ class Monster():
         else:
             return "spindel"
 
-# def STR(self):
-
-
-# def HP(self):
 
 Monster = Monster()
 print(Monster.typ())

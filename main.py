@@ -5,11 +5,11 @@ import Buttons
 import pygame
 
 
-# initierar pygame
+# initiates pygame
 pygame.init()
 
 # Creates the screen
-screen = pygame.display.set_mode((1280, 645))
+screen = pygame.display.set_mode((1920, ))
 
 running = True
 
@@ -49,6 +49,8 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
+
+    show_test_text(textX, textY)
     pygame.display.update()
 
     
