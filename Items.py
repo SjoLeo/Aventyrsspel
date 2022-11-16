@@ -1,10 +1,10 @@
 
 
 class Item():
-    def __init__(self, STR, HP, DEF):
-        self.STR = STR
-        self.HP = HP
-        self.DEF = DEF
+    def __init__(self, strength, hp, defence):
+        self.strength = strength
+        self.hp = hp
+        self.defence = defence
 
     def add_item_to_inventory(self):
         Inventory.append(self)
