@@ -10,6 +10,7 @@ class Item():
 
 
 
+
 # weapons
 LongSword = Item(2, 0, 0)
 BroadSword = Item(3, 0, 0)

@@ -9,7 +9,7 @@ import pygame
 pygame.init()
 
 # Creates the screen
-screen = pygame.display.set_mode((1920, ))
+screen = pygame.display.set_mode((1280, 720))
 
 running = True
 

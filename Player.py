@@ -8,6 +8,7 @@ class Player():
         self.lvl = lvl
         self.inventory = [Items.LongSword, Items.BroadSword, Items.Axe, Items.Chestplate]
         self.selected_inventory = [Items.Chestplate, Items.LongSword, Items.Axe]
+
     def add_item_to_inventory(self, item):
         self.inventory.append(item)
 
@@ -16,6 +17,7 @@ class Player():
             self.strength += item.strength
             self.hp += item.hp
             self.defence += item.defence
+
     def add_lvl(self, added_lvl):
         self.lvl += added_lvl
 
