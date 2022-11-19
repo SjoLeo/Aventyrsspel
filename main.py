@@ -38,7 +38,7 @@ def show_text(text, x, y, color):
 
 # background
 main_menu_background = pygame.image.load("Images/pixil-frame-0.png")
-main_menu_background = pygame.transform.scale(main_menu_background, (1200, 675))
+main_menu_background = pygame.transform.scale(main_menu_background, (width, height))
 active_background = main_menu_background
 
 def background():
@@ -62,7 +62,6 @@ while running:
 
     if new_game_button.render_text_button(screen):
         print('clicked')
-
 
 
     for event in pygame.event.get():
