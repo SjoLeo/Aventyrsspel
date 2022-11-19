@@ -32,6 +32,9 @@ new_game_button = TextButton.TextButton(200, 200, 'New Game', 'blue')
 # Text
 font_alagard = pygame.font.Font("Fonts/alagard.ttf", 100)
 
+def show_text(text, x, y, color):
+    test_text = font_alagard.render(text, True, (color))
+    screen.blit(test_text, (x, y))
 
 # background
 main_menu_background = pygame.image.load("Images/pixil-frame-0.png")
@@ -59,6 +62,8 @@ while running:
 
     if new_game_button.render_text_button(screen):
         print('clicked')
+
+
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
