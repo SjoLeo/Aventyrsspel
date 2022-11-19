@@ -32,18 +32,24 @@ new_game_button = TextButton.TextButton(200, 200, 'New Game', 'blue')
 # Text
 font_alagard = pygame.font.Font("Fonts/alagard.ttf", 100)
 
-textX = 200
-textY = 200
 
-def show_test_text(x, y):
-    test_text = font_alagard.render("Test Text", True, (225, 225, 225))
-    screen.blit(test_text, (x, y))
+# background
+main_menu_background = pygame.image.load("Images/pixil-frame-0.png")
+main_menu_background = pygame.transform.scale(main_menu_background, (1200, 675))
+active_background = main_menu_background
+
+def background():
+    screen.blit(active_background, (0, 0))
+
 
 # Game Loop
 
 while running:
 
     screen.fill((60, 50, 217))
+    # Graphics
+    background()
+
     # checks if action happened and draws image
     if inventory_button.draw_button(screen):
         print('clicked')
@@ -59,7 +65,6 @@ while running:
             running = False
 
 
-    show_test_text(textX, textY)
     pygame.display.update()
 
     
