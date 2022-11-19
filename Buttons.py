@@ -11,7 +11,7 @@ class Button():
         self.rect.topleft = (x, y)
         self.clicked = False
 
-    def draw_button(self, surface):
+    def render_image_button(self, surface):
         # action = what should happen when clicked (determined in main)
         action = False
 

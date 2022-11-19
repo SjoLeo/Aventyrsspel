@@ -51,13 +51,13 @@ while running:
     background()
 
     # checks if action happened and draws image
-    if inventory_button.draw_button(screen):
+    if inventory_button.render_image_button(screen):
         print('clicked')
 
-    if exit_button.draw_button(screen):
+    if exit_button.render_image_button(screen):
         running = False
 
-    if new_game_button.draw_text(screen):
+    if new_game_button.render_text_button(screen):
         print('clicked')
 
     for event in pygame.event.get():

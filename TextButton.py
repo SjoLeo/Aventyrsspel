@@ -9,7 +9,7 @@ class TextButton():
         self.rect.topleft = (x, y)
 
 
-    def draw_text(self, surface):
+    def render_text_button(self, surface):
 
         action = False
 
