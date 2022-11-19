@@ -1,15 +1,18 @@
 import Buttons
-
+import TextButton
 
 
 import pygame
+
 
 
 # initiates pygame
 pygame.init()
 
 # Creates the screen
-screen = pygame.display.set_mode((1280, 720))
+width = 1200
+height = 675
+screen = pygame.display.set_mode((width, height))
 
 running = True
 
@@ -20,8 +23,11 @@ pygame.display.set_caption("Test Caption")
 inventory_image = pygame.image.load('Images/Inventory_slot.png').convert_alpha()
 exit_image = pygame.image.load('Images/exit.png').convert_alpha()
 
+# making button objects
 inventory_button = Buttons.Button(inventory_image, 0, 0, 0.3)
-exit_button = Buttons.Button(exit_image, 1100, 0, 0.5)
+exit_button = Buttons.Button(exit_image, width-150, 0, 0.5)
+
+new_game_button = TextButton.TextButton(200, 200, 'New Game', 'blue')
 
 # Text
 font_alagard = pygame.font.Font("Fonts/alagard.ttf", 100)
@@ -44,6 +50,9 @@ while running:
 
     if exit_button.draw_button(screen):
         running = False
+
+    if new_game_button.draw_text(screen):
+        print('clicked')
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
