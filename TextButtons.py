@@ -2,9 +2,9 @@ import pygame
 
 
 class TextButton():
-    def __init__(self, x, y, text, color):
-        font_alagard = pygame.font.Font("Fonts/alagard.ttf", 100)
-        self.text = font_alagard.render(text, True, color )
+    def __init__(self, x, y, text, color, font):
+        font = pygame.font.Font(font, 100)
+        self.text = font.render(text, True, color )
         self.rect = self.text.get_rect()
         self.rect.topleft = (x, y)
 

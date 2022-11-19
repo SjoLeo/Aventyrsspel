@@ -1,5 +1,5 @@
 import Buttons
-import TextButton
+import TextButtons
 
 
 import pygame
@@ -27,7 +27,7 @@ exit_image = pygame.image.load('Images/exit.png').convert_alpha()
 inventory_button = Buttons.Button(inventory_image, 0, 0, 0.3)
 exit_button = Buttons.Button(exit_image, width-150, 0, 0.5)
 
-new_game_button = TextButton.TextButton(200, 200, 'New Game', 'blue')
+new_game_button = TextButtons.TextButton(200, 200, 'New Game', 'blue', 'Fonts/alagard.ttf')
 
 # Text
 font_alagard = pygame.font.Font("Fonts/alagard.ttf", 100)
