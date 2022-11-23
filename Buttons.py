@@ -11,7 +11,7 @@ class Button():
         self.rect.topleft = (x, y)
         self.clicked = False
 
-    def render_image_button(self, surface):
+    def image_button(self):
         # action = what should happen when clicked (determined in main)
         action = False
 
@@ -26,7 +26,8 @@ class Button():
         if pygame.mouse.get_pressed()[0]== False:
             self.clicked = False
 
-        surface.blit(self.image, (self.rect.x, self.rect.y))
-
         # returns true or false
         return action
+
+    def render_image(self, surface):
+        surface.blit(self.image, (self.rect.x, self.rect.y))
