@@ -47,6 +47,11 @@ font_alagard = pygame.font.Font("Fonts/alagard.ttf", 100)
 # backgrounds
 main_menu_background = pygame.image.load("Images/Start bild.png")
 main_menu_background = pygame.transform.scale(main_menu_background, (width, height))
+
+
+main_room = pygame.image.load('Images/main room.png')
+main_room = pygame.transform.scale(main_room, (width, height))
+
 active_background = main_menu_background
 
 
