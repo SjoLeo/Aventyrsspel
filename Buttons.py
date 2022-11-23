@@ -24,6 +24,7 @@ class Button():
                 self.clicked = True
                 action = True
         if pygame.mouse.get_pressed()[0]== False:
+
             self.clicked = False
 
         # returns true or false

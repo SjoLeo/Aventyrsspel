@@ -94,17 +94,20 @@ while running:
     if exit_button.text_button():
         running = False
 
+    if show_door_button == True:
+        door_button.render_image(screen)
+        if door_button.image_button():
+            print(Door.random_room())
+
     if show_new_game_button == True:
         new_game_button.render_text(screen)
     if new_game_button.text_button():
         active_background = main_room
         show_new_game_button = False
+        time.sleep(0.5)
         show_door_button = True
 
-    if show_door_button == True:
-        door_button.render_image(screen)
-        if door_button.image_button():
-            print(Door.random_room())
+
 
 
 
