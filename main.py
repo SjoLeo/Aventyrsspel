@@ -1,6 +1,7 @@
 import Buttons
 import TextButtons
 
+import random
 
 import pygame
 
@@ -62,12 +63,13 @@ small_chest = pygame.image.load(("Images/Chest.png"))
 
 inventory_image = pygame.image.load('Images/Inventory_slot.png')
 
-door_image = pygame.image.load('Images/Dörr.png')
+door_image = pygame.image.load('Images/Door.png')
 
 # making button images
 inventory_button = Buttons.Button(inventory_image, 0, 0, 0.3)
-door_button = Buttons.Button(door_image, 100, 100, 6)
-
+door_button_1 = Buttons.Button(door_image, 100, 190, 6)
+door_button_2 = Buttons.Button(door_image, 500, 190, 6)
+door_button_3 = Buttons.Button(door_image, 900, 190, 6)
 # making button text
 exit_button = TextButtons.TextButton(width-100, 25, 'X', 'red', 'Fonts/alagard.ttf')
 new_game_button = TextButtons.TextButton(200, 200, 'New game', 'white', 'Fonts/alagard.ttf')
@@ -80,6 +82,8 @@ show_new_game_button = True
 show_door_button = False
 # Game Loop
 running = True
+
+# random.seed(69)
 while running:
 
     screen.fill((60, 50, 217))
@@ -94,18 +98,23 @@ while running:
     if exit_button.text_button():
         running = False
 
-    if show_door_button == True:
-        door_button.render_image(screen)
-        if door_button.image_button():
-            print(Door.random_room())
+
 
     if show_new_game_button == True:
         new_game_button.render_text(screen)
     if new_game_button.text_button():
         active_background = main_room
         show_new_game_button = False
-        time.sleep(0.5)
         show_door_button = True
+
+
+
+    if show_door_button == True:
+        door_button_1.render_image(screen)
+        door_button_2.render_image(screen)
+        door_button_3.render_image(screen)
+        if door_button_1.image_button() or door_button_2.image_button() or door_button_3.image_button():
+            print(Door.random_room())
 
 
 

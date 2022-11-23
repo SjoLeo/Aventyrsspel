@@ -8,24 +8,24 @@ class TextButton():
         self.text = font.render(text, True, color )
         self.rect = self.text.get_rect()
         self.rect.topleft = (x, y)
+        self.clicking = False
 
 
-    def text_button(self, ):
-
-        action = False
-
+    def text_button(self):
         pos = pygame.mouse.get_pos()
 
-        # pos over button and clicked?
         if self.rect.collidepoint(pos):
-            if pygame.mouse.get_pressed()[0] == True and self.clicked == False:
-                self.clicked = True
-                action = True
-        if pygame.mouse.get_pressed()[0] == False:
-            self.clicked = False
+            if pygame.mouse.get_pressed()[0] == True:
+                self.clicking = True
+            if pygame.mouse.get_pressed()[0] == False:
+                if self.clicking == True:
+                    self.clicking = False
+                    return True
+                self.clicking = False
+        else:
+            self.clicking = False
 
-        # returns true or false
-        return action
+        return False
+
     def render_text(self, surface):
         surface.blit(self.text, (self.rect.x, self.rect.y))
-

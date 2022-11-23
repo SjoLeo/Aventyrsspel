@@ -1,7 +1,6 @@
 import pygame
 
 
-
 class Button():
     def __init__(self, image, x, y, scale):
         width = image.get_width()
@@ -9,26 +8,23 @@ class Button():
         self.image = pygame.transform.scale(image, (int(width * scale), int(height * scale)))
         self.rect = self.image.get_rect()
         self.rect.topleft = (x, y)
-        self.clicked = False
+        self.clicking = False
 
     def image_button(self):
-        # action = what should happen when clicked (determined in main)
-        action = False
-
         pos = pygame.mouse.get_pos()
 
-        # pos over button and clicked?
         if self.rect.collidepoint(pos):
-            if pygame.mouse.get_pressed()[0] == True and self.clicked == False:
+            if pygame.mouse.get_pressed()[0] == True:
+                self.clicking = True
+            if pygame.mouse.get_pressed()[0] == False:
+                if self.clicking == True:
+                    self.clicking = False
+                    return True
+                self.clicking = False
+        else:
+            self.clicking = False
 
-                self.clicked = True
-                action = True
-        if pygame.mouse.get_pressed()[0]== False:
-
-            self.clicked = False
-
-        # returns true or false
-        return action
+        return False
 
     def render_image(self, surface):
         surface.blit(self.image, (self.rect.x, self.rect.y))
