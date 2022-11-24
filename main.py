@@ -16,7 +16,10 @@ def show_text(text, x, y, color):
     screen.blit(test_text, (x, y))
 
 
-def show_image(image, x, y):
+def show_image(image, x, y, scale):
+    width = image.get_width()
+    height = image.get_height()
+    image = pygame.transform.scale(image, (int(width * scale), int(height * scale)))
     screen.blit(image, (x, y))
 
 
@@ -65,6 +68,10 @@ inventory_image = pygame.image.load('Images/Inventory_slot.png')
 
 door_image = pygame.image.load('Images/Door.png')
 
+hole_image = pygame.image.load('Images/Hole.png')
+
+spike_image = pygame.image.load('Images/spike_trap.png')
+
 # making button images
 inventory_button = Buttons.Button(inventory_image, 0, 0, 0.3)
 door_button_1 = Buttons.Button(door_image, 100, 190, 6)
@@ -80,11 +87,17 @@ new_game_button = TextButtons.TextButton(200, 200, 'New game', 'white', 'Fonts/a
 # hide/show buttons/images
 show_new_game_button = True
 show_door_button = False
+show_spike_image = True
 # Game Loop
 running = True
 
+room_type = None
+clock = pygame.time.Clock()
+
+counter = 0
 # random.seed(69)
 while running:
+    clock.tick(60)
 
     screen.fill((60, 50, 217))
     # Graphics
@@ -114,7 +127,24 @@ while running:
         door_button_2.render_image(screen)
         door_button_3.render_image(screen)
         if door_button_1.image_button() or door_button_2.image_button() or door_button_3.image_button():
-            print(Door.random_room())
+            room_type = Door.random_room()
+            #show_door_button = False
+
+
+    # trap room
+    if room_type == 'trap':
+        background()
+
+
+        exit_button.render_text(screen)
+        if counter >= 5:
+            show_image(hole_image, 410, 500, 7)
+        if counter >= 10:
+            show_image(spike_image, 450 , 487, 7)
+        counter += 1
+
+
+
 
 
 
