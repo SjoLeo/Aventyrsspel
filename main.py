@@ -153,6 +153,7 @@ while running:
                 monster_room_counter = 0
                 monster_is_dead = False
                 loot_text = False
+                start_monster_room_counter = False
 
 
     # trap room
