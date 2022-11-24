@@ -96,6 +96,8 @@ new_game_button = TextButtons.TextButton(200, 200, 'New game', 'white', 'Fonts/a
 main_lobby = False
 show_new_game_button = True
 show_door_button = True
+show_door_button_monster_room = True
+show_door_button_chest_room = True
 loot_text = None
 
 monster_is_dead = False
@@ -107,7 +109,7 @@ clock = pygame.time.Clock()
 trap_room_counter = 0
 chest_room_counter = 0
 monster_room_counter = 0
-random.seed(69)
+#random.seed(69)
 
 running = True
 # Game Loop
@@ -145,6 +147,12 @@ while running:
             if door_button_1.image_button() or door_button_2.image_button() or door_button_3.image_button():
                 room_type = Door.random_room()
                 show_door_button = False
+                show_door_button_chest_room = True
+                show_door_button_monster_room = True
+                generate_monster = True
+                monster_room_counter = 0
+                monster_is_dead = False
+                loot_text = False
 
 
     # trap room
@@ -173,10 +181,13 @@ while running:
 
         exit_button.render_text(screen)
         door_button_chest_room.render_image(screen)
-        if door_button_chest_room.image_button():
-            room_type = None
-            show_door_button = True
-        small_chest_button.render_image(screen)
+
+        if show_door_button_chest_room == True:
+            if door_button_chest_room.image_button():
+                room_type = None
+                show_door_button = True
+                show_door_button_monster_room = False
+            small_chest_button.render_image(screen)
 
         if small_chest_button.image_button():
             loot_text = True
@@ -190,11 +201,13 @@ while running:
         background()
         exit_button.render_text(screen)
         door_button_monster_room.render_image(screen)
-        if door_button_monster_room.image_button():
-            room_type = None
-            show_door_button = True
-            monster_room_counter = 0
-            monster_type = None
+        if show_door_button_monster_room == True:
+            if door_button_monster_room.image_button():
+                room_type = None
+                show_door_button = True
+                monster_room_counter = 0
+                monster_type = None
+                show_door_button_monster_room = False
 
 
         if generate_monster == True:
@@ -208,7 +221,7 @@ while running:
                 if spider_button.image_button():
                     monster_is_dead = True
                     start_monster_room_counter = True
-            if monster_is_dead == True and monster_room_counter <= 30:
+            if monster_is_dead == True and monster_room_counter <= 40:
                 show_text('You Killed The Monster', 100, 100, 'red')
         if start_monster_room_counter == True:
             monster_room_counter += 1
