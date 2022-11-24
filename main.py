@@ -228,18 +228,6 @@ while running:
             monster_room_counter += 1
 
 
-
-
-
-
-
-
-
-
-
-
-
-
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
