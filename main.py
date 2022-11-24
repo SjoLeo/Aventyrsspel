@@ -190,7 +190,7 @@ while running:
         background()
         exit_button.render_text(screen)
         door_button_monster_room.render_image(screen)
-        if door_button_monster_room:
+        if door_button_monster_room.image_button():
             room_type = None
             show_door_button = True
             monster_room_counter = 0
