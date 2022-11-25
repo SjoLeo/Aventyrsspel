@@ -109,7 +109,7 @@ clock = pygame.time.Clock()
 trap_room_counter = 0
 chest_room_counter = 0
 monster_room_counter = 0
-#random.seed(69)
+#random.seed(21150294)
 
 running = True
 # Game Loop
@@ -193,7 +193,7 @@ while running:
         if small_chest_button.image_button():
             loot_text = True
         if loot_text == True:
-            show_text('You Found: ...', 300, 100, 'white')
+            show_text('You Found:...', 300, 100, 'white')
 
 
     # monster room
