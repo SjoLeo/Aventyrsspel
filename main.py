@@ -1,6 +1,8 @@
 import Buttons
+import Items
 import Monster
 import TextButtons
+import Player
 
 import random
 
@@ -12,8 +14,8 @@ import time
 
 # functions
 
-def show_text(text, x, y, color):
-    test_text = font_alagard.render(text, True, (color))
+def show_text(text, x, y, color, font):
+    test_text = font.render(text, True, (color))
     screen.blit(test_text, (x, y))
 
 
@@ -29,7 +31,22 @@ def background():
 
 
 def frame():
+    global selected_weapon_frame_x
     screen.blit(frame_image, (0, 0))
+
+    # hp stat:
+    show_text(f"HP: {Player.player.hp}/ {Player.player.hp}", 1020, 2, "white", font_alagard_small)
+
+    # weapon icons:
+    weapon_1_button.render_image(screen)
+    weapon_2_button.render_image(screen)
+
+    if weapon_1_button.image_button():
+        selected_weapon_frame_x = 37.5
+    elif weapon_2_button.image_button():
+        selected_weapon_frame_x = 105
+
+    show_image(goldframe, selected_weapon_frame_x, 0, 7.5)
 
 # initiates pygame
 pygame.init()
@@ -49,8 +66,8 @@ pygame.display.set_caption("Test Caption")
 
 
 # Fonts
-font_alagard = pygame.font.Font("Fonts/alagard.ttf", 100)
-
+font_alagard_big = pygame.font.Font("Fonts/alagard.ttf", 100)
+font_alagard_small = pygame.font.Font("Fonts/alagard.ttf", 25)
 
 
 # backgrounds
@@ -70,7 +87,7 @@ frame_image = pygame.transform.scale(frame_image, (width, height))
 
 
 # images
-small_chest = pygame.image.load(("Images/Chest.png"))
+small_chest = pygame.image.load("Images/Chest.png")
 
 inventory_image = pygame.image.load('Images/Inventory_slot.png')
 
@@ -84,6 +101,7 @@ spider_image = pygame.image.load('Images/spindel_prot.png')
 
 zombie_boss_image = pygame.image.load('Images/zombie_boss.png')
 
+goldframe = pygame.image.load("Images/GoldFrame.png")
 
 
 # making button images
@@ -97,6 +115,10 @@ door_button_monster_room = Buttons.Button(door_image, 600, 190, 6)
 spider_button = Buttons.Button(spider_image, 100, 100, 3)
 zombie_boss_button = Buttons.Button(zombie_boss_image, 450, 220, 6)
 door_to_boss = Buttons.Button(door_image, 500, 190, 6)
+# Frame buttons
+weapon_1_button = Buttons.Button(Player.player.weapon_1.icon, 45, -4, 4)
+weapon_2_button = Buttons.Button(Player.player.weapon_2.icon, 113, -4, 4)
+
 # making button text
 exit_button = TextButtons.TextButton(width-100, 60, 'X', 'red', 'Fonts/alagard.ttf')
 new_game_button = TextButtons.TextButton(200, 200, 'New game', 'white', 'Fonts/alagard.ttf')
@@ -127,6 +149,8 @@ monster_room_counter = 0
 room_counter = 0
 #random.seed(21150294)
 
+selected_weapon_frame_x = 105
+
 running = True
 # Game Loop
 while running:
@@ -148,6 +172,7 @@ while running:
             active_background = main_room
             show_new_game_button = False
             main_lobby = True
+
 
     # main lobby
 
@@ -184,9 +209,9 @@ while running:
 
         exit_button.render_text(screen)
         if trap_room_counter <= 30:
-            show_text("It's a Dead End", 300, 100, 'white')
+            show_text("It's a Dead End", 300, 100, 'white', font_alagard_big)
         if trap_room_counter >= 40:
-            show_text('A Trap Appears!', 250, 100, 'red')
+            show_text('A Trap Appears!', 250, 100, 'red', font_alagard_big)
             show_image(hole_image, 410, 500, 7)
         if trap_room_counter >= 40:
             show_image(spike_image, 450, 487, 7)
@@ -216,8 +241,9 @@ while running:
 
         if small_chest_button.image_button():
             loot_text = True
+
         if loot_text == True:
-            show_text('You Found:...', 300, 100, 'white')
+            show_text('You Found:...', 300, 100, 'white', font_alagard_big)
 
 
     # monster room
@@ -249,7 +275,7 @@ while running:
                     monster_is_dead = True
                     start_monster_room_counter = True
             if monster_is_dead == True and monster_room_counter <= 40:
-                show_text('You Killed The Monster', 100, 100, 'red')
+                show_text('You Killed The Monster', 100, 100, 'red', font_alagard_big)
         if start_monster_room_counter == True:
             monster_room_counter += 1
 
@@ -264,7 +290,7 @@ while running:
 
         if hide_boss_text == False:
             door_to_boss.render_image(screen)
-            show_text('YOU FOUND THE BOSS', 80, 100, 'red')
+            show_text('YOU FOUND THE BOSS', 80, 100, 'red', font_alagard_big)
 
         if door_to_boss.image_button():
             hide_boss_text = True
@@ -278,9 +304,9 @@ while running:
                 monster_is_dead = True
                 start_monster_room_counter = True
             if monster_is_dead and monster_room_counter <= 30:
-                show_text('You Killed the Boss!', 100, 100, 'red')
+                show_text('You Killed the Boss!', 100, 100, 'red', font_alagard_big)
             if monster_room_counter >= 30:
-                show_text('Moving Down 1 Floor', 100, 100, 'white')
+                show_text('Moving Down 1 Floor', 100, 100, 'white', font_alagard_big)
 
 
 
