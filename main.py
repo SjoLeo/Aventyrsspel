@@ -82,6 +82,8 @@ spike_image = pygame.image.load('Images/spike_trap.png')
 
 spider_image = pygame.image.load('Images/spindel_prot.png')
 
+zombie_boss_image = pygame.image.load('Images/zombie_boss.png')
+
 
 
 # making button images
@@ -93,9 +95,10 @@ small_chest_button = Buttons.Button(small_chest, 565, 450, 6)
 door_button_chest_room = Buttons.Button(door_image, 150, 190, 6)
 door_button_monster_room = Buttons.Button(door_image, 600, 190, 6)
 spider_button = Buttons.Button(spider_image, 100, 100, 3)
-
+zombie_boss_button = Buttons.Button(zombie_boss_image, 450, 220, 6)
+door_to_boss = Buttons.Button(door_image, 500, 190, 6)
 # making button text
-exit_button = TextButtons.TextButton(width-100, 25, 'X', 'red', 'Fonts/alagard.ttf')
+exit_button = TextButtons.TextButton(width-100, 60, 'X', 'red', 'Fonts/alagard.ttf')
 new_game_button = TextButtons.TextButton(200, 200, 'New game', 'white', 'Fonts/alagard.ttf')
 
 
@@ -108,6 +111,9 @@ show_door_button = True
 show_door_button_monster_room = True
 show_door_button_chest_room = True
 loot_text = None
+show_boss_room = False
+hide_boss_text = False
+
 
 monster_is_dead = False
 generate_monster = True
@@ -118,6 +124,7 @@ clock = pygame.time.Clock()
 trap_room_counter = 0
 chest_room_counter = 0
 monster_room_counter = 0
+room_counter = 0
 #random.seed(21150294)
 
 running = True
@@ -155,16 +162,20 @@ while running:
 
         if show_door_button == True:
             if door_button_1.image_button() or door_button_2.image_button() or door_button_3.image_button():
-                room_type = Door.random_room()
+                if room_counter < 5:
+                    room_type = Door.random_room()
                 show_door_button = False
                 show_door_button_chest_room = True
                 show_door_button_monster_room = True
                 generate_monster = True
-                monster_room_counter = 0
                 monster_is_dead = False
                 loot_text = False
                 start_monster_room_counter = False
+                show_boss_room = False
+                hide_boss_text = False
 
+                trap_room_counter = 0
+                monster_room_counter = 0
 
     # trap room
     if room_type == 'trap':
@@ -172,17 +183,18 @@ while running:
         frame()
 
         exit_button.render_text(screen)
-        if trap_room_counter <= 60:
+        if trap_room_counter <= 30:
             show_text("It's a Dead End", 300, 100, 'white')
-        if trap_room_counter >= 70:
+        if trap_room_counter >= 40:
             show_text('A Trap Appears!', 250, 100, 'red')
             show_image(hole_image, 410, 500, 7)
-        if trap_room_counter >= 70:
+        if trap_room_counter >= 40:
             show_image(spike_image, 450, 487, 7)
-        if trap_room_counter >= 90:
+        if trap_room_counter >= 60:
             room_type = None
             show_door_button = True
-            trap_room_counter = 0
+
+            room_counter += 1
         trap_room_counter += 1
 
 
@@ -199,6 +211,7 @@ while running:
                 room_type = None
                 show_door_button = True
                 show_door_button_monster_room = False
+                room_counter += 1
             small_chest_button.render_image(screen)
 
         if small_chest_button.image_button():
@@ -221,6 +234,7 @@ while running:
                 monster_room_counter = 0
                 monster_type = None
                 show_door_button_monster_room = False
+                room_counter += 1
 
 
         if generate_monster == True:
@@ -238,6 +252,47 @@ while running:
                 show_text('You Killed The Monster', 100, 100, 'red')
         if start_monster_room_counter == True:
             monster_room_counter += 1
+
+
+    # boss room
+
+    if room_counter == 5:
+
+        background()
+        frame()
+        exit_button.render_text(screen)
+
+        if hide_boss_text == False:
+            door_to_boss.render_image(screen)
+            show_text('YOU FOUND THE BOSS', 80, 100, 'red')
+
+        if door_to_boss.image_button():
+            hide_boss_text = True
+            show_boss_room = True
+
+
+        if show_boss_room == True:
+            if monster_is_dead == False:
+                zombie_boss_button.render_image(screen)
+            if zombie_boss_button.image_button():
+                monster_is_dead = True
+                start_monster_room_counter = True
+            if monster_is_dead and monster_room_counter <= 30:
+                show_text('You Killed the Boss!', 100, 100, 'red')
+            if monster_room_counter >= 30:
+                show_text('Moving Down 1 Floor', 100, 100, 'white')
+
+
+
+            if monster_room_counter >= 50:
+                room_counter = 0
+                room_type = None
+                show_door_button = True
+
+
+        if start_monster_room_counter == True:
+            monster_room_counter += 1
+
 
 
     for event in pygame.event.get():
