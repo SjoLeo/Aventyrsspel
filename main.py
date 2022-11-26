@@ -27,6 +27,10 @@ def show_image(image, x, y, scale):
 def background():
     screen.blit(active_background, (0, 0))
 
+
+def frame():
+    screen.blit(frame_image, (0, 0))
+
 # initiates pygame
 pygame.init()
 
@@ -59,6 +63,9 @@ main_room = pygame.transform.scale(main_room, (width, height))
 
 active_background = main_menu_background
 
+frame_image = pygame.image.load('Images/Frame.png')
+frame_image = pygame.transform.scale(frame_image, (width, height))
+
 
 
 
@@ -74,6 +81,8 @@ hole_image = pygame.image.load('Images/Hole.png')
 spike_image = pygame.image.load('Images/spike_trap.png')
 
 spider_image = pygame.image.load('Images/spindel_prot.png')
+
+
 
 # making button images
 inventory_button = Buttons.Button(inventory_image, 0, 0, 0.3)
@@ -137,6 +146,7 @@ while running:
 
     if main_lobby == True:
         background()
+        frame()
         exit_button.render_text(screen)
 
         door_button_1.render_image(screen)
@@ -159,7 +169,7 @@ while running:
     # trap room
     if room_type == 'trap':
         background()
-
+        frame()
 
         exit_button.render_text(screen)
         if trap_room_counter <= 60:
@@ -168,17 +178,18 @@ while running:
             show_text('A Trap Appears!', 250, 100, 'red')
             show_image(hole_image, 410, 500, 7)
         if trap_room_counter >= 70:
-            show_image(spike_image, 450 , 487, 7)
-        trap_room_counter += 1
+            show_image(spike_image, 450, 487, 7)
         if trap_room_counter >= 90:
             room_type = None
             show_door_button = True
             trap_room_counter = 0
+        trap_room_counter += 1
 
 
     # chest room
     if room_type == 'chest':
         background()
+        frame()
 
         exit_button.render_text(screen)
         door_button_chest_room.render_image(screen)
@@ -200,6 +211,7 @@ while running:
     if room_type == 'monster':
 
         background()
+        frame()
         exit_button.render_text(screen)
         door_button_monster_room.render_image(screen)
         if show_door_button_monster_room == True:
