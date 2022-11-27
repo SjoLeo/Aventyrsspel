@@ -148,7 +148,7 @@ tick_counter = 0
 chest_room_counter = 0
 
 room_counter = 0
-random.seed(69)
+#random.seed(69)
 
 selected_weapon_frame_x = 37.5
 
