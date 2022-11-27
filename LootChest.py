@@ -9,5 +9,6 @@ class LootChest():
         self.items = [random_item(), random_item(), random_item()]
 
 
-lootchest = LootChest()
-print((lootchest.items))
+
+
+

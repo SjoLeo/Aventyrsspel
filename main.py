@@ -3,6 +3,7 @@ import Items
 import Monster
 import TextButtons
 import Player
+import LootChest
 
 import random
 
@@ -130,26 +131,26 @@ new_game_button = TextButtons.TextButton(200, 200, 'New game', 'white', 'Fonts/a
 main_lobby = False
 show_new_game_button = True
 show_door_button = True
-show_door_button_monster_room = True
-show_door_button_chest_room = True
-loot_text = None
+show_room_exit = True
+
+show_room_text = False
 show_boss_room = False
-hide_boss_text = False
+generate_loot_chest = True
 
 
 monster_is_dead = False
 generate_monster = True
-start_monster_room_counter = False
+start_tick_counter = False
 room_type = None
 clock = pygame.time.Clock()
 
-trap_room_counter = 0
+tick_counter = 0
 chest_room_counter = 0
-monster_room_counter = 0
-room_counter = 0
-#random.seed(21150294)
 
-selected_weapon_frame_x = 105
+room_counter = 0
+random.seed(69)
+
+selected_weapon_frame_x = 37.5
 
 running = True
 # Game Loop
@@ -190,17 +191,18 @@ while running:
                 if room_counter < 5:
                     room_type = Door.random_room()
                 show_door_button = False
-                show_door_button_chest_room = True
-                show_door_button_monster_room = True
+                show_room_exit = True
                 generate_monster = True
                 monster_is_dead = False
-                loot_text = False
-                start_monster_room_counter = False
+                show_room_text = False
+                hide_room_text = True
                 show_boss_room = False
-                hide_boss_text = False
+                start_tick_counter = False
+                monster_type = None
+                lootchest = None
+                generate_loot_chest = True
+                tick_counter = 0
 
-                trap_room_counter = 0
-                monster_room_counter = 0
 
     # trap room
     if room_type == 'trap':
@@ -208,42 +210,57 @@ while running:
         frame()
 
         exit_button.render_text(screen)
-        if trap_room_counter <= 30:
+        if tick_counter <= 20:
             show_text("It's a Dead End", 300, 100, 'white', font_alagard_big)
-        if trap_room_counter >= 40:
+        if tick_counter >= 25:
             show_text('A Trap Appears!', 250, 100, 'red', font_alagard_big)
             show_image(hole_image, 410, 500, 7)
-        if trap_room_counter >= 40:
+        if tick_counter >= 35:
             show_image(spike_image, 450, 487, 7)
-        if trap_room_counter >= 60:
+        if tick_counter >= 50:
             room_type = None
             show_door_button = True
 
             room_counter += 1
-        trap_room_counter += 1
+        tick_counter += 1
 
 
     # chest room
     if room_type == 'chest':
         background()
         frame()
+        if generate_loot_chest == True:
+            lootchest = LootChest.LootChest()
+            generate_loot_chest = False
+
 
         exit_button.render_text(screen)
         door_button_chest_room.render_image(screen)
 
-        if show_door_button_chest_room == True:
+        if show_room_exit == True:
             if door_button_chest_room.image_button():
                 room_type = None
                 show_door_button = True
-                show_door_button_monster_room = False
+                show_room_exit = False
                 room_counter += 1
             small_chest_button.render_image(screen)
 
         if small_chest_button.image_button():
-            loot_text = True
 
-        if loot_text == True:
+
+            show_room_text = True
+
+        if show_room_text == True:
             show_text('You Found:...', 300, 100, 'white', font_alagard_big)
+            item1 = lootchest.items[0]
+            show_image(item1.icon, 500, 300, 4)
+
+            item2 = lootchest.items[1]
+            show_image(item2.icon, 600, 300, 4)
+
+            item3 = lootchest.items[2]
+            show_image(item3.icon, 700, 300, 4)
+
 
 
     # monster room
@@ -253,13 +270,10 @@ while running:
         frame()
         exit_button.render_text(screen)
         door_button_monster_room.render_image(screen)
-        if show_door_button_monster_room == True:
+        if show_room_exit == True:
             if door_button_monster_room.image_button():
                 room_type = None
                 show_door_button = True
-                monster_room_counter = 0
-                monster_type = None
-                show_door_button_monster_room = False
                 room_counter += 1
 
 
@@ -273,11 +287,11 @@ while running:
                 spider_button.render_image(screen)
                 if spider_button.image_button():
                     monster_is_dead = True
-                    start_monster_room_counter = True
-            if monster_is_dead == True and monster_room_counter <= 40:
+                    start_tick_counter = True
+            if monster_is_dead == True and tick_counter <= 40:
                 show_text('You Killed The Monster', 100, 100, 'red', font_alagard_big)
-        if start_monster_room_counter == True:
-            monster_room_counter += 1
+        if start_tick_counter == True:
+            tick_counter += 1
 
 
     # boss room
@@ -288,12 +302,12 @@ while running:
         frame()
         exit_button.render_text(screen)
 
-        if hide_boss_text == False:
+        if hide_room_text == True:
             door_to_boss.render_image(screen)
             show_text('YOU FOUND THE BOSS', 80, 100, 'red', font_alagard_big)
 
         if door_to_boss.image_button():
-            hide_boss_text = True
+            hide_room_text = False
             show_boss_room = True
 
 
@@ -302,22 +316,22 @@ while running:
                 zombie_boss_button.render_image(screen)
             if zombie_boss_button.image_button():
                 monster_is_dead = True
-                start_monster_room_counter = True
-            if monster_is_dead and monster_room_counter <= 30:
+                start_tick_counter = True
+            if monster_is_dead and tick_counter <= 30:
                 show_text('You Killed the Boss!', 100, 100, 'red', font_alagard_big)
-            if monster_room_counter >= 30:
+            if tick_counter >= 30:
                 show_text('Moving Down 1 Floor', 100, 100, 'white', font_alagard_big)
 
 
 
-            if monster_room_counter >= 50:
+            if tick_counter >= 50:
                 room_counter = 0
                 room_type = None
                 show_door_button = True
 
 
-        if start_monster_room_counter == True:
-            monster_room_counter += 1
+        if start_tick_counter == True:
+            tick_counter += 1
 
 
 
