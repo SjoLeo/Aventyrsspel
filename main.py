@@ -258,6 +258,7 @@ while running:
         if show_room_text == True:
             show_text('You Found:...', 300, 100, 'white', font_alagard_big)
             show_image(open_chest_image, 565, 426, 6)
+
             item1 = lootchest.items[0]
             show_image(item1.icon, 500, 300, 4)
 
