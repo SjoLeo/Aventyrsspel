@@ -47,7 +47,7 @@ def frame():
     elif weapon_2_button.image_button():
         selected_weapon_frame_x = 105
 
-    show_image(goldframe, selected_weapon_frame_x, 0, 7.5)
+    show_image(gold_frame_image, selected_weapon_frame_x, 0, 7.5)
 
 # initiates pygame
 pygame.init()
@@ -102,7 +102,9 @@ spider_image = pygame.image.load('Images/spindel_prot.png')
 
 zombie_boss_image = pygame.image.load('Images/zombie_boss.png')
 
-goldframe = pygame.image.load("Images/GoldFrame.png")
+gold_frame_image = pygame.image.load("Images/GoldFrame.png")
+
+open_chest_image = pygame.image.load("Images/open_chest.png")
 
 
 # making button images
@@ -136,7 +138,7 @@ show_room_exit = True
 show_room_text = False
 show_boss_room = False
 generate_loot_chest = True
-
+show_chest = True
 
 monster_is_dead = False
 generate_monster = True
@@ -192,6 +194,7 @@ while running:
                     room_type = Door.random_room()
                 show_door_button = False
                 show_room_exit = True
+                show_chest = True
                 generate_monster = True
                 monster_is_dead = False
                 show_room_text = False
@@ -243,15 +246,18 @@ while running:
                 show_door_button = True
                 show_room_exit = False
                 room_counter += 1
+
+        if show_chest == True:
             small_chest_button.render_image(screen)
 
         if small_chest_button.image_button():
-
+            show_chest = False
 
             show_room_text = True
 
         if show_room_text == True:
             show_text('You Found:...', 300, 100, 'white', font_alagard_big)
+            show_image(open_chest_image, 565, 426, 6)
             item1 = lootchest.items[0]
             show_image(item1.icon, 500, 300, 4)
 
