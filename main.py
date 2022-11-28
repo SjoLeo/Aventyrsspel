@@ -106,6 +106,7 @@ gold_frame_image = pygame.image.load("Images/GoldFrame.png")
 
 open_chest_image = pygame.image.load("Images/open_chest.png")
 
+chest_item_frame_image = pygame.image.load("Images/chest_loot_frame.png")
 
 # making button images
 inventory_button = Buttons.Button(inventory_image, 0, 0, 0.3)
@@ -155,6 +156,7 @@ room_counter = 0
 selected_weapon_frame_x = 37.5
 
 running = True
+
 # Game Loop
 while running:
     clock.tick(60)
@@ -208,6 +210,7 @@ while running:
 
 
     # trap room
+
     if room_type == 'trap':
         background()
         frame()
@@ -258,15 +261,17 @@ while running:
         if show_room_text == True:
             show_text('You Found:...', 300, 100, 'white', font_alagard_big)
             show_image(open_chest_image, 565, 426, 6)
+            show_image(chest_item_frame_image, 468, 257, 4)
+            show_text("Choose One", 500, 270, "white", font_alagard_small)
 
             item1 = lootchest.items[0]
-            show_image(item1.icon, 500, 300, 4)
+            show_image(item1.icon, 513, 300, 4)
 
             item2 = lootchest.items[1]
             show_image(item2.icon, 600, 300, 4)
 
             item3 = lootchest.items[2]
-            show_image(item3.icon, 700, 300, 4)
+            show_image(item3.icon, 687, 300, 4)
 
 
 
