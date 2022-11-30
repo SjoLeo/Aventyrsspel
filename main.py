@@ -13,6 +13,7 @@ import Door
 
 import time
 
+print("test test test")
 
 # functions
 
