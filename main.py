@@ -5,6 +5,7 @@ import TextButtons
 import Player
 import LootChest
 
+
 import random
 
 import pygame
@@ -33,12 +34,14 @@ def background():
 
 def frame():
     global selected_weapon_frame_x
+    global selected_armour_frame_x
     screen.blit(frame_image, (0, 0))
 
     # hp stat:
     show_text(f"HP: {Player.player.hp}/ {Player.player.hp}", 1020, 2, "white", font_alagard_small)
 
     # weapon icons:
+
     weapon_1_button.render_image(screen)
     weapon_2_button.render_image(screen)
 
@@ -48,6 +51,46 @@ def frame():
         selected_weapon_frame_x = 105
 
     show_image(gold_frame_image, selected_weapon_frame_x, 0, 7.5)
+
+    # armour icons:
+    armour_1_button.render_image(screen)
+    armour_2_button.render_image(screen)
+
+    if armour_1_button.image_button():
+        selected_armour_frame_x = 210
+    elif armour_2_button.image_button():
+        selected_armour_frame_x = 278
+    show_image(gold_frame_image, selected_armour_frame_x, 0, 7.5)
+
+
+def reset_variables():
+    global show_door_button
+    global show_room_exit
+    global show_chest
+    global generate_monster
+    global monster_is_dead
+    global show_room_text
+    global hide_room_text
+    global show_boss_room
+    global start_tick_counter
+    global monster_type
+    global lootchest
+    global generate_loot_chest
+    global tick_counter
+
+    show_door_button = False
+    show_room_exit = True
+    show_chest = True
+    generate_monster = True
+    monster_is_dead = False
+    show_room_text = False
+    hide_room_text = True
+    show_boss_room = False
+    start_tick_counter = False
+    monster_type = None
+    lootchest = None
+    generate_loot_chest = True
+    tick_counter = 0
 
 # initiates pygame
 pygame.init()
@@ -123,6 +166,9 @@ door_to_boss = Buttons.Button(door_image, 500, 190, 6)
 weapon_1_button = Buttons.Button(Player.player.weapon_1.icon, 45, -4, 4)
 weapon_2_button = Buttons.Button(Player.player.weapon_2.icon, 113, -4, 4)
 
+armour_1_button = Buttons.Button(Player.player.armour_1.icon, 215, 0, 4)
+armour_2_button = Buttons.Button(Player.player.armour_2.icon, 283, 0, 4)
+
 # making button text
 exit_button = TextButtons.TextButton(width-100, 60, 'X', 'red', 'Fonts/alagard.ttf')
 new_game_button = TextButtons.TextButton(200, 200, 'New game', 'white', 'Fonts/alagard.ttf')
@@ -145,20 +191,27 @@ monster_is_dead = False
 generate_monster = True
 start_tick_counter = False
 room_type = None
+
 clock = pygame.time.Clock()
 
 tick_counter = 0
 chest_room_counter = 0
 
 room_counter = 0
-#random.seed(69)
+
+pos = None
+
+random.seed(69)
 
 selected_weapon_frame_x = 37.5
+selected_armour_frame_x = 210
 
 running = True
 
 # Game Loop
 while running:
+    #pos = pygame.mouse.get_pos()
+    #print(pos)
     clock.tick(60)
 
     screen.fill((60, 50, 217))
@@ -194,19 +247,7 @@ while running:
             if door_button_1.image_button() or door_button_2.image_button() or door_button_3.image_button():
                 if room_counter < 5:
                     room_type = Door.random_room()
-                show_door_button = False
-                show_room_exit = True
-                show_chest = True
-                generate_monster = True
-                monster_is_dead = False
-                show_room_text = False
-                hide_room_text = True
-                show_boss_room = False
-                start_tick_counter = False
-                monster_type = None
-                lootchest = None
-                generate_loot_chest = True
-                tick_counter = 0
+                reset_variables()
 
 
     # trap room

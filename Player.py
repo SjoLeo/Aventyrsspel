@@ -10,6 +10,9 @@ class Player():
         self.selected_inventory = [Items.Chestplate, Items.Sword, Items.Crossbow]
         self.weapon_1 = Items.Sword
         self.weapon_2 = Items.Crossbow
+
+        self.armour_1 = Items.Chestplate
+        self.armour_2 = Items.Chestplate
     def add_item_to_inventory(self, item):
         self.inventory.append(item)
 
