@@ -41,7 +41,6 @@ def frame():
     show_text(f"HP: {Player.player.hp}/ {Player.player.hp}", 1020, 2, "white", font_alagard_small)
 
     # weapon icons:
-
     weapon_1_button.render_image(screen)
     weapon_2_button.render_image(screen)
 
@@ -61,6 +60,13 @@ def frame():
     elif armour_2_button.image_button():
         selected_armour_frame_x = 278
     show_image(gold_frame_image, selected_armour_frame_x, 0, 7.5)
+
+    # Potions
+    potion_1_button.render_image(screen)
+    potion_2_button.render_image(screen)
+    drink_button.render_image(screen)
+
+
 
     # Progress Bar
 
