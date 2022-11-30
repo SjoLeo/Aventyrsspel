@@ -5,7 +5,6 @@ import TextButtons
 import Player
 import LootChest
 
-
 import random
 
 import pygame
@@ -13,6 +12,7 @@ import pygame
 import Door
 
 import time
+
 
 # functions
 
@@ -62,6 +62,26 @@ def frame():
         selected_armour_frame_x = 278
     show_image(gold_frame_image, selected_armour_frame_x, 0, 7.5)
 
+    # Progress Bar
+
+    # 7.5 pixels per bakgrundspixel
+    # +98 x pixels per room (verkar vara nåt konstigt som gör det inconsistent)
+    # (borde gå att göra mer clean med nån class eller nåt)
+    if room_counter > 0:
+        show_image(green_progress, 570, 600, 10)
+
+    if room_counter > 1:
+        show_image(green_progress, 668, 600, 10)
+
+    if room_counter > 2:
+        show_image(green_progress, 765, 600, 10)
+
+    if room_counter > 3:
+        show_image(green_progress, 863, 600, 10)
+
+    if room_counter > 4:
+        show_image(green_progress, 960, 600, 10)
+
 
 def reset_variables():
     global show_door_button
@@ -92,6 +112,7 @@ def reset_variables():
     generate_loot_chest = True
     tick_counter = 0
 
+
 # initiates pygame
 pygame.init()
 
@@ -100,24 +121,19 @@ width = 1200
 height = 675
 screen = pygame.display.set_mode((width, height))
 
-
-
 # Title and Window
 pygame.display.set_caption("Test Caption")
 # icon = pygame.image.load("")
 # pygame.display.set_icon(icon)
 
 
-
 # Fonts
 font_alagard_big = pygame.font.Font("Fonts/alagard.ttf", 100)
 font_alagard_small = pygame.font.Font("Fonts/alagard.ttf", 25)
 
-
 # backgrounds
 main_menu_background = pygame.image.load("Images/Start bild.png")
 main_menu_background = pygame.transform.scale(main_menu_background, (width, height))
-
 
 main_room = pygame.image.load('Images/main room.png')
 main_room = pygame.transform.scale(main_room, (width, height))
@@ -126,9 +142,6 @@ active_background = main_menu_background
 
 frame_image = pygame.image.load('Images/Frame.png')
 frame_image = pygame.transform.scale(frame_image, (width, height))
-
-
-
 
 # images
 small_chest = pygame.image.load("Images/Chest.png")
@@ -151,6 +164,8 @@ open_chest_image = pygame.image.load("Images/open_chest.png")
 
 chest_item_frame_image = pygame.image.load("Images/chest_loot_frame.png")
 
+green_progress = pygame.image.load("Images/green.png")
+
 # making button images
 inventory_button = Buttons.Button(inventory_image, 0, 0, 0.3)
 door_button_1 = Buttons.Button(door_image, 100, 190, 6)
@@ -170,11 +185,8 @@ armour_1_button = Buttons.Button(Player.player.armour_1.icon, 215, 0, 4)
 armour_2_button = Buttons.Button(Player.player.armour_2.icon, 283, 0, 4)
 
 # making button text
-exit_button = TextButtons.TextButton(width-100, 60, 'X', 'red', 'Fonts/alagard.ttf')
+exit_button = TextButtons.TextButton(width - 100, 60, 'X', 'red', 'Fonts/alagard.ttf')
 new_game_button = TextButtons.TextButton(200, 200, 'New game', 'white', 'Fonts/alagard.ttf')
-
-
-
 
 # variables
 main_lobby = False
@@ -210,8 +222,8 @@ running = True
 
 # Game Loop
 while running:
-    #pos = pygame.mouse.get_pos()
-    #print(pos)
+    # pos = pygame.mouse.get_pos()
+    # print(pos)
     clock.tick(60)
 
     screen.fill((60, 50, 217))
@@ -225,16 +237,15 @@ while running:
         running = False
 
     new_game_button.render_text(screen)
-    if show_new_game_button == True:
+    if show_new_game_button:
         if new_game_button.text_button():
             active_background = main_room
             show_new_game_button = False
             main_lobby = True
 
-
     # main lobby
 
-    if main_lobby == True:
+    if main_lobby:
         background()
         frame()
         exit_button.render_text(screen)
@@ -243,12 +254,11 @@ while running:
         door_button_2.render_image(screen)
         door_button_3.render_image(screen)
 
-        if show_door_button == True:
+        if show_door_button:
             if door_button_1.image_button() or door_button_2.image_button() or door_button_3.image_button():
                 if room_counter < 5:
                     room_type = Door.random_room()
                 reset_variables()
-
 
     # trap room
 
@@ -271,27 +281,25 @@ while running:
             room_counter += 1
         tick_counter += 1
 
-
     # chest room
     if room_type == 'chest':
         background()
         frame()
-        if generate_loot_chest == True:
+        if generate_loot_chest:
             lootchest = LootChest.LootChest()
             generate_loot_chest = False
-
 
         exit_button.render_text(screen)
         door_button_chest_room.render_image(screen)
 
-        if show_room_exit == True:
+        if show_room_exit:
             if door_button_chest_room.image_button():
                 room_type = None
                 show_door_button = True
                 show_room_exit = False
                 room_counter += 1
 
-        if show_chest == True:
+        if show_chest:
             small_chest_button.render_image(screen)
 
         if small_chest_button.image_button():
@@ -299,7 +307,7 @@ while running:
 
             show_room_text = True
 
-        if show_room_text == True:
+        if show_room_text:
             show_text('You Found:...', 300, 100, 'white', font_alagard_big)
             show_image(open_chest_image, 565, 426, 6)
             show_image(chest_item_frame_image, 468, 257, 4)
@@ -314,8 +322,6 @@ while running:
             item3 = lootchest.items[2]
             show_image(item3.icon, 687, 300, 4)
 
-
-
     # monster room
     if room_type == 'monster':
 
@@ -323,29 +329,26 @@ while running:
         frame()
         exit_button.render_text(screen)
         door_button_monster_room.render_image(screen)
-        if show_room_exit == True:
+        if show_room_exit:
             if door_button_monster_room.image_button():
                 room_type = None
                 show_door_button = True
                 room_counter += 1
 
-
-        if generate_monster == True:
+        if generate_monster:
             monster_type = Monster.monster.type()
             generate_monster = False
 
-
         if monster_type == 'spindel':
-            if monster_is_dead == False:
+            if not monster_is_dead:
                 spider_button.render_image(screen)
                 if spider_button.image_button():
                     monster_is_dead = True
                     start_tick_counter = True
             if monster_is_dead == True and tick_counter <= 40:
                 show_text('You Killed The Monster', 100, 100, 'red', font_alagard_big)
-        if start_tick_counter == True:
+        if start_tick_counter:
             tick_counter += 1
-
 
     # boss room
 
@@ -363,9 +366,8 @@ while running:
             hide_room_text = False
             show_boss_room = True
 
-
-        if show_boss_room == True:
-            if monster_is_dead == False:
+        if show_boss_room:
+            if not monster_is_dead:
                 zombie_boss_button.render_image(screen)
             if zombie_boss_button.image_button():
                 monster_is_dead = True
@@ -375,24 +377,16 @@ while running:
             if tick_counter >= 30:
                 show_text('Moving Down 1 Floor', 100, 100, 'white', font_alagard_big)
 
-
-
             if tick_counter >= 50:
                 room_counter = 0
                 room_type = None
                 show_door_button = True
 
-
-        if start_tick_counter == True:
+        if start_tick_counter:
             tick_counter += 1
-
-
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
 
-
     pygame.display.update()
-
-
