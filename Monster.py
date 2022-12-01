@@ -7,7 +7,7 @@ class Monster():
         self.strength = Player.player.lvl*(rand.randint(9, 12))
         self.hp = Player.player.lvl*(rand.randint(9, 12))
 
-    def type(self):
+    def monster_type(self):
 
         monster = rand.randint(1, 10)
 
@@ -18,7 +18,7 @@ class Monster():
             return "spindel"
 
 
-monster = Monster()
+'''
 print(monster.type())
-print(f'styrka:{monster.strength} hp: {monster.hp} ')
+print(f'styrka:{monster.strength} hp: {monster.hp} ')'''
 
