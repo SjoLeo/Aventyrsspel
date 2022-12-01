@@ -81,36 +81,6 @@ def frame():
         show_image(green_progress, 960, 600, 10)
 
 
-def reset_variables():
-    global show_door_button
-    global show_room_exit
-    global show_chest
-    global generate_monster
-    global monster_is_dead
-    global show_room_text
-    global hide_room_text
-    global show_boss_room
-    global start_tick_counter
-    global monster_type
-    global lootchest
-    global generate_loot_chest
-    global tick_counter
-
-    show_door_button = False
-    show_room_exit = True
-    show_chest = True
-    generate_monster = True
-    monster_is_dead = False
-    show_room_text = False
-    hide_room_text = True
-    show_boss_room = False
-    start_tick_counter = False
-    monster_type = None
-    lootchest = None
-    generate_loot_chest = True
-    tick_counter = 0
-
-
 # initiates pygame
 pygame.init()
 
@@ -187,30 +157,17 @@ exit_button = TextButtons.TextButton(width - 100, 60, 'X', 'red', 'Fonts/alagard
 new_game_button = TextButtons.TextButton(200, 200, 'New game', 'white', 'Fonts/alagard.ttf')
 
 # variables
-main_lobby = False
-show_new_game_button = True
-show_door_button = True
+
 show_room_exit = True
 lootchest = None
 monster_type = None
 monster = None
-
-show_room_text = False
-show_boss_room = False
-generate_loot_chest = True
-show_chest = True
-
-monster_is_dead = False
-generate_monster = True
-start_tick_counter = False
 room_type = None
 
-clock = pygame.time.Clock()
-
 tick_counter = 0
-chest_room_counter = 0
-
 room_counter = 0
+
+clock = pygame.time.Clock()
 
 pos = None
 

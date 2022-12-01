@@ -1,12 +1,6 @@
-import Buttons
-import Items
-import Monster
-import TextButtons
-import Player
-import LootChest
+
 import random
 import pygame
-import Door
 import time
 import GameState
 
@@ -23,7 +17,7 @@ pygame.display.set_caption("Test Caption")
 
 clock = pygame.time.Clock()
 
-random.seed(69)
+#random.seed(69)
 game_state = GameState.GameState()
 running = True
 
