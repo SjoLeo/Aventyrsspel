@@ -32,6 +32,7 @@ def frame():
 
     # hp stat:
     show_text(f"HP: {Player.player.hp}/ {Player.player.hp}", 1020, 2, "white", font_alagard_small)
+    show_text(f"STR: {Player.player.strength}", 1020, 15, "white", font_alagard_small)
 
     # weapon icons:
 
@@ -87,7 +88,7 @@ screen = pygame.display.set_mode((width, height))
 
 # Fonts
 font_alagard_big = pygame.font.Font("Fonts/alagard.ttf", 100)
-font_alagard_small = pygame.font.Font("Fonts/alagard.ttf", 25)
+font_alagard_small = pygame.font.Font("Fonts/alagard.ttf", 15)
 
 # backgrounds
 main_menu_background = pygame.image.load("Images/Start bild.png")
@@ -113,6 +114,7 @@ gold_frame_image = pygame.image.load("Images/GoldFrame.png")
 open_chest_image = pygame.image.load("Images/open_chest.png")
 chest_item_frame_image = pygame.image.load("Images/chest_loot_frame.png")
 green_progress = pygame.image.load("Images/green.png")
+zombie_image = pygame.image.load('Images/zombie.png')
 
 # making button images
 inventory_button = Buttons.Button(inventory_image, 0, 0, 0.3)
@@ -125,6 +127,7 @@ door_button_monster_room = Buttons.Button(door_image, 600, 190, 6)
 spider_button = Buttons.Button(spider_image, 100, 100, 3)
 zombie_boss_button = Buttons.Button(zombie_boss_image, 450, 220, 6)
 door_to_boss = Buttons.Button(door_image, 500, 190, 6)
+zombie_button = Buttons.Button(zombie_image, 300, 180, 5)
 # Frame buttons
 weapon_1_button = Buttons.Button(Player.player.weapon_1.icon, 45, -4, 4)
 weapon_2_button = Buttons.Button(Player.player.weapon_2.icon, 113, -4, 4)
@@ -138,7 +141,6 @@ new_game_button = TextButtons.TextButton(200, 200, 'New game', 'white', 'Fonts/a
 
 # variables
 
-show_room_exit = True
 lootchest = None
 monster_type = None
 monster = None
@@ -151,7 +153,7 @@ selected_weapon_frame_x = 37.5
 selected_armour_frame_x = 210
 
 clock = pygame.time.Clock()
-random.seed(69)
+
 
 class GameState():
     def __init__(self):
@@ -193,6 +195,7 @@ class GameState():
         if exit_button.text_button():
             pygame.quit()
             sys.exit()
+
 
         door_button_1.render_image(screen)
         door_button_2.render_image(screen)
@@ -317,7 +320,6 @@ class GameState():
 
         if door_button_monster_room.image_button():
             room_counter += 1
-            monster
             self.state = 'menu'
 
 
@@ -327,8 +329,9 @@ class GameState():
                 self.state = 'monster_room_killed'
 
         if monster_type == 'zombie':
-            room_counter += 1
-            self.state = 'monster_room_killed'
+            zombie_button.render_image(screen)
+            if zombie_button.image_button():
+                self.state = 'monster_room_killed'
 
     def monster_room_killed(self):
         global room_counter
@@ -336,11 +339,14 @@ class GameState():
         background()
         frame()
         exit_button.render_text(screen)
+        if exit_button.text_button():
+            pygame.quit()
+            sys.exit()
         door_button_monster_room.render_image(screen)
-        if show_room_exit:
-            if door_button_monster_room.image_button():
-                room_counter += 1
-                self.state = 'menu'
+
+        if door_button_monster_room.image_button():
+            room_counter += 1
+            self.state = 'menu'
 
         show_text('You Killed The Monster', 100, 100, 'red', font_alagard_big)
 
