@@ -4,15 +4,10 @@ import Monster
 import TextButtons
 import Player
 import LootChest
-
 import random
-
 import pygame
-
 import sys
-
 import Door
-
 import time
 def show_text(text, x, y, color, font):
     test_text = font.render(text, True, (color))
@@ -89,11 +84,6 @@ width = 1200
 height = 675
 screen = pygame.display.set_mode((width, height))
 
-# Title and Window
-pygame.display.set_caption("Test Caption")
-# icon = pygame.image.load("")
-# pygame.display.set_icon(icon)
-
 
 # Fonts
 font_alagard_big = pygame.font.Font("Fonts/alagard.ttf", 100)
@@ -113,25 +103,15 @@ frame_image = pygame.transform.scale(frame_image, (width, height))
 
 # images
 small_chest = pygame.image.load("Images/Chest.png")
-
 inventory_image = pygame.image.load('Images/Inventory_slot.png')
-
 door_image = pygame.image.load('Images/Door.png')
-
 hole_image = pygame.image.load('Images/Hole.png')
-
 spike_image = pygame.image.load('Images/spike_trap.png')
-
 spider_image = pygame.image.load('Images/spindel_prot.png')
-
 zombie_boss_image = pygame.image.load('Images/zombie_boss.png')
-
 gold_frame_image = pygame.image.load("Images/GoldFrame.png")
-
 open_chest_image = pygame.image.load("Images/open_chest.png")
-
 chest_item_frame_image = pygame.image.load("Images/chest_loot_frame.png")
-
 green_progress = pygame.image.load("Images/green.png")
 
 # making button images
@@ -167,15 +147,11 @@ room_type = None
 tick_counter = 0
 room_counter = 0
 
-clock = pygame.time.Clock()
-
-pos = None
-
-random.seed(69)
-
 selected_weapon_frame_x = 37.5
 selected_armour_frame_x = 210
 
+clock = pygame.time.Clock()
+random.seed(69)
 
 class GameState():
     def __init__(self):

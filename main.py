@@ -4,13 +4,6 @@ import pygame
 import time
 import GameState
 
-pygame.init()
-
-# Screen
-width = 1200
-height = 675
-screen = pygame.display.set_mode((width, height))
-
 
 pygame.display.set_caption("Test Caption")
 
