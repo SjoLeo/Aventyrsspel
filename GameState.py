@@ -18,7 +18,7 @@ def show_image(image, x, y, scale):
     width = image.get_width()
     height = image.get_height()
     image = pygame.transform.scale(image, (int(width * scale), int(height * scale)))
-    screen.blit(image, (x, y))
+    return screen.blit(image, (x, y))
 
 
 def background():
@@ -34,27 +34,35 @@ def frame():
     show_text(f"HP: {Player.player.hp}/ {Player.player.hp}", 1020, 2, "white", font_alagard_small)
     show_text(f"STR: {Player.player.strength}", 1020, 15, "white", font_alagard_small)
 
-    # weapon icons:
+    # weapon icons
+    if not Player.player.weapon_1 == None:
+        show_image(Player.player.weapon_1.icon, 45, -4, 4)
+    if not Player.player.weapon_2 == None:
+        show_image(Player.player.weapon_2.icon, 113, -4, 4)
 
-    weapon_1_button.render_image(screen)
-    weapon_2_button.render_image(screen)
-
-    if weapon_1_button.image_button():
+    # empty weapon
+    if empty_inv_button1.image_button():
         selected_weapon_frame_x = 37.5
-    elif weapon_2_button.image_button():
+    elif empty_inv_button2.image_button():
         selected_weapon_frame_x = 105
-
     show_image(gold_frame_image, selected_weapon_frame_x, 0, 7.5)
 
-    # armour icons:
-    armour_1_button.render_image(screen)
-    armour_2_button.render_image(screen)
+    # armour icons
+    if not Player.player.armour_1 == None:
+        show_image(Player.player.armour_1.icon, 215, 0, 4)
+    if not Player.player.armour_2 == None:
+        show_image(Player.player.armour_2.icon, 283, 0, 4)
 
-    if armour_1_button.image_button():
+    # empty armour
+    if empty_inv_button3.image_button():
         selected_armour_frame_x = 210
-    elif armour_2_button.image_button():
+    elif empty_inv_button4.image_button():
         selected_armour_frame_x = 278
     show_image(gold_frame_image, selected_armour_frame_x, 0, 7.5)
+
+    # potion icon
+
+    # empty potion
 
     # Progress Bar
 
@@ -115,6 +123,7 @@ open_chest_image = pygame.image.load("Images/open_chest.png")
 chest_item_frame_image = pygame.image.load("Images/chest_loot_frame.png")
 green_progress = pygame.image.load("Images/green.png")
 zombie_image = pygame.image.load('Images/zombie.png')
+empty_inv_image = pygame.image.load('Images/empty_inv.png')
 
 # making button images
 inventory_button = Buttons.Button(inventory_image, 0, 0, 0.3)
@@ -128,12 +137,14 @@ spider_button = Buttons.Button(spider_image, 100, 100, 3)
 zombie_boss_button = Buttons.Button(zombie_boss_image, 450, 220, 6)
 door_to_boss = Buttons.Button(door_image, 500, 190, 6)
 zombie_button = Buttons.Button(zombie_image, 300, 180, 5)
-# Frame buttons
-weapon_1_button = Buttons.Button(Player.player.weapon_1.icon, 45, -4, 4)
-weapon_2_button = Buttons.Button(Player.player.weapon_2.icon, 113, -4, 4)
 
-armour_1_button = Buttons.Button(Player.player.armour_1.icon, 215, 0, 4)
-armour_2_button = Buttons.Button(Player.player.armour_2.icon, 283, 0, 4)
+# frame buttons
+empty_inv_button1 = Buttons.Button(empty_inv_image, 45, 0, 1)
+empty_inv_button2 = Buttons.Button(empty_inv_image, 113, 0, 1)
+
+empty_inv_button3 = Buttons.Button(empty_inv_image, 215, 0, 1)
+empty_inv_button4 = Buttons.Button(empty_inv_image, 283, 0, 1)
+
 
 # making button text
 exit_button = TextButtons.TextButton(width - 100, 60, 'X', 'red', 'Fonts/alagard.ttf')
