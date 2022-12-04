@@ -7,11 +7,11 @@ class Player():
         self.defence = base_defence
         self.lvl = lvl
 
-        self.weapon_inventory = [Items.Sword, None]
+        self.weapon_inventory = [Items.Sword, 'Empty']
         self.weapon_1 = self.weapon_inventory[0]
         self.weapon_2 = self.weapon_inventory[1]
 
-        self.armour_inventory = [Items.Chestplate, None]
+        self.armour_inventory = [Items.Chestplate, 'Empty']
         self.armour_1 = self.armour_inventory[0]
         self.armour_2 = self.armour_inventory[1]
 

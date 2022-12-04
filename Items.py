@@ -8,18 +8,15 @@ class Item():
         self.icon = icon
         self.type = type
 
+
 # icons
 sword_image = pygame.image.load("Images/Sword.png")
-
 broad_sword_image = pygame.image.load("Images/BroadSword.png")
-
 crossbow_image = pygame.image.load("Images/Cross_bow.png")
 
 chestplate_image = pygame.image.load("Images/Basic_armor.png")
 
 hp_potion_image = pygame.image.load("Images/Health_potion.png")
-
-
 
 
 # weapons

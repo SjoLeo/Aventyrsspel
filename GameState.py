@@ -35,9 +35,9 @@ def frame():
     show_text(f"STR: {Player.player.strength}", 1020, 15, "white", font_alagard_small)
 
     # weapon icons
-    if not Player.player.weapon_1 == None:
+    if not Player.player.weapon_1 == 'Empty':
         show_image(Player.player.weapon_1.icon, 45, -4, 4)
-    if not Player.player.weapon_2 == None:
+    if not Player.player.weapon_2 == 'Empty':
         show_image(Player.player.weapon_2.icon, 113, -4, 4)
 
     # empty weapon
@@ -48,9 +48,9 @@ def frame():
     show_image(gold_frame_image, selected_weapon_frame_x, 0, 7.5)
 
     # armour icons
-    if not Player.player.armour_1 == None:
+    if not Player.player.armour_1 == 'Empty':
         show_image(Player.player.armour_1.icon, 215, 0, 4)
-    if not Player.player.armour_2 == None:
+    if not Player.player.armour_2 == 'Empty':
         show_image(Player.player.armour_2.icon, 283, 0, 4)
 
     # empty armour
