@@ -13,6 +13,9 @@ def show_text(text, x, y, color, font):
     test_text = font.render(text, True, (color))
     screen.blit(test_text, (x, y))
 
+def random_item():
+    random_items_list = (random.choice(random.choice(Items.items_list)), random.choice(random.choice(Items.items_list)), random.choice(random.choice(Items.items_list)))
+    return random_items_list
 
 def show_image(image, x, y, scale):
     width = image.get_width()
@@ -156,6 +159,7 @@ lootchest = None
 monster_type = None
 monster = None
 room_type = None
+random_items = None
 
 tick_counter = 0
 room_counter = 0
@@ -221,7 +225,8 @@ class GameState():
                     self.state = 'monster_room'
 
                 if room_type == 'chest':
-                    lootchest = LootChest.LootChest()
+
+                    #lootchest = LootChest.LootChest()
                     self.state = 'chest_room'
                 if room_type == 'trap':
                     self.state = 'trap_room'
@@ -259,6 +264,7 @@ class GameState():
         pygame.display.flip()
     def chest_room(self):
         global room_counter
+        global random_items
 
         background()
         frame()
@@ -276,12 +282,15 @@ class GameState():
         small_chest_button.render_image(screen)
 
         if small_chest_button.image_button():
+            random_items = random_item()
             self.state = 'chest_room_opened'
 
         pygame.display.flip()
 
     def chest_room_opened(self):
         global room_counter
+        global random_items
+
 
         background()
         frame()
@@ -294,6 +303,7 @@ class GameState():
 
         if door_button_chest_room.image_button():
             room_counter += 1
+
             self.state = 'menu'
 
         show_text('You Found:...', 300, 100, 'white', font_alagard_big)
@@ -301,13 +311,16 @@ class GameState():
         show_image(chest_item_frame_image, 468, 257, 4)
         show_text("Choose One", 500, 270, "white", font_alagard_small)
 
-        item1 = lootchest.items[0]
-        show_image(item1.icon, 513, 300, 4)
+        item1 = random_items[0]
+        item1_button = Buttons.Button(item1.icon, 513, 300, 4)
+        item1_button.render_image(screen)
+        if item1_button.image_button():
+            print('clicked')
 
-        item2 = lootchest.items[1]
+        item2 = random_items[1]
         show_image(item2.icon, 600, 300, 4)
 
-        item3 = lootchest.items[2]
+        item3 = random_items[2]
         show_image(item3.icon, 687, 300, 4)
 
         pygame.display.flip()

@@ -1,4 +1,3 @@
-
 import random
 import pygame
 import time
@@ -12,11 +11,9 @@ width = 1200
 height = 675
 screen = pygame.display.set_mode((width, height))
 
-
-
 clock = pygame.time.Clock()
 
-#random.seed(69)
+random.seed(69)
 game_state = GameState.GameState()
 running = True
 
