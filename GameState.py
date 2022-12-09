@@ -9,6 +9,7 @@ import pygame
 import sys
 import Door
 import time
+
 def show_text(text, x, y, color, font):
     test_text = font.render(text, True, (color))
     screen.blit(test_text, (x, y))
@@ -64,6 +65,7 @@ def frame():
     show_image(gold_frame_image, selected_armour_frame_x, 0, 7.5)
 
     # potion icon
+
 
     # empty potion
 
@@ -350,13 +352,24 @@ class GameState():
         if monster_type == 'spindel':
             spider_button.render_image(screen)
             if spider_button.image_button():
-                self.state = 'monster_room_killed'
+                #Checks if the player is stronger, weaker, or equal to the monster, and proceed accordingly
+                if Player.player.strength > Monster.monster.strength:
+                    self.state = 'monster_room_killed'
+                elif Player.player.strength == Monster.monster.strenght:
+                    self.state = 'monster_room_tie'
+                else:
+                    self.state = 'monster_room_loss'
 
         if monster_type == 'zombie':
             zombie_button.render_image(screen)
             if zombie_button.image_button():
-                self.state = 'monster_room_killed'
-
+                #Checks if the player is stronger, weaker, or equal to the monster, and proceed accordingly
+                if Player.player.strength > Monster.monster.strength:
+                    self.state = 'monster_room_killed'
+                elif Player.player.strength == Monster.monster.strength:
+                    self.state = 'monster_room_tie'
+                else:
+                    self.state = 'monster_room_loss'
     def monster_room_killed(self):
         global room_counter
 
