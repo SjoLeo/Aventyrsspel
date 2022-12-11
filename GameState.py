@@ -32,6 +32,7 @@ def background():
 def frame():
     global selected_weapon_frame_x
     global selected_armour_frame_x
+
     screen.blit(frame_image, (0, 0))
 
     # hp stat:
@@ -39,11 +40,10 @@ def frame():
     show_text(f"STR: {Player.player.strength}", 1020, 15, "white", font_alagard_small)
 
     # weapon icons
-    if not Player.player.weapon_1 == 'Empty':
-        show_image(Player.player.weapon_1.icon, 45, -4, 4)
-    if not Player.player.weapon_2 == 'Empty':
-        show_image(Player.player.weapon_2.icon, 113, -4, 4)
-
+    if not Player.player.weapon_inventory[0] == 'Empty':
+        show_image(Player.player.weapon_inventory[0].icon, 45, -4, 4)
+    if not Player.player.weapon_inventory[1] == 'Empty':
+        show_image(Player.player.weapon_inventory[1].icon, 113, -4, 4)
     # empty weapon
     if empty_inv_button1.image_button():
         selected_weapon_frame_x = 37.5
@@ -52,10 +52,10 @@ def frame():
     show_image(gold_frame_image, selected_weapon_frame_x, 0, 7.5)
 
     # armour icons
-    if not Player.player.armour_1 == 'Empty':
-        show_image(Player.player.armour_1.icon, 215, 0, 4)
-    if not Player.player.armour_2 == 'Empty':
-        show_image(Player.player.armour_2.icon, 283, 0, 4)
+    if not Player.player.armour_inventory[0] == 'Empty':
+        show_image(Player.player.armour_inventory[0].icon, 215, 0, 4)
+    if not Player.player.armour_inventory[1] == 'Empty':
+        show_image(Player.player.armour_inventory[1].icon, 283, 0, 4)
 
     # empty armour
     if empty_inv_button3.image_button():
@@ -274,9 +274,10 @@ class GameState():
     def chest_room(self):
         global room_counter
         global random_items
-        global item1_button
-        global item2_button
-        global item3_button
+        global item1_chest_button
+        global item2_chest_button
+        global item3_chest_button
+
 
         background()
         frame()
@@ -296,9 +297,11 @@ class GameState():
         if small_chest_button.image_button():
 
             random_items = random_item()
-            item1_button = Buttons.Button(random_items[0].icon, 513, 300, 4)
-            item2_button = Buttons.Button(random_items[1].icon, 600, 300, 4)
-            item3_button = Buttons.Button(random_items[2].icon, 687, 300, 4)
+            item1_chest_button = Buttons.Button(random_items[0].icon, 513, 300, 4)
+            item2_chest_button = Buttons.Button(random_items[1].icon, 600, 300, 4)
+            item3_chest_button = Buttons.Button(random_items[2].icon, 687, 300, 4)
+
+
             self.state = 'chest_room_opened'
 
         pygame.display.flip()
@@ -325,19 +328,24 @@ class GameState():
         show_image(chest_item_frame_image, 468, 257, 4)
         show_text("Choose One", 500, 270, "white", font_alagard_small)
 
-        #print(random_items)
+        item1_chest_button.render_image(screen)
+        if item1_chest_button.image_button():
+            if random_items[0].type == 'weapon':
+                Player.player.add_item_to_inventory(random_items[0], '')
 
 
-        item1_button.render_image(screen)
-        if item1_button.image_button():
-            Player.player.add_item_to_inventory(random_items[0], 'idk')
 
-        item2_button.render_image(screen)
-        if item2_button.image_button():
+            if random_items[0].type == 'armour':
+                pass
+            if random_items[0].type == 'potion':
+                pass
+
+        item2_chest_button.render_image(screen)
+        if item2_chest_button.image_button():
             print('clicked')
 
-        item3_button.render_image(screen)
-        if item3_button.image_button():
+        item3_chest_button.render_image(screen)
+        if item3_chest_button.image_button():
             print('clicked')
 
         pygame.display.flip()
