@@ -157,11 +157,13 @@ new_game_button = TextButtons.TextButton(200, 200, 'New game', 'white', 'Fonts/a
 
 # variables
 
+
 lootchest = None
 monster_type = None
 monster = None
 room_type = None
 random_items = None
+
 
 tick_counter = 0
 room_counter = 0
@@ -264,6 +266,7 @@ class GameState():
         tick_counter += 1
 
         pygame.display.flip()
+
     def chest_room(self):
         global room_counter
         global random_items
@@ -291,8 +294,6 @@ class GameState():
 
     def chest_room_opened(self):
         global room_counter
-        global random_items
-
 
         background()
         frame()
@@ -313,17 +314,20 @@ class GameState():
         show_image(chest_item_frame_image, 468, 257, 4)
         show_text("Choose One", 500, 270, "white", font_alagard_small)
 
-        item1 = random_items[0]
-        item1_button = Buttons.Button(item1.icon, 513, 300, 4)
+        #print(random_items)
+        item1_button = Buttons.Button(random_items[0].icon, 513, 300, 4)
+
         item1_button.render_image(screen)
         if item1_button.image_button():
-            print('clicked')
+            asdf
 
+
+        '''
         item2 = random_items[1]
         show_image(item2.icon, 600, 300, 4)
 
         item3 = random_items[2]
-        show_image(item3.icon, 687, 300, 4)
+        show_image(item3.icon, 687, 300, 4)'''
 
         pygame.display.flip()
 
@@ -400,6 +404,8 @@ class GameState():
 
         if door_to_boss.image_button():
             self.state = 'boss_room'
+
+        pygame.display.flip()
     def boss_room(self):
         background()
         frame()
@@ -412,6 +418,7 @@ class GameState():
         if zombie_boss_button.image_button():
 
             self.state = 'boss_room_killed'
+        pygame.display.flip()
 
     def boss_room_killed(self):
         global room_counter
@@ -434,32 +441,33 @@ class GameState():
             tick_counter = 0
             self.state = 'menu'
         tick_counter += 1
+        pygame.display.flip()
 
     def state_manager(self):
         if self.state == 'start_game':
             self.start_game()
 
-        if self.state == 'menu':
+        elif self.state == 'menu':
             self.menu()
 
-        if self.state == 'monster_room':
+        elif self.state == 'monster_room':
             self.monster_room()
-        if self.state == 'monster_room_killed':
+        elif self.state == 'monster_room_killed':
             self.monster_room_killed()
 
-        if self.state == 'chest_room':
+        elif self.state == 'chest_room':
             self.chest_room()
-        if self.state == 'chest_room_opened':
+        elif self.state == 'chest_room_opened':
             self.chest_room_opened()
 
-        if self.state == 'trap_room':
+        elif self.state == 'trap_room':
             self.trap_room()
 
-        if self.state == 'room_to_boss_room':
+        elif self.state == 'room_to_boss_room':
             self.room_to_boss_room()
 
-        if self.state == 'boss_room':
+        elif self.state == 'boss_room':
             self.boss_room()
 
-        if self.state == 'boss_room_killed':
+        elif self.state == 'boss_room_killed':
             self.boss_room_killed()
