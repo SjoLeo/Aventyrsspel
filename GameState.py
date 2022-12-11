@@ -150,6 +150,10 @@ empty_inv_button2 = Buttons.Button(empty_inv_image, 113, 0, 1)
 empty_inv_button3 = Buttons.Button(empty_inv_image, 215, 0, 1)
 empty_inv_button4 = Buttons.Button(empty_inv_image, 283, 0, 1)
 
+# chest button
+
+
+
 
 # making button text
 exit_button = TextButtons.TextButton(width - 100, 60, 'X', 'red', 'Fonts/alagard.ttf')
@@ -162,7 +166,7 @@ lootchest = None
 monster_type = None
 monster = None
 room_type = None
-random_items = None
+
 
 
 tick_counter = 0
@@ -270,6 +274,9 @@ class GameState():
     def chest_room(self):
         global room_counter
         global random_items
+        global item1_button
+        global item2_button
+        global item3_button
 
         background()
         frame()
@@ -287,7 +294,11 @@ class GameState():
         small_chest_button.render_image(screen)
 
         if small_chest_button.image_button():
+
             random_items = random_item()
+            item1_button = Buttons.Button(random_items[0].icon, 513, 300, 4)
+            item2_button = Buttons.Button(random_items[1].icon, 600, 300, 4)
+            item3_button = Buttons.Button(random_items[2].icon, 687, 300, 4)
             self.state = 'chest_room_opened'
 
         pygame.display.flip()
@@ -315,19 +326,19 @@ class GameState():
         show_text("Choose One", 500, 270, "white", font_alagard_small)
 
         #print(random_items)
-        item1_button = Buttons.Button(random_items[0].icon, 513, 300, 4)
+
 
         item1_button.render_image(screen)
         if item1_button.image_button():
-            asdf
+            Player.player.add_item_to_inventory(random_items[0], 'idk')
 
+        item2_button.render_image(screen)
+        if item2_button.image_button():
+            print('clicked')
 
-        '''
-        item2 = random_items[1]
-        show_image(item2.icon, 600, 300, 4)
-
-        item3 = random_items[2]
-        show_image(item3.icon, 687, 300, 4)'''
+        item3_button.render_image(screen)
+        if item3_button.image_button():
+            print('clicked')
 
         pygame.display.flip()
 
