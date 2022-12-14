@@ -71,9 +71,9 @@ def frame():
 
     # potion icon
     if not Player.player.potion_inventory[0] == 'Empty':
-        show_image(Player.player.potion_inventory[0].icon, 215, 0, 4)
+        show_image(Player.player.potion_inventory[0].icon, 390, -4, 4)
     if not Player.player.potion_inventory[1] == 'Empty':
-        show_image(Player.player.potion_inventory[1].icon, 283, 0, 4)
+        show_image(Player.player.potion_inventory[1].icon, 458, -4, 4)
 
     # empty potion
     if empty_inv_button3.image_button():

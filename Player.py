@@ -9,6 +9,7 @@ class Player():
         self.equipped_weapon = 0
         self.equipped_armour = 0
         self.equipped_potion = 0
+        self.weapon_inventory = ['Empty', 'Empty']
 
         self.armour_inventory = ['Empty', 'Empty']
         self.potion_inventory = ['Empty', 'Empty']
