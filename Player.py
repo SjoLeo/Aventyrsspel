@@ -12,7 +12,7 @@ class Player():
 
         self.weapon_inventory = [Items.BroadSword, 'Empty']
         self.armour_inventory = [Items.Chestplate, 'Empty']
-
+        self.potion_inventory = [Items.Potion_of_health, "Empty"]
 
     def add_item_to_inventory(self, item):
         if item.type == 'weapon':

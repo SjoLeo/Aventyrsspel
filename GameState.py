@@ -70,9 +70,17 @@ def frame():
     show_image(gold_frame_image, selected_armour_frame_x, 0, 7.5)
 
     # potion icon
-
+    if not Player.player.potion_inventory[0] == 'Empty':
+        show_image(Player.player.potion_inventory[0].icon, 215, 0, 4)
+    if not Player.player.potion_inventory[1] == 'Empty':
+        show_image(Player.player.potion_inventory[1].icon, 283, 0, 4)
 
     # empty potion
+    if empty_inv_button3.image_button():
+        selected_potion_frame_x = 210
+    elif empty_inv_button4.image_button():
+        selected_potion_frame_x = 278
+    show_image(gold_frame_image, selected_armour_frame_x, 0, 7.5)
 
     # Progress Bar
 
