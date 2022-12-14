@@ -343,28 +343,21 @@ class GameState():
 
         item1_chest_button.render_image(screen)
         if item1_chest_button.image_button():
-            if random_items[0].type == 'weapon':
-                Player.player.add_item_to_inventory(random_items[0])
+            Player.player.add_item_to_inventory(random_items[0])
+            room_counter += 1
+            self.state = 'menu'
+
         if item2_chest_button.image_button():
-            if random_items[1].type == 'weapon':
-                Player.player.add_item_to_inventory(random_items[1])
+            Player.player.add_item_to_inventory(random_items[1])
+            room_counter += 1
+            self.state = 'menu'
 
 
         if item3_chest_button.image_button():
-            if random_items[2].type == 'weapon':
-                Player.player.add_item_to_inventory(random_items[2])
+            Player.player.add_item_to_inventory(random_items[2])
+            room_counter += 1
+            self.state = 'menu'
 
-
-
-            if random_items[0].type == 'armour':
-                Player.player.add_item_to_inventory(random_items[0])
-            if random_items[1].type == 'armour':
-                Player.player.add_item_to_inventory(random_items[1])
-            if random_items[2].type == 'armour':
-                Player.player.add_item_to_inventory(random_items[2])
-
-            if random_items[0].type == 'potion':
-                pass
 
         item2_chest_button.render_image(screen)
         if item2_chest_button.image_button():
@@ -401,6 +394,7 @@ class GameState():
         if monster_type == 'spindel':
             spider_button.render_image(screen)
             if spider_button.image_button():
+                self.state = 'monster_room_killed'
                 #Checks if the player is stronger, weaker, or equal to the monster, and proceed accordingly
                 if Player.player.strength > Monster.monster.strength:
                     self.state = 'monster_room_killed'
@@ -412,13 +406,16 @@ class GameState():
         if monster_type == 'zombie':
             zombie_button.render_image(screen)
             if zombie_button.image_button():
+                self.state = 'monster_room_killed'
                 #Checks if the player is stronger, weaker, or equal to the monster, and proceed accordingly
                 if Player.player.strength > Monster.monster.strength:
                     self.state = 'monster_room_killed'
                 elif Player.player.strength == Monster.monster.strength:
-                    self.state = 'monster_room_tie'
+                    show_text('Your Strength was matched', 200, 100, 'white', font_alagard_big)
+                    self.state = 'menu'
                 else:
-                    self.state = 'monster_room_loss'
+                    show_text('You lost to the monster', 200,100 , 'red', font_alagard_big)
+                    self.state = 'menu'
     def monster_room_killed(self):
         global room_counter
 
