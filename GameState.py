@@ -44,11 +44,14 @@ def frame():
         show_image(Player.player.weapon_inventory[0].icon, 45, -4, 4)
     if not Player.player.weapon_inventory[1] == 'Empty':
         show_image(Player.player.weapon_inventory[1].icon, 113, -4, 4)
+
     # empty weapon
     if empty_inv_button1.image_button():
         selected_weapon_frame_x = 37.5
+        Player.player.equipped_weapon = 0
     elif empty_inv_button2.image_button():
         selected_weapon_frame_x = 105
+        Player.player.equipped_weapon = 1
     show_image(gold_frame_image, selected_weapon_frame_x, 0, 7.5)
 
     # armour icons
@@ -60,8 +63,10 @@ def frame():
     # empty armour
     if empty_inv_button3.image_button():
         selected_armour_frame_x = 210
+        Player.player.equipped_armour = 0
     elif empty_inv_button4.image_button():
         selected_armour_frame_x = 278
+        Player.player.equipped_armour = 1
     show_image(gold_frame_image, selected_armour_frame_x, 0, 7.5)
 
     # potion icon
@@ -331,12 +336,25 @@ class GameState():
         item1_chest_button.render_image(screen)
         if item1_chest_button.image_button():
             if random_items[0].type == 'weapon':
-                Player.player.add_item_to_inventory(random_items[0], '')
+                Player.player.add_item_to_inventory(random_items[0])
+        if item2_chest_button.image_button():
+            if random_items[1].type == 'weapon':
+                Player.player.add_item_to_inventory(random_items[1])
+
+
+        if item3_chest_button.image_button():
+            if random_items[2].type == 'weapon':
+                Player.player.add_item_to_inventory(random_items[2])
 
 
 
             if random_items[0].type == 'armour':
-                pass
+                Player.player.add_item_to_inventory(random_items[0])
+            if random_items[1].type == 'armour':
+                Player.player.add_item_to_inventory(random_items[1])
+            if random_items[2].type == 'armour':
+                Player.player.add_item_to_inventory(random_items[2])
+
             if random_items[0].type == 'potion':
                 pass
 
