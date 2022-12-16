@@ -37,7 +37,7 @@ def frame():
 
     screen.blit(frame_image, (0, 0))
 
-    # hp stat:
+    # displayed stats:
     show_text(f"HP: {Player.player.hp}/ {Player.player.hp}", 1020, 2, "white", font_alagard_small)
     show_text(f"STR: {Player.player.damage}", 1020, 15, "white", font_alagard_small)
     show_text(f"DEF: {Player.player.defence}", 1020, 28, "white", font_alagard_small)
