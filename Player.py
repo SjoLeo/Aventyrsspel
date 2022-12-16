@@ -5,12 +5,15 @@ class Player():
         self.strength = base_strength
         self.hp = base_hp
         self.defence = base_defence
+
+        self.damage = base_strength
+
         self.lvl = lvl
         self.equipped_weapon = 0
         self.equipped_armour = 0
         self.equipped_potion = 0
-        self.weapon_inventory = ['Empty', 'Empty']
 
+        self.weapon_inventory = ['Empty', 'Empty']
         self.armour_inventory = ['Empty', 'Empty']
         self.potion_inventory = ['Empty', 'Empty']
 
@@ -23,12 +26,14 @@ class Player():
             for _ in self.armour_inventory:
                 self.armour_inventory[self.equipped_armour] = item
 
+        if item.type == 'potion':
+            for _ in self.potion_inventory:
+                self.potion_inventory[self.equipped_potion] = item
 
-
-
-
-
-
+    def add_item_stats(self):
+        self.damage = self.strength
+        if not self.weapon_inventory[self.equipped_weapon] == 'Empty':
+            self.damage = self.weapon_inventory[self.equipped_weapon].strength + self.strength
 
 
     def add_lvl(self, added_lvl):

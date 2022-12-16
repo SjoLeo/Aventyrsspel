@@ -2,6 +2,8 @@ import random
 import pygame
 import time
 import GameState
+import Player
+import sys
 
 
 pygame.display.set_caption("Test Caption")
@@ -28,6 +30,13 @@ while running:
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            running = False
+            pygame.quit()
+            sys.exit()
+
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_e:
+                print('yo mama')
 
 
+
+    pygame.display.flip()

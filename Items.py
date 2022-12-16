@@ -1,4 +1,5 @@
 import pygame
+import Player
 
 class Item():
     def __init__(self, strength, hp, defence, icon, type):
@@ -7,6 +8,7 @@ class Item():
         self.defence = defence
         self.icon = icon
         self.type = type
+
 
 
 # icons

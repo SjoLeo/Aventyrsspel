@@ -29,15 +29,18 @@ def background():
     screen.blit(active_background, (0, 0))
 
 
+
 def frame():
     global selected_weapon_frame_x
     global selected_armour_frame_x
+    global selected_potion_frame_x
 
     screen.blit(frame_image, (0, 0))
 
     # hp stat:
     show_text(f"HP: {Player.player.hp}/ {Player.player.hp}", 1020, 2, "white", font_alagard_small)
-    show_text(f"STR: {Player.player.strength}", 1020, 15, "white", font_alagard_small)
+    show_text(f"STR: {Player.player.damage}", 1020, 15, "white", font_alagard_small)
+    show_text(f"DEF: {Player.player.defence}", 1020, 28, "white", font_alagard_small)
 
     # weapon icons
     if not Player.player.weapon_inventory[0] == 'Empty':
@@ -49,9 +52,11 @@ def frame():
     if empty_inv_button1.image_button():
         selected_weapon_frame_x = 37.5
         Player.player.equipped_weapon = 0
+        Player.player.add_item_stats()
     elif empty_inv_button2.image_button():
         selected_weapon_frame_x = 105
         Player.player.equipped_weapon = 1
+        Player.player.add_item_stats()
     show_image(gold_frame_image, selected_weapon_frame_x, 0, 7.5)
 
     # armour icons
@@ -76,11 +81,13 @@ def frame():
         show_image(Player.player.potion_inventory[1].icon, 458, -4, 4)
 
     # empty potion
-    if empty_inv_button3.image_button():
-        selected_potion_frame_x = 210
-    elif empty_inv_button4.image_button():
-        selected_potion_frame_x = 278
-    show_image(gold_frame_image, selected_armour_frame_x, 0, 7.5)
+    if empty_inv_button5.image_button():
+        selected_potion_frame_x = 383
+        Player.player.equipped_potion = 0
+    elif empty_inv_button6.image_button():
+        selected_potion_frame_x = 451
+        Player.player.equipped_potion = 1
+    show_image(gold_frame_image, selected_potion_frame_x, 0, 7.5)
 
     # Progress Bar
 
@@ -163,6 +170,8 @@ empty_inv_button2 = Buttons.Button(empty_inv_image, 113, 0, 1)
 empty_inv_button3 = Buttons.Button(empty_inv_image, 215, 0, 1)
 empty_inv_button4 = Buttons.Button(empty_inv_image, 283, 0, 1)
 
+empty_inv_button5 = Buttons.Button(empty_inv_image, 390, 0, 1)
+empty_inv_button6 = Buttons.Button(empty_inv_image, 458, 0, 1)
 # chest button
 
 
@@ -177,7 +186,7 @@ new_game_button = TextButtons.TextButton(200, 200, 'New game', 'white', 'Fonts/a
 
 lootchest = None
 monster_type = None
-monster = None
+
 room_type = None
 
 
@@ -187,6 +196,7 @@ room_counter = 0
 
 selected_weapon_frame_x = 37.5
 selected_armour_frame_x = 210
+selected_potion_frame_x = 383
 
 clock = pygame.time.Clock()
 
@@ -216,7 +226,7 @@ class GameState():
                 pygame.quit()
                 sys.exit()
 
-        pygame.display.flip()
+
 
     def menu(self):
         global room_type
@@ -240,20 +250,20 @@ class GameState():
         if door_button_1.image_button() or door_button_2.image_button() or door_button_3.image_button():
             if room_counter < 5:
                 room_type = Door.random_room()
+                print(room_type)
                 if room_type == 'monster':
                     monster = Monster.Monster()
                     monster_type = monster.monster_type()
                     self.state = 'monster_room'
 
                 if room_type == 'chest':
-
                     #lootchest = LootChest.LootChest()
                     self.state = 'chest_room'
                 if room_type == 'trap':
                     self.state = 'trap_room'
             if room_counter == 5:
                 self.state = 'room_to_boss_room'
-        pygame.display.flip()
+
 
     def trap_room(self):
         global room_counter
@@ -282,7 +292,7 @@ class GameState():
 
         tick_counter += 1
 
-        pygame.display.flip()
+
 
     def chest_room(self):
         global room_counter
@@ -315,9 +325,10 @@ class GameState():
             item3_chest_button = Buttons.Button(random_items[2].icon, 687, 300, 4)
 
 
+
             self.state = 'chest_room_opened'
 
-        pygame.display.flip()
+
 
     def chest_room_opened(self):
         global room_counter
@@ -345,36 +356,28 @@ class GameState():
         if item1_chest_button.image_button():
             Player.player.add_item_to_inventory(random_items[0])
             room_counter += 1
+            Player.player.add_item_stats()
             self.state = 'menu'
-
-        if item2_chest_button.image_button():
-            Player.player.add_item_to_inventory(random_items[1])
-            room_counter += 1
-            self.state = 'menu'
-
-
-        if item3_chest_button.image_button():
-            Player.player.add_item_to_inventory(random_items[2])
-            room_counter += 1
-            self.state = 'menu'
-
 
         item2_chest_button.render_image(screen)
         if item2_chest_button.image_button():
-            print('clicked')
+            Player.player.add_item_to_inventory(random_items[1])
+            room_counter += 1
+            Player.player.add_item_stats()
+            self.state = 'menu'
 
         item3_chest_button.render_image(screen)
         if item3_chest_button.image_button():
-            print('clicked')
-
-        pygame.display.flip()
+            Player.player.add_item_to_inventory(random_items[2])
+            room_counter += 1
+            Player.player.add_item_stats()
+            self.state = 'menu'
 
     def monster_room(self):
         global room_counter
         global monster
         global monster_type
-
-
+        global tick_counter
 
 
         background()
@@ -389,33 +392,59 @@ class GameState():
         if door_button_monster_room.image_button():
             room_counter += 1
             self.state = 'menu'
-
+        print(Player.player.strength, monster.strength)
 
         if monster_type == 'spindel':
             spider_button.render_image(screen)
             if spider_button.image_button():
                 self.state = 'monster_room_killed'
+                '''
                 #Checks if the player is stronger, weaker, or equal to the monster, and proceed accordingly
-                if Player.player.strength > Monster.monster.strength:
+                if Player.player.strength > monster.strength:
                     self.state = 'monster_room_killed'
-                elif Player.player.strength == Monster.monster.strenght:
-                    self.state = 'monster_room_tie'
+                elif Player.player.strength == monster.strength:
+                    if tick_counter <= 20:
+                        show_text('Your Strength was matched', 200, 100, 'white', font_alagard_big)
+                    else:
+                        tick_counter = 0
+                        room_counter += 1
+                        self.state = 'menu'
+                    tick_counter += 1
                 else:
-                    self.state = 'monster_room_loss'
+                    if tick_counter <= 20:
+                        show_text('You lost to the monster', 200, 100, 'red', font_alagard_big)
+                    else:
+                        tick_counter = 0
+                        room_counter += 1
+                        self.state = 'menu'
+                    tick_counter += 1'''
 
         if monster_type == 'zombie':
             zombie_button.render_image(screen)
             if zombie_button.image_button():
                 self.state = 'monster_room_killed'
+                '''
                 #Checks if the player is stronger, weaker, or equal to the monster, and proceed accordingly
-                if Player.player.strength > Monster.monster.strength:
+                if Player.player.strength > monster.strength:
                     self.state = 'monster_room_killed'
-                elif Player.player.strength == Monster.monster.strength:
-                    show_text('Your Strength was matched', 200, 100, 'white', font_alagard_big)
-                    self.state = 'menu'
+                elif Player.player.strength == monster.strength:
+                    if tick_counter <= 50:
+                        show_text('Your Strength was matched', 200, 100, 'white', font_alagard_big)
+                    else:
+                        tick_counter = 0
+                        room_counter += 1
+                        self.state = 'menu'
+                    tick_counter += 1
                 else:
-                    show_text('You lost to the monster', 200,100 , 'red', font_alagard_big)
-                    self.state = 'menu'
+                    if tick_counter <= 20:
+                        show_text('You lost to the monster', 200, 100, 'red', font_alagard_big)
+                    else:
+                        tick_counter = 0
+                        room_counter += 1
+                        self.state = 'menu'
+                    tick_counter += 1'''
+
+
     def monster_room_killed(self):
         global room_counter
 
@@ -447,7 +476,7 @@ class GameState():
         if door_to_boss.image_button():
             self.state = 'boss_room'
 
-        pygame.display.flip()
+
     def boss_room(self):
         background()
         frame()
@@ -460,7 +489,7 @@ class GameState():
         if zombie_boss_button.image_button():
 
             self.state = 'boss_room_killed'
-        pygame.display.flip()
+
 
     def boss_room_killed(self):
         global room_counter
@@ -483,33 +512,33 @@ class GameState():
             tick_counter = 0
             self.state = 'menu'
         tick_counter += 1
-        pygame.display.flip()
+
 
     def state_manager(self):
         if self.state == 'start_game':
             self.start_game()
 
-        elif self.state == 'menu':
+        if self.state == 'menu':
             self.menu()
 
-        elif self.state == 'monster_room':
+        if self.state == 'monster_room':
             self.monster_room()
-        elif self.state == 'monster_room_killed':
+        if self.state == 'monster_room_killed':
             self.monster_room_killed()
 
-        elif self.state == 'chest_room':
+        if self.state == 'chest_room':
             self.chest_room()
-        elif self.state == 'chest_room_opened':
+        if self.state == 'chest_room_opened':
             self.chest_room_opened()
 
-        elif self.state == 'trap_room':
+        if self.state == 'trap_room':
             self.trap_room()
 
-        elif self.state == 'room_to_boss_room':
+        if self.state == 'room_to_boss_room':
             self.room_to_boss_room()
 
-        elif self.state == 'boss_room':
+        if self.state == 'boss_room':
             self.boss_room()
 
-        elif self.state == 'boss_room_killed':
+        if self.state == 'boss_room_killed':
             self.boss_room_killed()
