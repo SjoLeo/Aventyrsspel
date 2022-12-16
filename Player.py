@@ -1,4 +1,5 @@
 import Items
+import Monster
 
 class Player():
     def __init__(self, base_strength, base_hp, base_defence, lvl):
@@ -7,6 +8,7 @@ class Player():
         self.defence = base_defence
 
         self.damage = base_strength
+        self.total_defence = base_defence
 
         self.lvl = lvl
         self.equipped_weapon = 0
@@ -31,9 +33,15 @@ class Player():
                 self.potion_inventory[self.equipped_potion] = item
 
     def add_item_stats(self):
+        # adding strength bonus to player
         self.damage = self.strength
         if not self.weapon_inventory[self.equipped_weapon] == 'Empty':
             self.damage = self.weapon_inventory[self.equipped_weapon].strength + self.strength
+
+        # adding defence bonus to player
+        self.total_defence = self.defence
+        if not self.armour_inventory[self.equipped_armour] == 'Empty':
+            self.total_defence = self.armour_inventory[self.equipped_armour].defence + self.defence
 
 
     def add_lvl(self, added_lvl):

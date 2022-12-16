@@ -30,6 +30,9 @@ def background():
 
 
 
+
+
+
 def frame():
     global selected_weapon_frame_x
     global selected_armour_frame_x
@@ -40,7 +43,7 @@ def frame():
     # displayed stats:
     show_text(f"HP: {Player.player.hp}/ {Player.player.hp}", 1020, 2, "white", font_alagard_small)
     show_text(f"STR: {Player.player.damage}", 1020, 15, "white", font_alagard_small)
-    show_text(f"DEF: {Player.player.defence}", 1020, 28, "white", font_alagard_small)
+    show_text(f"DEF: {Player.player.total_defence}", 1020, 28, "white", font_alagard_small)
 
     # weapon icons
     if not Player.player.weapon_inventory[0] == 'Empty':
@@ -69,9 +72,11 @@ def frame():
     if empty_inv_button3.image_button():
         selected_armour_frame_x = 210
         Player.player.equipped_armour = 0
+        Player.player.add_item_stats()
     elif empty_inv_button4.image_button():
         selected_armour_frame_x = 278
         Player.player.equipped_armour = 1
+        Player.player.add_item_stats()
     show_image(gold_frame_image, selected_armour_frame_x, 0, 7.5)
 
     # potion icon
@@ -373,6 +378,7 @@ class GameState():
             Player.player.add_item_stats()
             self.state = 'menu'
 
+
     def monster_room(self):
         global room_counter
         global monster
@@ -397,53 +403,23 @@ class GameState():
         if monster_type == 'spindel':
             spider_button.render_image(screen)
             if spider_button.image_button():
-                self.state = 'monster_room_killed'
-                '''
-                #Checks if the player is stronger, weaker, or equal to the monster, and proceed accordingly
-                if Player.player.strength > monster.strength:
-                    self.state = 'monster_room_killed'
-                elif Player.player.strength == monster.strength:
-                    if tick_counter <= 20:
-                        show_text('Your Strength was matched', 200, 100, 'white', font_alagard_big)
-                    else:
-                        tick_counter = 0
-                        room_counter += 1
-                        self.state = 'menu'
-                    tick_counter += 1
-                else:
-                    if tick_counter <= 20:
-                        show_text('You lost to the monster', 200, 100, 'red', font_alagard_big)
-                    else:
-                        tick_counter = 0
-                        room_counter += 1
-                        self.state = 'menu'
-                    tick_counter += 1'''
+                self.state = 'fight'
+
 
         if monster_type == 'zombie':
             zombie_button.render_image(screen)
             if zombie_button.image_button():
-                self.state = 'monster_room_killed'
-                '''
-                #Checks if the player is stronger, weaker, or equal to the monster, and proceed accordingly
-                if Player.player.strength > monster.strength:
-                    self.state = 'monster_room_killed'
-                elif Player.player.strength == monster.strength:
-                    if tick_counter <= 50:
-                        show_text('Your Strength was matched', 200, 100, 'white', font_alagard_big)
-                    else:
-                        tick_counter = 0
-                        room_counter += 1
-                        self.state = 'menu'
-                    tick_counter += 1
-                else:
-                    if tick_counter <= 20:
-                        show_text('You lost to the monster', 200, 100, 'red', font_alagard_big)
-                    else:
-                        tick_counter = 0
-                        room_counter += 1
-                        self.state = 'menu'
-                    tick_counter += 1'''
+                self.state = 'fight'
 
+    def fight(self):
+        if Player.player.damage > monster.strength:
+            self.state = 'monster_room_killed'
+
+        elif Player.player.damage == monster.strength:
+            self.state = 'monster_room_tie'
+
+        else:
+            self.state = 'monster_room_loss'
 
     def monster_room_killed(self):
         global room_counter
@@ -461,6 +437,40 @@ class GameState():
             self.state = 'menu'
 
         show_text('You Killed The Monster', 100, 100, 'red', font_alagard_big)
+
+    def monster_room_tie(self):
+        global room_counter
+
+        background()
+        frame()
+        if exit_button.text_button():
+            pygame.quit()
+            sys.exit()
+
+        door_button_monster_room.render_image(screen)
+        if door_button_monster_room.image_button():
+            room_counter += 1
+            self.state = 'menu'
+
+        show_text('You were of equal strength', 50, 100, 'white', font_alagard_big)
+
+    def monster_room_loss(self):
+        global room_counter
+
+        background()
+        frame()
+        if exit_button.text_button():
+            pygame.quit()
+            sys.exit()
+
+        door_button_monster_room.render_image(screen)
+        if door_button_monster_room.image_button():
+            room_counter += 1
+            self.state = 'menu'
+
+        show_text('You lost to the monster', 100, 100, 'red', font_alagard_big)
+
+
 
     def room_to_boss_room(self):
         background()
@@ -523,8 +533,18 @@ class GameState():
 
         if self.state == 'monster_room':
             self.monster_room()
+
+        if self.state == 'fight':
+            self.fight()
+
         if self.state == 'monster_room_killed':
             self.monster_room_killed()
+
+        if self.state == 'monster_room_tie':
+            self.monster_room_tie()
+
+        if self.state == 'monster_room_loss':
+            self.monster_room_loss()
 
         if self.state == 'chest_room':
             self.chest_room()
