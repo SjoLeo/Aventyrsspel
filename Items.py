@@ -2,7 +2,8 @@ import pygame
 import Player
 
 class Item():
-    def __init__(self, strength, hp, defence, icon, type):
+    def __init__(self, strength, hp, defence, icon, type, name):
+        self.name = name
         self.strength = strength
         self.hp = hp
         self.defence = defence
@@ -23,24 +24,24 @@ hp_potion_image = pygame.image.load("Images/Health_potion.png")
 
 # weapons
 
-Sword = Item(2, 0, 0, sword_image, 'weapon')
-BroadSword = Item(3, 0, 0, broad_sword_image, 'weapon')
+Sword = Item(2, 0, 0, sword_image, 'weapon', 'Sword')
+BroadSword = Item(3, 0, 0, broad_sword_image, 'weapon', 'Broadsword')
 """
 Axe = Item(1, 0, 0, main.)
 """
-Crossbow = Item(1, 0, 0, crossbow_image, 'weapon')
+Crossbow = Item(1, 0, 0, crossbow_image, 'weapon', 'Crossbow')
 
 weapons = [Sword, BroadSword, Crossbow]
 
 # armour
 
-Chestplate = Item(0, 0, 5, chestplate_image, 'armour')
+Chestplate = Item(0, 0, 5, chestplate_image, 'armour', 'Chestplate')
 
 armours = [Chestplate]
 
 # potion
 
-Potion_of_health = Item(0, 5, 0, hp_potion_image, 'potion')
+Potion_of_health = Item(0, 5, 0, hp_potion_image, 'potion', 'Potion_of_health')
 
 potions = [Potion_of_health]
 

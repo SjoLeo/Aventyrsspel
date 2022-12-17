@@ -9,6 +9,7 @@ class Player():
 
         self.damage = base_strength
         self.total_defence = base_defence
+        self.current_hp = base_hp
 
         self.lvl = lvl
         self.equipped_weapon = 0
@@ -42,6 +43,14 @@ class Player():
         self.total_defence = self.defence
         if not self.armour_inventory[self.equipped_armour] == 'Empty':
             self.total_defence = self.armour_inventory[self.equipped_armour].defence + self.defence
+
+    def drink_potion(self):
+        if not self.potion_inventory[self.equipped_potion] == 'Empty':
+            # check potion type
+            if self.potion_inventory[self.equipped_potion].name == 'Potion_of_health':
+                if self.current_hp + 3 <= self.hp:
+                    self.current_hp += 3
+                    self.potion_inventory[self.equipped_potion] = 'Empty'
 
 
     def add_lvl(self, added_lvl):
