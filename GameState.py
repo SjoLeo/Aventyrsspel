@@ -3,12 +3,13 @@ import Items
 import Monster
 import TextButtons
 import Player
-import LootChest
+
 import random
 import pygame
 import sys
-import Door
+
 import time
+
 
 def show_text(text, x, y, color, font):
     test_text = font.render(text, True, (color))
@@ -29,7 +30,9 @@ def background():
     screen.blit(active_background, (0, 0))
 
 
-
+def random_room():
+    rooms = ['monster', 'trap', 'chest']
+    return random.choice(rooms)
 
 
 
@@ -38,12 +41,14 @@ def frame():
     global selected_armour_frame_x
     global selected_potion_frame_x
 
+
     screen.blit(frame_image, (0, 0))
 
     # displayed stats:
-    show_text(f"HP: {Player.player.hp}/ {Player.player.hp}", 1020, 2, "white", font_alagard_small)
+    show_text(f"HP: {Player.player.current_hp}/ {Player.player.hp}", 1020, 2, "white", font_alagard_small)
     show_text(f"STR: {Player.player.damage}", 1020, 15, "white", font_alagard_small)
     show_text(f"DEF: {Player.player.total_defence}", 1020, 28, "white", font_alagard_small)
+    show_text(f'Player level: {Player.player.lvl}', 546, 10, 'white', font_alagard_medium)
 
     # weapon icons
     if not Player.player.weapon_inventory[0] == 'Empty':
@@ -114,6 +119,14 @@ def frame():
     if room_counter > 4:
         show_image(green_progress, 960, 600, 10)
 
+    # check for key inputs
+    for event in pygame.event.get():
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_e:
+                # drink potion
+                Player.player.drink_potion()
+
+
 
 # initiates pygame
 pygame.init()
@@ -125,8 +138,9 @@ screen = pygame.display.set_mode((width, height))
 
 
 # Fonts
-font_alagard_big = pygame.font.Font("Fonts/alagard.ttf", 100)
+font_alagard_big = pygame.font.Font("Fonts/alagard.ttf", 70)
 font_alagard_small = pygame.font.Font("Fonts/alagard.ttf", 15)
+font_alagard_medium = pygame.font.Font('Fonts/alagard.ttf', 25)
 
 # backgrounds
 main_menu_background = pygame.image.load("Images/Start bild.png")
@@ -188,13 +202,8 @@ new_game_button = TextButtons.TextButton(200, 200, 'New game', 'white', 'Fonts/a
 
 # variables
 
-
-lootchest = None
 monster_type = None
-
 room_type = None
-
-
 
 tick_counter = 0
 room_counter = 0
@@ -231,12 +240,9 @@ class GameState():
                 pygame.quit()
                 sys.exit()
 
-
-
     def menu(self):
         global room_type
         global room_counter
-        global lootchest
         global monster
         global monster_type
 
@@ -247,14 +253,13 @@ class GameState():
             pygame.quit()
             sys.exit()
 
-
         door_button_1.render_image(screen)
         door_button_2.render_image(screen)
         door_button_3.render_image(screen)
 
         if door_button_1.image_button() or door_button_2.image_button() or door_button_3.image_button():
             if room_counter < 5:
-                room_type = Door.random_room()
+                room_type = random_room()
                 print(room_type)
                 if room_type == 'monster':
                     monster = Monster.Monster()
@@ -262,10 +267,11 @@ class GameState():
                     self.state = 'monster_room'
 
                 if room_type == 'chest':
-                    #lootchest = LootChest.LootChest()
                     self.state = 'chest_room'
+
                 if room_type == 'trap':
                     self.state = 'trap_room'
+
             if room_counter == 5:
                 self.state = 'room_to_boss_room'
 
@@ -284,13 +290,16 @@ class GameState():
             sys.exit()
 
         if tick_counter <= 20:
-            show_text("It's a Dead End", 300, 100, 'white', font_alagard_big)
+            show_text("It's a Dead End", 150, 120, 'white', font_alagard_big)
         if tick_counter >= 25:
-            show_text('A Trap Appears!', 250, 100, 'red', font_alagard_big)
+            show_text('A Trap Appears!', 150, 120, 'red', font_alagard_big)
             show_image(hole_image, 410, 500, 7)
         if tick_counter >= 35:
             show_image(spike_image, 450, 487, 7)
+
         if tick_counter >= 50:
+            # player takes damage
+            Player.player.current_hp -= 1
             room_counter += 1
             tick_counter = 0
             self.state = 'menu'
@@ -352,7 +361,7 @@ class GameState():
 
             self.state = 'menu'
 
-        show_text('You Found:...', 300, 100, 'white', font_alagard_big)
+        show_text('You Found:...', 150, 120, 'white', font_alagard_big)
         show_image(open_chest_image, 565, 426, 6)
         show_image(chest_item_frame_image, 468, 257, 4)
         show_text("Choose One", 500, 270, "white", font_alagard_small)
@@ -419,6 +428,7 @@ class GameState():
             self.state = 'monster_room_tie'
 
         else:
+            Player.player.current_hp -= 1
             self.state = 'monster_room_loss'
 
     def monster_room_killed(self):
@@ -436,13 +446,14 @@ class GameState():
             room_counter += 1
             self.state = 'menu'
 
-        show_text('You Killed The Monster', 100, 100, 'red', font_alagard_big)
+        show_text('You Killed The Monster', 150, 120, 'red', font_alagard_big)
 
     def monster_room_tie(self):
         global room_counter
 
         background()
         frame()
+        exit_button.render_text(screen)
         if exit_button.text_button():
             pygame.quit()
             sys.exit()
@@ -452,13 +463,14 @@ class GameState():
             room_counter += 1
             self.state = 'menu'
 
-        show_text('You were of equal strength', 50, 100, 'white', font_alagard_big)
+        show_text('You were of equal strength', 150, 120, 'white', font_alagard_big)
 
     def monster_room_loss(self):
         global room_counter
 
         background()
         frame()
+        exit_button.render_text(screen)
         if exit_button.text_button():
             pygame.quit()
             sys.exit()
@@ -468,7 +480,7 @@ class GameState():
             room_counter += 1
             self.state = 'menu'
 
-        show_text('You lost to the monster', 100, 100, 'red', font_alagard_big)
+        show_text('You lost to the monster', 150, 120, 'red', font_alagard_big)
 
 
 
@@ -481,7 +493,7 @@ class GameState():
             sys.exit()
 
         door_to_boss.render_image(screen)
-        show_text('YOU FOUND THE BOSS', 80, 100, 'red', font_alagard_big)
+        show_text('YOU FOUND THE BOSS', 150, 120, 'red', font_alagard_big)
 
         if door_to_boss.image_button():
             self.state = 'boss_room'
@@ -513,9 +525,9 @@ class GameState():
             sys.exit()
 
         if tick_counter <= 30:
-            show_text('You Killed the Boss!', 100, 100, 'red', font_alagard_big)
+            show_text('You Killed the Boss!', 150, 120, 'red', font_alagard_big)
         if tick_counter >= 30:
-            show_text('Moving Down 1 Floor', 100, 100, 'white', font_alagard_big)
+            show_text('Moving Down 1 Floor', 150, 120, 'white', font_alagard_big)
 
         if tick_counter >= 50:
             room_counter = 0
@@ -523,6 +535,16 @@ class GameState():
             self.state = 'menu'
         tick_counter += 1
 
+    def defeated(self):
+        global tick_counter
+        background()
+        frame()
+        if tick_counter <= 40:
+            show_text('YOU WERE DEFEATED', 150, 120, 'red', font_alagard_big)
+        else:
+            pygame.quit()
+            sys.exit()
+        tick_counter += 1
 
     def state_manager(self):
         if self.state == 'start_game':
@@ -562,3 +584,6 @@ class GameState():
 
         if self.state == 'boss_room_killed':
             self.boss_room_killed()
+
+        if self.state == 'defeated':
+            self.defeated()
