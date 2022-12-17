@@ -459,7 +459,7 @@ class GameState():
             room_counter += 1
             self.state = 'menu'
 
-        show_text('You Killed The Monster', 150, 120, 'red', font_alagard_big)
+        show_text('You Killed The Monster', 150, 120, 'white', font_alagard_big)
 
     def monster_room_tie(self):
         global room_counter
