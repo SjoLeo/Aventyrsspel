@@ -49,6 +49,7 @@ def frame():
     show_text(f"STR: {Player.player.damage}", 1020, 15, "white", font_alagard_small)
     show_text(f"DEF: {Player.player.total_defence}", 1020, 28, "white", font_alagard_small)
     show_text(f'Player level: {Player.player.lvl}', 546, 10, 'white', font_alagard_medium)
+    show_text(f'Dungeon floor: {dungeon_floor}', 546, 30, 'white', font_alagard_medium)
 
     # weapon icons
     if not Player.player.weapon_inventory[0] == 'Empty':
@@ -201,9 +202,10 @@ exit_button = TextButtons.TextButton(width - 100, 60, 'X', 'red', 'Fonts/alagard
 new_game_button = TextButtons.TextButton(200, 200, 'New game', 'white', 'Fonts/alagard.ttf')
 
 # variables
-
+dungeon_floor = 0
 monster_type = None
 room_type = None
+
 
 tick_counter = 0
 room_counter = 0
@@ -218,6 +220,7 @@ clock = pygame.time.Clock()
 class GameState():
     def __init__(self):
         self.state = 'start_game'
+
 
     def start_game(self):
         global active_background
@@ -516,6 +519,7 @@ class GameState():
     def boss_room_killed(self):
         global room_counter
         global tick_counter
+        global dungeon_floor
 
         background()
         frame()
@@ -530,6 +534,7 @@ class GameState():
             show_text('Moving Down 1 Floor', 150, 120, 'white', font_alagard_big)
 
         if tick_counter >= 50:
+            dungeon_floor += 1
             room_counter = 0
             tick_counter = 0
             self.state = 'menu'
