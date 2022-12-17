@@ -178,10 +178,16 @@ door_button_3 = Buttons.Button(door_image, 900, 190, 6)
 small_chest_button = Buttons.Button(small_chest, 565, 450, 6)
 door_button_chest_room = Buttons.Button(door_image, 150, 190, 6)
 door_button_monster_room = Buttons.Button(door_image, 600, 190, 6)
-spider_button = Buttons.Button(spider_image, 100, 100, 3)
-zombie_boss_button = Buttons.Button(zombie_boss_image, 450, 220, 6)
 door_to_boss = Buttons.Button(door_image, 500, 190, 6)
-zombie_button = Buttons.Button(zombie_image, 300, 180, 5)
+
+
+# monster buttons
+monster_x = 0
+monster_y = 0
+spider_button = Buttons.Button(spider_image, monster_x, monster_y, 3)
+zombie_button = Buttons.Button(zombie_image, monster_x, monster_y, 5)
+zombie_boss_button = Buttons.Button(zombie_boss_image, 450, 220, 6)
+
 
 # frame buttons
 empty_inv_button1 = Buttons.Button(empty_inv_image, 45, 0, 1)
@@ -202,6 +208,7 @@ exit_button = TextButtons.TextButton(width - 100, 60, 'X', 'red', 'Fonts/alagard
 new_game_button = TextButtons.TextButton(200, 200, 'New game', 'white', 'Fonts/alagard.ttf')
 
 # variables
+
 dungeon_floor = 0
 monster_type = None
 room_type = None
@@ -248,6 +255,8 @@ class GameState():
         global room_counter
         global monster
         global monster_type
+        global monster_x
+        global monster_y
 
         background()
         frame()
@@ -266,7 +275,10 @@ class GameState():
                 print(room_type)
                 if room_type == 'monster':
                     monster = Monster.Monster()
-                    monster_type = monster.monster_type()
+                    monster_type = monster.type
+                    monster_x = monster.monster_position()[0]
+                    monster_y = monster.monster_position()[1]
+
                     self.state = 'monster_room'
 
                 if room_type == 'chest':
@@ -410,13 +422,12 @@ class GameState():
         if door_button_monster_room.image_button():
             room_counter += 1
             self.state = 'menu'
-        print(Player.player.strength, monster.strength)
+        #print(Player.player.strength, monster.strength)
 
-        if monster_type == 'spindel':
+        if monster_type == 'spider':
             spider_button.render_image(screen)
             if spider_button.image_button():
                 self.state = 'fight'
-
 
         if monster_type == 'zombie':
             zombie_button.render_image(screen)

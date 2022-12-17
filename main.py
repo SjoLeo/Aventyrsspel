@@ -15,14 +15,14 @@ screen = pygame.display.set_mode((width, height))
 
 clock = pygame.time.Clock()
 
-random.seed(69)
+#random.seed(69)
 game_state = GameState.GameState()
 running = True
 
 # Game Loop
 while running:
-    pos = pygame.mouse.get_pos()
-    print(pos)
+    #pos = pygame.mouse.get_pos()
+    #print(pos)
     clock.tick(60)
 
     game_state.state_manager()
