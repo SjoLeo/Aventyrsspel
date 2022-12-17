@@ -182,10 +182,9 @@ door_to_boss = Buttons.Button(door_image, 500, 190, 6)
 
 
 # monster buttons
-monster_x = 0
-monster_y = 0
-spider_button = Buttons.Button(spider_image, monster_x, monster_y, 3)
-zombie_button = Buttons.Button(zombie_image, monster_x, monster_y, 5)
+# x och y ändras i gamestate
+spider_button = Buttons.Button(spider_image, 0, 0, 3)
+zombie_button = Buttons.Button(zombie_image, 0, 0, 5)
 zombie_boss_button = Buttons.Button(zombie_boss_image, 450, 220, 6)
 
 
@@ -405,10 +404,6 @@ class GameState():
 
     def monster_room(self):
         global room_counter
-        global monster
-        global monster_type
-        global tick_counter
-
 
         background()
         frame()
@@ -425,11 +420,15 @@ class GameState():
         #print(Player.player.strength, monster.strength)
 
         if monster_type == 'spider':
+            spider_button.rect.x = monster_x
+            spider_button.rect.y = monster_y
             spider_button.render_image(screen)
             if spider_button.image_button():
                 self.state = 'fight'
 
         if monster_type == 'zombie':
+            zombie_button.rect.x = monster_x
+            zombie_button.rect.y = monster_y
             zombie_button.render_image(screen)
             if zombie_button.image_button():
                 self.state = 'fight'
