@@ -120,7 +120,7 @@ def frame():
     if room_counter > 4:
         show_image(green_progress, 960, 600, 10)
 
-    # check for key inputs
+    # check for key inputs related to inventory items
     for event in pygame.event.get():
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_e:
@@ -232,22 +232,10 @@ class GameState():
         global active_background
 
         background()
-
-        exit_button.render_text(screen)
-        if exit_button.text_button():
-            pygame.quit()
-            sys.exit()
-
-
         new_game_button.render_text(screen)
         if new_game_button.text_button():
             active_background = main_room
             self.state = 'menu'
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
 
     def menu(self):
         global room_type
@@ -259,10 +247,6 @@ class GameState():
 
         background()
         frame()
-        exit_button.render_text(screen)
-        if exit_button.text_button():
-            pygame.quit()
-            sys.exit()
 
         door_button_1.render_image(screen)
         door_button_2.render_image(screen)
@@ -298,11 +282,6 @@ class GameState():
         background()
         frame()
 
-        exit_button.render_text(screen)
-        if exit_button.text_button():
-            pygame.quit()
-            sys.exit()
-
         if tick_counter <= 20:
             show_text("It's a Dead End", 150, 120, 'white', font_alagard_big)
         if tick_counter >= 25:
@@ -329,14 +308,9 @@ class GameState():
         global item2_chest_button
         global item3_chest_button
 
-
         background()
         frame()
 
-        exit_button.render_text(screen)
-        if exit_button.text_button():
-            pygame.quit()
-            sys.exit()
         door_button_chest_room.render_image(screen)
 
         if door_button_chest_room.image_button():
@@ -352,11 +326,14 @@ class GameState():
             item2_chest_button = Buttons.Button(random_items[1].icon, 600, 300, 4)
             item3_chest_button = Buttons.Button(random_items[2].icon, 687, 300, 4)
 
-
+            # randomize stats for items
+            for item in random_items:
+                if item.type == 'weapon':
+                    item.strength = random.randint(1, 5)
+                if item.type == 'armour':
+                    item.defence = random.randint(1, 5)
 
             self.state = 'chest_room_opened'
-
-
 
     def chest_room_opened(self):
         global room_counter
@@ -364,10 +341,6 @@ class GameState():
         background()
         frame()
 
-        exit_button.render_text(screen)
-        if exit_button.text_button():
-            pygame.quit()
-            sys.exit()
         door_button_chest_room.render_image(screen)
 
         if door_button_chest_room.image_button():
@@ -407,10 +380,6 @@ class GameState():
 
         background()
         frame()
-        exit_button.render_text(screen)
-        if exit_button.text_button():
-            pygame.quit()
-            sys.exit()
 
         door_button_monster_room.render_image(screen)
 
@@ -449,10 +418,7 @@ class GameState():
 
         background()
         frame()
-        exit_button.render_text(screen)
-        if exit_button.text_button():
-            pygame.quit()
-            sys.exit()
+
         door_button_monster_room.render_image(screen)
 
         if door_button_monster_room.image_button():
@@ -466,10 +432,6 @@ class GameState():
 
         background()
         frame()
-        exit_button.render_text(screen)
-        if exit_button.text_button():
-            pygame.quit()
-            sys.exit()
 
         door_button_monster_room.render_image(screen)
         if door_button_monster_room.image_button():
@@ -483,10 +445,7 @@ class GameState():
 
         background()
         frame()
-        exit_button.render_text(screen)
-        if exit_button.text_button():
-            pygame.quit()
-            sys.exit()
+
 
         door_button_monster_room.render_image(screen)
         if door_button_monster_room.image_button():
@@ -495,15 +454,9 @@ class GameState():
 
         show_text('You lost to the monster', 150, 120, 'red', font_alagard_big)
 
-
-
     def room_to_boss_room(self):
         background()
         frame()
-        exit_button.render_text(screen)
-        if exit_button.text_button():
-            pygame.quit()
-            sys.exit()
 
         door_to_boss.render_image(screen)
         show_text('YOU FOUND THE BOSS', 150, 120, 'red', font_alagard_big)
@@ -511,14 +464,9 @@ class GameState():
         if door_to_boss.image_button():
             self.state = 'boss_room'
 
-
     def boss_room(self):
         background()
         frame()
-        exit_button.render_text(screen)
-        if exit_button.text_button():
-            pygame.quit()
-            sys.exit()
 
         zombie_boss_button.render_image(screen)
         if zombie_boss_button.image_button():
@@ -533,10 +481,6 @@ class GameState():
 
         background()
         frame()
-        exit_button.render_text(screen)
-        if exit_button.text_button():
-            pygame.quit()
-            sys.exit()
 
         if tick_counter <= 30:
             show_text('You Killed the Boss!', 150, 120, 'red', font_alagard_big)
@@ -554,14 +498,15 @@ class GameState():
         global tick_counter
         background()
         frame()
-        if tick_counter <= 40:
-            show_text('YOU WERE DEFEATED', 150, 120, 'red', font_alagard_big)
+        if tick_counter <= 100:
+            show_text('GAME OVER', 150, 120, 'red', font_alagard_big)
         else:
             pygame.quit()
             sys.exit()
         tick_counter += 1
 
     def state_manager(self):
+        # all scenes
         if self.state == 'start_game':
             self.start_game()
 
@@ -602,3 +547,20 @@ class GameState():
 
         if self.state == 'defeated':
             self.defeated()
+
+
+        # things that should be done/checked throughout the entire game
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
+        exit_button.render_text(screen)
+        if exit_button.text_button():
+            pygame.quit()
+            sys.exit()
+
+        if Player.player.current_hp <= 0:
+            self.state = 'defeated'
+
+        pygame.display.flip()
