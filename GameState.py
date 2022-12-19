@@ -238,12 +238,7 @@ class GameState():
             self.state = 'menu'
 
     def menu(self):
-        global room_type
-        global room_counter
-        global monster
-        global monster_type
-        global monster_x
-        global monster_y
+        global room_type, room_counter, monster, monster_type, monster_x, monster_y
 
         background()
         frame()
@@ -275,9 +270,7 @@ class GameState():
 
 
     def trap_room(self):
-        global room_counter
-        global tick_counter
-        global room_type
+        global room_counter, tick_counter, room_type
 
         background()
         frame()
@@ -302,11 +295,7 @@ class GameState():
 
 
     def chest_room(self):
-        global room_counter
-        global random_items
-        global item1_chest_button
-        global item2_chest_button
-        global item3_chest_button
+        global room_counter, random_items, item1_chest_button, item2_chest_button, item3_chest_button
 
         background()
         frame()
@@ -475,9 +464,7 @@ class GameState():
 
 
     def boss_room_killed(self):
-        global room_counter
-        global tick_counter
-        global dungeon_floor
+        global room_counter, tick_counter, dungeon_floor
 
         background()
         frame()
