@@ -316,6 +316,7 @@ class GameState():
             item3_chest_button = Buttons.Button(random_items[2].icon, 687, 300, 4)
 
             # randomize stats for items
+            # if you get two of the same items the former item is also going to change strength
             for item in random_items:
                 if item.type == 'weapon':
                     item.strength = random.randint(1, 5)
