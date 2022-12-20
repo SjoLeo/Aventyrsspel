@@ -16,7 +16,7 @@ running = True
 
 # Game Loop
 while running:
-    print(pygame.mouse.get_pos())
+    #print(pygame.mouse.get_pos())
     clock.tick(60)
 
     game_state.state_manager()

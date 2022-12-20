@@ -8,6 +8,7 @@ import random
 import pygame
 import sys
 import copy
+import Animation
 
 import time
 
@@ -185,6 +186,10 @@ zombie_image = pygame.image.load('Images/zombie.png')
 empty_inv_image = pygame.image.load('Images/empty_inv.png')
 torch_image = pygame.image.load('Images/torch.png')
 
+# animations
+
+test_animation = [zombie_image, zombie_boss_image, spider_image]
+
 # making button images
 inventory_button = Buttons.Button(inventory_image, 0, 0, 0.3)
 door_button_1 = Buttons.Button(door_image, 100, 190, 6)
@@ -238,8 +243,11 @@ selected_potion_frame_x = 383
 clock = pygame.time.Clock()
 
 
+test = Animation.Animation(test_animation, 400, 400, 5)
+
 class GameState():
     def __init__(self):
+
         self.state = 'start_game'
 
 
@@ -251,6 +259,9 @@ class GameState():
         if new_game_button.text_button():
             active_background = main_room
             self.state = 'menu'
+
+        test.update(screen, 0.05)
+
 
     def menu(self):
         global room_type, room_counter, monster, monster_type, monster_x, monster_y
