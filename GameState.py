@@ -161,6 +161,9 @@ main_menu_background = pygame.transform.scale(main_menu_background, (width, heig
 main_room = pygame.image.load('Images/main room.png')
 main_room = pygame.transform.scale(main_room, (width, height))
 
+boss_room = pygame.image.load('Images/Boss_room.png')
+boss_room = pygame.transform.scale(boss_room, (width, height))
+
 active_background = main_menu_background
 
 frame_image = pygame.image.load('Images/Frame.png')
@@ -180,6 +183,7 @@ chest_item_frame_image = pygame.image.load("Images/chest_loot_frame.png")
 green_progress = pygame.image.load("Images/green.png")
 zombie_image = pygame.image.load('Images/zombie.png')
 empty_inv_image = pygame.image.load('Images/empty_inv.png')
+torch_image = pygame.image.load('Images/torch.png')
 
 # making button images
 inventory_button = Buttons.Button(inventory_image, 0, 0, 0.3)
@@ -449,16 +453,22 @@ class GameState():
         show_text('You lost to the monster', 150, 120, 'red', font_alagard_big)
 
     def room_to_boss_room(self):
+        global active_background
         background()
         frame()
+
 
         door_to_boss.render_image(screen)
         show_text('YOU FOUND THE BOSS', 150, 120, 'red', font_alagard_big)
 
         if door_to_boss.image_button():
+            active_background = boss_room
             self.state = 'boss_room'
+        show_image(torch_image, 420, 240, 5)
+        show_image(torch_image, 740, 240, 5)
 
     def boss_room(self):
+
         background()
         frame()
 
@@ -469,7 +479,7 @@ class GameState():
 
 
     def boss_room_killed(self):
-        global room_counter, tick_counter, dungeon_floor
+        global room_counter, tick_counter, dungeon_floor, active_background
 
         background()
         frame()
@@ -483,6 +493,7 @@ class GameState():
             dungeon_floor += 1
             room_counter = 0
             tick_counter = 0
+            active_background = main_room
             self.state = 'menu'
         tick_counter += 1
 
