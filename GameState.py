@@ -7,6 +7,7 @@ import Player
 import random
 import pygame
 import sys
+import copy
 
 import time
 
@@ -16,7 +17,17 @@ def show_text(text, x, y, color, font):
     screen.blit(test_text, (x, y))
 
 def random_item():
-    random_items_list = (random.choice(random.choice(Items.items_list)), random.choice(random.choice(Items.items_list)), random.choice(random.choice(Items.items_list)))
+    # randomize stats for items
+    # makes copy
+    random_items_list = copy.deepcopy((random.choice(random.choice(Items.items_list)), random.choice(random.choice(Items.items_list)), random.choice(random.choice(Items.items_list))))
+    for item in random_items_list:
+
+        if item.type == 'weapon':
+            item.strength = random.randint(1, 5)
+
+        if item.type == 'armour':
+            item.defence = random.randint(1, 5)
+
     return random_items_list
 
 def show_image(image, x, y, scale):
@@ -315,15 +326,8 @@ class GameState():
             item2_chest_button = Buttons.Button(random_items[1].icon, 600, 300, 4)
             item3_chest_button = Buttons.Button(random_items[2].icon, 687, 300, 4)
 
-            # randomize stats for items
-            # if you get two of the same items the former item is also going to change strength
-            for item in random_items:
-                if item.type == 'weapon':
-                    item.strength = random.randint(1, 5)
-                if item.type == 'armour':
-                    item.defence = random.randint(1, 5)
-
             self.state = 'chest_room_opened'
+
 
     def chest_room_opened(self):
         global room_counter
@@ -538,6 +542,7 @@ class GameState():
 
 
         # things that should be done/checked throughout the entire game
+        # could also put this in main
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()

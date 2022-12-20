@@ -1,5 +1,6 @@
 import pygame
 import Player
+import copy
 
 class Item():
     def __init__(self, strength, hp, defence, icon, type, name):
@@ -9,6 +10,20 @@ class Item():
         self.defence = defence
         self.icon = icon
         self.type = type
+
+    def __deepcopy__(self, memo): # memo is a dict of id's to copies
+        id_self = id(self)        # memoization avoids unnecesary recursion
+        _copy = memo.get(id_self)
+        if _copy is None:
+            _copy = type(self)(
+                copy.deepcopy(self.strength, memo),
+                copy.deepcopy(self.hp, memo),
+                copy.deepcopy(self.defence, memo),
+                copy.copy(self.icon),
+                copy.deepcopy(self.type, memo),
+                copy.deepcopy(self.name, memo))
+            memo[id_self] = _copy
+        return _copy
 
 
 
