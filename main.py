@@ -1,5 +1,6 @@
 import pygame
 import GameState
+import random
 
 pygame.display.set_caption("Test Caption")
 
@@ -10,7 +11,7 @@ screen = pygame.display.set_mode((width, height))
 
 clock = pygame.time.Clock()
 
-#random.seed(69)
+#random.seed(10)
 game_state = GameState.GameState()
 running = True
 

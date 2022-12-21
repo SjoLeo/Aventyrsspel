@@ -8,7 +8,6 @@ import random
 import pygame
 import sys
 import copy
-import Animation
 
 import time
 
@@ -178,6 +177,7 @@ hole_image = pygame.image.load('Images/Hole.png')
 spike_image = pygame.image.load('Images/spike_trap.png')
 spider_image = pygame.image.load('Images/spindel_prot.png')
 zombie_boss_image = pygame.image.load('Images/zombie_boss.png')
+zombie_boss_image_2 = pygame.image.load('Images/zombie_boss_2.png')
 gold_frame_image = pygame.image.load("Images/GoldFrame.png")
 open_chest_image = pygame.image.load("Images/open_chest.png")
 chest_item_frame_image = pygame.image.load("Images/chest_loot_frame.png")
@@ -186,9 +186,6 @@ zombie_image = pygame.image.load('Images/zombie.png')
 empty_inv_image = pygame.image.load('Images/empty_inv.png')
 torch_image = pygame.image.load('Images/torch.png')
 
-# animations
-
-test_animation = [zombie_image, zombie_boss_image, spider_image]
 
 # making button images
 inventory_button = Buttons.Button(inventory_image, 0, 0, 0.3)
@@ -226,6 +223,10 @@ empty_inv_button6 = Buttons.Button(empty_inv_image, 458, 0, 1)
 exit_button = TextButtons.TextButton(width - 100, 60, 'X', 'red', 'Fonts/alagard.ttf')
 new_game_button = TextButtons.TextButton(200, 200, 'New game', 'white', 'Fonts/alagard.ttf')
 
+
+
+
+
 # variables
 
 dungeon_floor = 0
@@ -243,11 +244,8 @@ selected_potion_frame_x = 383
 clock = pygame.time.Clock()
 
 
-test = Animation.Animation(test_animation, 400, 400, 5)
-
 class GameState():
     def __init__(self):
-
         self.state = 'start_game'
 
 
@@ -259,8 +257,6 @@ class GameState():
         if new_game_button.text_button():
             active_background = main_room
             self.state = 'menu'
-
-        test.update(screen, 0.05)
 
 
     def menu(self):
@@ -300,6 +296,7 @@ class GameState():
 
         background()
         frame()
+
 
         if tick_counter <= 20:
             show_text("It's a Dead End", 150, 120, 'white', font_alagard_big)
@@ -485,7 +482,6 @@ class GameState():
 
         zombie_boss_button.render_image(screen)
         if zombie_boss_button.image_button():
-
             self.state = 'boss_room_killed'
 
 

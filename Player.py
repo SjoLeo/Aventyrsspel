@@ -49,6 +49,9 @@ class Player():
                 if self.current_hp + 3 <= self.hp:
                     self.current_hp += 3
                     self.potion_inventory[self.equipped_potion] = 'Empty'
+                else:
+                    self.current_hp = self.hp
+                    self.potion_inventory[self.equipped_potion] = 'Empty'
 
 
     def add_lvl(self, added_lvl):
