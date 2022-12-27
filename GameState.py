@@ -11,6 +11,8 @@ import copy
 
 import time
 
+import Worldinfo
+
 
 def show_text(text, x, y, color, font):
     test_text = font.render(text, True, (color))
@@ -23,10 +25,10 @@ def random_item():
     for item in random_items_list:
 
         if item.type == 'weapon':
-            item.strength = random.randint(1, 5)
+            item.strength = random.randint(3, 13) * Worldinfo.current_dungeon_floor
 
         if item.type == 'armour':
-            item.defence = random.randint(1, 5)
+            item.defence = random.randint(3, 13) * Worldinfo.current_dungeon_floor
 
     return random_items_list
 
@@ -60,7 +62,7 @@ def frame():
     show_text(f"STR: {Player.player.damage}", 1020, 15, "white", font_alagard_small)
     show_text(f"DEF: {Player.player.total_defence}", 1020, 28, "white", font_alagard_small)
     show_text(f'Player level: {Player.player.lvl}', 546, 10, 'white', font_alagard_medium)
-    show_text(f'Dungeon floor: {dungeon_floor}', 546, 30, 'white', font_alagard_medium)
+    show_text(f'Dungeon floor: {Worldinfo.current_dungeon_floor}', 546, 30, 'white', font_alagard_medium)
 
     # weapon icons
     if not Player.player.weapon_inventory[0] == 'Empty':
@@ -238,7 +240,7 @@ new_game_button = TextButtons.TextButton(200, 200, 'New game', 'white', 'Fonts/a
 
 # variables
 
-dungeon_floor = 0
+
 monster_type = None
 room_type = None
 
@@ -493,17 +495,18 @@ class GameState():
         show_image(boss.current_health_bar_image, boss_x-30, boss_y-50, 5)
 
         if boss.type == 'zombie_boss':
+            print(boss.current_hp)
             zombie_boss_button.render_image(screen)
             if zombie_boss_button.image_button():
                 boss.current_hp -= Player.player.damage
 
-        if boss.current_hp == 0:
+        if boss.current_hp <= 0:
             self.state = 'boss_room_killed'
 
 
 
     def boss_room_killed(self):
-        global room_counter, tick_counter, dungeon_floor, active_background
+        global room_counter, tick_counter, active_background
 
         background()
         frame()
@@ -514,7 +517,7 @@ class GameState():
             show_text('Moving Down 1 Floor', 150, 120, 'white', font_alagard_big)
 
         if tick_counter >= 50:
-            dungeon_floor += 1
+            Worldinfo.current_dungeon_floor += 1
             room_counter = 0
             tick_counter = 0
             active_background = main_room

@@ -8,8 +8,8 @@ import pygame
 
 class Monster():
     def __init__(self):
-        self.strength = Player.player.lvl*(rand.randint(9, 12))
-        self.hp = Player.player.lvl*(rand.randint(9, 12))
+        self.strength = (rand.randint(4, 14)) * Worldinfo.current_dungeon_floor
+        self.hp = (rand.randint(4, 14)) * Worldinfo.current_dungeon_floor
 
         monsters = ['spider', 'zombie']
         self.type = rand.choice(monsters)
@@ -59,7 +59,7 @@ class Boss():
         else:
             self.current_health_bar_image = health_bar_0
 
-        return self.current_health_bar_image
+
 
 
 # health bar images
