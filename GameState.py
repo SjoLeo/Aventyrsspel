@@ -175,16 +175,18 @@ inventory_image = pygame.image.load('Images/Inventory_slot.png')
 door_image = pygame.image.load('Images/Door.png')
 hole_image = pygame.image.load('Images/Hole.png')
 spike_image = pygame.image.load('Images/spike_trap.png')
-spider_image = pygame.image.load('Images/spindel_prot.png')
-zombie_boss_image = pygame.image.load('Images/zombie_boss.png')
-zombie_boss_image_2 = pygame.image.load('Images/zombie_boss_2.png')
 gold_frame_image = pygame.image.load("Images/GoldFrame.png")
 open_chest_image = pygame.image.load("Images/open_chest.png")
 chest_item_frame_image = pygame.image.load("Images/chest_loot_frame.png")
 green_progress = pygame.image.load("Images/green.png")
-zombie_image = pygame.image.load('Images/zombie.png')
 empty_inv_image = pygame.image.load('Images/empty_inv.png')
 torch_image = pygame.image.load('Images/torch.png')
+
+zombie_image = pygame.image.load('Images/zombie.png')
+spider_image = pygame.image.load('Images/spindel_prot.png')
+zombie_boss_image = pygame.image.load('Images/zombie_boss.png')
+zombie_boss_image_2 = pygame.image.load('Images/zombie_boss_2.png')
+
 
 
 # making button images
@@ -202,7 +204,14 @@ door_to_boss = Buttons.Button(door_image, 500, 190, 6)
 # x och y ändras i gamestate
 spider_button = Buttons.Button(spider_image, 0, 0, 3)
 zombie_button = Buttons.Button(zombie_image, 0, 0, 5)
-zombie_boss_button = Buttons.Button(zombie_boss_image, 450, 220, 6)
+
+
+boss_x = 450
+boss_y = 220
+zombie_boss_button = Buttons.Button(zombie_boss_image, boss_x, boss_y, 6)
+
+
+
 
 
 # frame buttons
@@ -260,7 +269,7 @@ class GameState():
 
 
     def menu(self):
-        global room_type, room_counter, monster, monster_type, monster_x, monster_y
+        global room_type, room_counter, monster, monster_type, monster_x, monster_y, boss
 
         background()
         frame()
@@ -289,6 +298,7 @@ class GameState():
 
             if room_counter == 5:
                 self.state = 'room_to_boss_room'
+                boss = Monster.Boss(100, 5)
 
 
     def trap_room(self):
@@ -479,10 +489,17 @@ class GameState():
 
         background()
         frame()
+        boss.calculate_health_bar_image()
+        show_image(boss.current_health_bar_image, boss_x-30, boss_y-50, 5)
 
-        zombie_boss_button.render_image(screen)
-        if zombie_boss_button.image_button():
+        if boss.type == 'zombie_boss':
+            zombie_boss_button.render_image(screen)
+            if zombie_boss_button.image_button():
+                boss.current_hp -= Player.player.damage
+
+        if boss.current_hp == 0:
             self.state = 'boss_room_killed'
+
 
 
     def boss_room_killed(self):
