@@ -4,11 +4,13 @@ import Monster
 
 class Player():
     def __init__(self, base_strength, base_hp, base_defence, lvl):
+        self.current_combo = 1
+
         self.strength = base_strength
         self.hp = base_hp
         self.defence = base_defence
 
-        self.damage = base_strength
+        self.damage = base_strength * self.current_combo
         self.total_defence = base_defence
         self.current_hp = base_hp
 
@@ -20,6 +22,8 @@ class Player():
         self.weapon_inventory = ['Empty', 'Empty']
         self.armour_inventory = ['Empty', 'Empty']
         self.potion_inventory = ['Empty', 'Empty']
+
+
 
     def add_item_to_inventory(self, item):
         if item.type == 'weapon':
@@ -33,9 +37,9 @@ class Player():
 
     def add_item_stats(self):
         # adding strength bonus to player
-        self.damage = self.strength
+        self.damage = self.strength * self.current_combo
         if not self.weapon_inventory[self.equipped_weapon] == 'Empty':
-            self.damage = self.weapon_inventory[self.equipped_weapon].strength + self.strength
+            self.damage = (self.weapon_inventory[self.equipped_weapon].strength + self.strength) * self.current_combo
 
         # adding defence bonus to player
         self.total_defence = self.defence
