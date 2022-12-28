@@ -207,12 +207,17 @@ door_to_boss = Buttons.Button(door_image, 500, 190, 6)
 spider_button = Buttons.Button(spider_image, 0, 0, 3)
 zombie_button = Buttons.Button(zombie_image, 0, 0, 5)
 
+zombie_boss_scale = 6
+zombie_boss_x = 450
+zombie_boss_y = 220
+zombie_boss_button = Buttons.Button(zombie_boss_image, zombie_boss_x, zombie_boss_y, zombie_boss_scale)
 
-boss_x = 450
-boss_y = 220
-zombie_boss_button = Buttons.Button(zombie_boss_image, boss_x, boss_y, 6)
+# vulnerable spot image
+vulnerable_spot_image = pygame.image.load('Images/vulnerable_spot.png')
 
-
+# vulnerable spot button
+# x and y changes in gamestate
+vulnerable_spot_button = Buttons.Button(vulnerable_spot_image, 0, 0, 4)
 
 
 
@@ -271,7 +276,7 @@ class GameState():
 
 
     def menu(self):
-        global room_type, room_counter, monster, monster_type, monster_x, monster_y, boss
+        global room_type, room_counter, monster, monster_type, monster_x, monster_y
 
         background()
         frame()
@@ -300,7 +305,7 @@ class GameState():
 
             if room_counter == 5:
                 self.state = 'room_to_boss_room'
-                boss = Monster.Boss(100, 5)
+
 
 
     def trap_room(self):
@@ -323,6 +328,7 @@ class GameState():
             Player.player.current_hp -= 1
             room_counter += 1
             tick_counter = 0
+            Worldinfo.traps_triggered += 1
             self.state = 'menu'
 
         tick_counter += 1
@@ -376,6 +382,7 @@ class GameState():
             Player.player.add_item_to_inventory(random_items[0])
             room_counter += 1
             Player.player.add_item_stats()
+            Worldinfo.chests_opened += 1
             self.state = 'menu'
 
         item2_chest_button.render_image(screen)
@@ -383,6 +390,7 @@ class GameState():
             Player.player.add_item_to_inventory(random_items[1])
             room_counter += 1
             Player.player.add_item_stats()
+            Worldinfo.chests_opened += 1
             self.state = 'menu'
 
         item3_chest_button.render_image(screen)
@@ -390,6 +398,7 @@ class GameState():
             Player.player.add_item_to_inventory(random_items[2])
             room_counter += 1
             Player.player.add_item_stats()
+            Worldinfo.chests_opened += 1
             self.state = 'menu'
 
 
@@ -441,6 +450,7 @@ class GameState():
 
         if door_button_monster_room.image_button():
             room_counter += 1
+            Worldinfo.monsters_slayed += 1
             self.state = 'menu'
 
         show_text('You Killed The Monster', 150, 120, 'white', font_alagard_big)
@@ -473,32 +483,47 @@ class GameState():
         show_text('You lost to the monster', 150, 120, 'red', font_alagard_big)
 
     def room_to_boss_room(self):
-        global active_background
+        global active_background, boss, vulnerable_spot_x, vulnerable_spot_y
         background()
         frame()
 
 
         door_to_boss.render_image(screen)
         show_text('YOU FOUND THE BOSS', 150, 120, 'red', font_alagard_big)
+        show_image(torch_image, 420, 240, 5)
+        show_image(torch_image, 740, 240, 5)
 
         if door_to_boss.image_button():
             active_background = boss_room
+            # creates the boss object
+            boss = Monster.Boss(100, 5)
+            if boss.type == 'zombie_boss':
+                # generate the first spot
+                boss.generate_vulnerable_spot_coordinates(zombie_boss_image, zombie_boss_x, zombie_boss_y, zombie_boss_scale)
+
+
             self.state = 'boss_room'
-        show_image(torch_image, 420, 240, 5)
-        show_image(torch_image, 740, 240, 5)
+
+
 
     def boss_room(self):
 
         background()
         frame()
         boss.calculate_health_bar_image()
-        show_image(boss.current_health_bar_image, boss_x-30, boss_y-50, 5)
+        show_image(boss.current_health_bar_image, zombie_boss_x - 30, zombie_boss_y - 50, 5)
 
         if boss.type == 'zombie_boss':
-            print(boss.current_hp)
+
             zombie_boss_button.render_image(screen)
-            if zombie_boss_button.image_button():
+            vulnerable_spot_button.rect.x = boss.vulnerable_x_coordinate
+            vulnerable_spot_button.rect.y = boss.vulnerable_y_coordinate
+            vulnerable_spot_button.render_image(screen)
+
+            if vulnerable_spot_button.image_button():
                 boss.current_hp -= Player.player.damage
+                # generate new spots
+                boss.generate_vulnerable_spot_coordinates(zombie_boss_image, zombie_boss_x, zombie_boss_y, zombie_boss_scale)
 
         if boss.current_hp <= 0:
             self.state = 'boss_room_killed'
@@ -518,6 +543,8 @@ class GameState():
 
         if tick_counter >= 50:
             Worldinfo.current_dungeon_floor += 1
+            Worldinfo.bosses_slayed += 1
+
             room_counter = 0
             tick_counter = 0
             active_background = main_room
@@ -525,15 +552,16 @@ class GameState():
         tick_counter += 1
 
     def defeated(self):
-        global tick_counter
         background()
         frame()
-        if tick_counter <= 100:
-            show_text('GAME OVER', 150, 120, 'red', font_alagard_big)
-        else:
-            pygame.quit()
-            sys.exit()
-        tick_counter += 1
+
+        show_text('GAME OVER', 150, 120, 'red', font_alagard_big)
+        show_text('STATS:', 150, 180, 'white', font_alagard_big)
+        show_text(f'Bosses Slayed: {Worldinfo.bosses_slayed}', 150, 240, 'white', font_alagard_big)
+        show_text(f'Monsters Slayed: {Worldinfo.monsters_slayed}', 150, 300, 'white', font_alagard_big)
+        show_text(f'Chests Opened: {Worldinfo.chests_opened}', 150, 360, 'white', font_alagard_big)
+        show_text(f'Traps Triggered: {Worldinfo.traps_triggered}', 150, 420, 'white', font_alagard_big)
+
 
     def state_manager(self):
         # all scenes

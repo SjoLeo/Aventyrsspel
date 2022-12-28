@@ -2,6 +2,7 @@ import random as rand
 import Player
 import Worldinfo
 import pygame
+import Buttons
 
 
 
@@ -35,6 +36,8 @@ class Boss():
         self.current_health_bar_image = health_bar_100
 
         self.type = rand.choice(['zombie_boss'])
+        self.vulnerable_x_coordinate = 0
+        self.vulnerable_y_coordinate = 0
 
 
     def calculate_health_bar_image(self):
@@ -59,6 +62,15 @@ class Boss():
         else:
             self.current_health_bar_image = health_bar_0
 
+    def generate_vulnerable_spot_coordinates(self, image, x, y, scale):
+        width = image.get_width()
+        height = image.get_height()
+        self.vulnerable_x_coordinate = rand.randint(x, x + width*scale)
+        self.vulnerable_y_coordinate = rand.randint(y, y + height*scale)
+
+
+
+
 
 
 
@@ -72,3 +84,5 @@ health_bar_38 = pygame.image.load('Images/health_bars/health_bar_38%.png')
 health_bar_25 = pygame.image.load('Images/health_bars/health_bar_25%.png')
 health_bar_13 = pygame.image.load('Images/health_bars/health_bar_13%.png')
 health_bar_0 = pygame.image.load('Images/health_bars/health_bar_0%.png')
+
+
