@@ -156,6 +156,7 @@ screen = pygame.display.set_mode((width, height))
 font_alagard_big = pygame.font.Font("Fonts/alagard.ttf", 70)
 font_alagard_small = pygame.font.Font("Fonts/alagard.ttf", 15)
 font_alagard_medium = pygame.font.Font('Fonts/alagard.ttf', 25)
+font_alagard_medium_big = pygame.font.Font('Fonts/alagard.ttf', 50)
 
 # backgrounds
 main_menu_background = pygame.image.load("Images/Start bild.png")
@@ -522,7 +523,7 @@ class GameState():
             vulnerable_spot_button.render_image(screen)
 
             if vulnerable_spot_button.got_pressed():
-                result = random.choice(['dodge'])
+                result = random.choice(['dodge', 'hit', 'hit', 'hit'])
                 if result == 'hit':
                     boss.current_hp -= Player.player.damage
                     # generate new spots
@@ -553,13 +554,12 @@ class GameState():
 
     def boss_dodged(self):
         global tick_counter
-        print(tick_counter)
-        if tick_counter <= 200:
-            show_text('The Boss Dodged', 100, 200, 'red', font_alagard_big)
-        if tick_counter >= 400:
-            show_text('You Got Hit Instead', 100, 200, 'red', font_alagard_big)
+        frame()
+        if tick_counter <= 70:
+            show_text('The Boss Dodged', 700, 200, 'red', font_alagard_medium_big)
+            show_text('You Got Hit Instead', 700, 240, 'red', font_alagard_medium_big)
 
-        if tick_counter >= 800:
+        else:
             tick_counter = 0
             self.state = 'boss_room'
         tick_counter += 1
