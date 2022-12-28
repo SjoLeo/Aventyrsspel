@@ -1,3 +1,4 @@
+import Animation
 import Buttons
 import Items
 import Monster
@@ -59,7 +60,7 @@ def frame():
 
     # displayed stats:
     show_text(f"HP: {Player.player.current_hp}/ {Player.player.hp}", 1020, 2, "white", font_alagard_small)
-    show_text(f"STR: {Player.player.damage}", 1020, 15, "white", font_alagard_small)
+    show_text(f"STR: {int(Player.player.damage/Player.player.current_combo)} x {Player.player.current_combo}", 1020, 15, "white", font_alagard_small)
     show_text(f"DEF: {Player.player.total_defence}", 1020, 28, "white", font_alagard_small)
     show_text(f'Player level: {Player.player.lvl}', 546, 10, 'white', font_alagard_medium)
     show_text(f'Dungeon floor: {Worldinfo.current_dungeon_floor}', 546, 30, 'white', font_alagard_medium)
@@ -71,14 +72,14 @@ def frame():
         show_image(Player.player.weapon_inventory[1].icon, 113, -4, 4)
 
     # empty weapon
-    if empty_inv_button1.image_button():
+    if empty_inv_button1.got_pressed():
         selected_weapon_frame_x = 37.5
         Player.player.equipped_weapon = 0
-        Player.player.add_item_stats()
-    elif empty_inv_button2.image_button():
+        Player.player.update_player_stats()
+    elif empty_inv_button2.got_pressed():
         selected_weapon_frame_x = 105
         Player.player.equipped_weapon = 1
-        Player.player.add_item_stats()
+        Player.player.update_player_stats()
     show_image(gold_frame_image, selected_weapon_frame_x, 0, 7.5)
 
     # armour icons
@@ -88,14 +89,14 @@ def frame():
         show_image(Player.player.armour_inventory[1].icon, 283, 0, 4)
 
     # empty armour
-    if empty_inv_button3.image_button():
+    if empty_inv_button3.got_pressed():
         selected_armour_frame_x = 210
         Player.player.equipped_armour = 0
-        Player.player.add_item_stats()
-    elif empty_inv_button4.image_button():
+        Player.player.update_player_stats()
+    elif empty_inv_button4.got_pressed():
         selected_armour_frame_x = 278
         Player.player.equipped_armour = 1
-        Player.player.add_item_stats()
+        Player.player.update_player_stats()
     show_image(gold_frame_image, selected_armour_frame_x, 0, 7.5)
 
     # potion icon
@@ -105,10 +106,10 @@ def frame():
         show_image(Player.player.potion_inventory[1].icon, 458, -4, 4)
 
     # empty potion
-    if empty_inv_button5.image_button():
+    if empty_inv_button5.got_pressed():
         selected_potion_frame_x = 383
         Player.player.equipped_potion = 0
-    elif empty_inv_button6.image_button():
+    elif empty_inv_button6.got_pressed():
         selected_potion_frame_x = 451
         Player.player.equipped_potion = 1
     show_image(gold_frame_image, selected_potion_frame_x, 0, 7.5)
@@ -189,6 +190,8 @@ spider_image = pygame.image.load('Images/spindel_prot.png')
 zombie_boss_image = pygame.image.load('Images/zombie_boss.png')
 zombie_boss_image_2 = pygame.image.load('Images/zombie_boss_2.png')
 
+# empty background image
+empty_background_image = pygame.image.load('Images/empty_background.png')
 
 
 # making button images
@@ -230,9 +233,6 @@ empty_inv_button4 = Buttons.Button(empty_inv_image, 283, 0, 1)
 
 empty_inv_button5 = Buttons.Button(empty_inv_image, 390, 0, 1)
 empty_inv_button6 = Buttons.Button(empty_inv_image, 458, 0, 1)
-# chest button
-
-
 
 
 # making button text
@@ -242,9 +242,7 @@ new_game_button = TextButtons.TextButton(200, 200, 'New game', 'white', 'Fonts/a
 
 
 
-
 # variables
-
 
 monster_type = None
 room_type = None
@@ -285,7 +283,7 @@ class GameState():
         door_button_2.render_image(screen)
         door_button_3.render_image(screen)
 
-        if door_button_1.image_button() or door_button_2.image_button() or door_button_3.image_button():
+        if door_button_1.got_pressed() or door_button_2.got_pressed() or door_button_3.got_pressed():
             if room_counter < 5:
                 room_type = random_room()
                 print(room_type)
@@ -343,19 +341,19 @@ class GameState():
 
         door_button_chest_room.render_image(screen)
 
-        if door_button_chest_room.image_button():
+        if door_button_chest_room.got_pressed():
             room_counter += 1
             self.state = 'menu'
 
         small_chest_button.render_image(screen)
 
-        if small_chest_button.image_button():
+        if small_chest_button.got_pressed():
 
             random_items = random_item()
             item1_chest_button = Buttons.Button(random_items[0].icon, 513, 300, 4)
             item2_chest_button = Buttons.Button(random_items[1].icon, 600, 300, 4)
             item3_chest_button = Buttons.Button(random_items[2].icon, 687, 300, 4)
-
+            Worldinfo.chests_opened += 1
             self.state = 'chest_room_opened'
 
 
@@ -367,7 +365,7 @@ class GameState():
 
         door_button_chest_room.render_image(screen)
 
-        if door_button_chest_room.image_button():
+        if door_button_chest_room.got_pressed():
             room_counter += 1
 
             self.state = 'menu'
@@ -378,27 +376,27 @@ class GameState():
         show_text("Choose One", 500, 270, "white", font_alagard_small)
 
         item1_chest_button.render_image(screen)
-        if item1_chest_button.image_button():
+        if item1_chest_button.got_pressed():
             Player.player.add_item_to_inventory(random_items[0])
             room_counter += 1
-            Player.player.add_item_stats()
-            Worldinfo.chests_opened += 1
+            Player.player.update_player_stats()
+
             self.state = 'menu'
 
         item2_chest_button.render_image(screen)
-        if item2_chest_button.image_button():
+        if item2_chest_button.got_pressed():
             Player.player.add_item_to_inventory(random_items[1])
             room_counter += 1
-            Player.player.add_item_stats()
-            Worldinfo.chests_opened += 1
+            Player.player.update_player_stats()
+
             self.state = 'menu'
 
         item3_chest_button.render_image(screen)
-        if item3_chest_button.image_button():
+        if item3_chest_button.got_pressed():
             Player.player.add_item_to_inventory(random_items[2])
             room_counter += 1
-            Player.player.add_item_stats()
-            Worldinfo.chests_opened += 1
+            Player.player.update_player_stats()
+
             self.state = 'menu'
 
 
@@ -410,7 +408,7 @@ class GameState():
 
         door_button_monster_room.render_image(screen)
 
-        if door_button_monster_room.image_button():
+        if door_button_monster_room.got_pressed():
             room_counter += 1
             self.state = 'menu'
         #print(Player.player.strength, monster.strength)
@@ -419,14 +417,14 @@ class GameState():
             spider_button.rect.x = monster_x
             spider_button.rect.y = monster_y
             spider_button.render_image(screen)
-            if spider_button.image_button():
+            if spider_button.got_pressed():
                 self.state = 'fight'
 
         if monster_type == 'zombie':
             zombie_button.rect.x = monster_x
             zombie_button.rect.y = monster_y
             zombie_button.render_image(screen)
-            if zombie_button.image_button():
+            if zombie_button.got_pressed():
                 self.state = 'fight'
 
     def fight(self):
@@ -448,7 +446,7 @@ class GameState():
 
         door_button_monster_room.render_image(screen)
 
-        if door_button_monster_room.image_button():
+        if door_button_monster_room.got_pressed():
             room_counter += 1
             Worldinfo.monsters_slayed += 1
             self.state = 'menu'
@@ -462,7 +460,7 @@ class GameState():
         frame()
 
         door_button_monster_room.render_image(screen)
-        if door_button_monster_room.image_button():
+        if door_button_monster_room.got_pressed():
             room_counter += 1
             self.state = 'menu'
 
@@ -476,14 +474,14 @@ class GameState():
 
 
         door_button_monster_room.render_image(screen)
-        if door_button_monster_room.image_button():
+        if door_button_monster_room.got_pressed():
             room_counter += 1
             self.state = 'menu'
 
         show_text('You lost to the monster', 150, 120, 'red', font_alagard_big)
 
     def room_to_boss_room(self):
-        global active_background, boss, vulnerable_spot_x, vulnerable_spot_y
+        global active_background, boss, vulnerable_spot_x, vulnerable_spot_y, empty_background_button
         background()
         frame()
 
@@ -493,14 +491,14 @@ class GameState():
         show_image(torch_image, 420, 240, 5)
         show_image(torch_image, 740, 240, 5)
 
-        if door_to_boss.image_button():
+        if door_to_boss.got_pressed():
             active_background = boss_room
             # creates the boss object
             boss = Monster.Boss(100, 5)
             if boss.type == 'zombie_boss':
                 # generate the first spot
                 boss.generate_vulnerable_spot_coordinates(zombie_boss_image, zombie_boss_x, zombie_boss_y, zombie_boss_scale)
-
+                empty_background_button = Buttons.Button(empty_background_image, zombie_boss_x-95, zombie_boss_y-60, 13)
 
             self.state = 'boss_room'
 
@@ -511,24 +509,60 @@ class GameState():
         background()
         frame()
         boss.calculate_health_bar_image()
-        show_image(boss.current_health_bar_image, zombie_boss_x - 30, zombie_boss_y - 50, 5)
-
+        show_image(boss.current_health_bar_image, zombie_boss_x - 20, zombie_boss_y - 50, 5)
+        show_text(f'COMBO: x{Player.player.current_combo}', 100, 120, 'white', font_alagard_big)
         if boss.type == 'zombie_boss':
 
             zombie_boss_button.render_image(screen)
+
+            empty_background_button.render_image(screen)
+
             vulnerable_spot_button.rect.x = boss.vulnerable_x_coordinate
             vulnerable_spot_button.rect.y = boss.vulnerable_y_coordinate
             vulnerable_spot_button.render_image(screen)
 
-            if vulnerable_spot_button.image_button():
-                boss.current_hp -= Player.player.damage
-                # generate new spots
+            if vulnerable_spot_button.got_pressed():
+                result = random.choice(['dodge'])
+                if result == 'hit':
+                    boss.current_hp -= Player.player.damage
+                    # generate new spots
+                    boss.generate_vulnerable_spot_coordinates(zombie_boss_image, zombie_boss_x, zombie_boss_y, zombie_boss_scale)
+                    Player.player.current_combo += 1
+                    # update the damage stats
+                    Player.player.update_player_stats()
+                else:
+                    boss.generate_vulnerable_spot_coordinates(zombie_boss_image, zombie_boss_x, zombie_boss_y, zombie_boss_scale)
+                    Player.player.current_hp -= 1
+                    Player.player.current_combo = 1
+                    Player.player.update_player_stats()
+
+                    self.state = 'boss_dodged'
+
+
+            if empty_background_button.got_pressed() and not vulnerable_spot_button.mouse_hover():
+                Player.player.current_hp -= 1
+                Player.player.current_combo = 1
+                Player.player.update_player_stats()
                 boss.generate_vulnerable_spot_coordinates(zombie_boss_image, zombie_boss_x, zombie_boss_y, zombie_boss_scale)
 
         if boss.current_hp <= 0:
+            Player.player.current_combo = 1
+            Player.player.update_player_stats()
             self.state = 'boss_room_killed'
 
 
+    def boss_dodged(self):
+        global tick_counter
+        print(tick_counter)
+        if tick_counter <= 200:
+            show_text('The Boss Dodged', 100, 200, 'red', font_alagard_big)
+        if tick_counter >= 400:
+            show_text('You Got Hit Instead', 100, 200, 'red', font_alagard_big)
+
+        if tick_counter >= 800:
+            tick_counter = 0
+            self.state = 'boss_room'
+        tick_counter += 1
 
     def boss_room_killed(self):
         global room_counter, tick_counter, active_background
@@ -599,6 +633,9 @@ class GameState():
 
         if self.state == 'boss_room':
             self.boss_room()
+
+        if self.state == 'boss_dodged':
+            self.boss_dodged()
 
         if self.state == 'boss_room_killed':
             self.boss_room_killed()
