@@ -35,7 +35,7 @@ class Player():
         if item.type == 'potion':
             self.potion_inventory[self.equipped_potion] = item
 
-    def add_item_stats(self):
+    def update_player_stats(self):
         # adding strength bonus to player
         self.damage = self.strength * self.current_combo
         if not self.weapon_inventory[self.equipped_weapon] == 'Empty':
@@ -45,6 +45,8 @@ class Player():
         self.total_defence = self.defence
         if not self.armour_inventory[self.equipped_armour] == 'Empty':
             self.total_defence = self.armour_inventory[self.equipped_armour].defence + self.defence
+
+
 
     def drink_potion(self):
         if not self.potion_inventory[self.equipped_potion] == 'Empty':
