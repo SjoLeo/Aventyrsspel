@@ -10,7 +10,7 @@ class Button():
         self.rect.topleft = (x, y)
         self.clicking = False
 
-    def image_button(self):
+    def got_pressed(self):
 
         pos = pygame.mouse.get_pos()
         if self.rect.collidepoint(pos):
@@ -26,6 +26,10 @@ class Button():
 
         return False
 
+    def mouse_hover(self):
+        pos = pygame.mouse.get_pos()
+        if self.rect.collidepoint(pos):
+            return True
 
 
     def render_image(self, surface):
