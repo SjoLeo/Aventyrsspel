@@ -18,15 +18,15 @@ game_state = GameState.GameState()
 running = True
 
 # Game Loop
-dt = 0
+dt = 0.0167
+last = 0
 while running:
     #print(pygame.mouse.get_pos())
-    clock.tick(60)
+    clock.tick(30)
     #print(clock)
 
     game_state.state_manager(dt)
 
     ticks = pygame.time.get_ticks()
-    dt = ticks
-
-
+    dt = (ticks - last) / 1000
+    last = ticks
