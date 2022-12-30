@@ -373,15 +373,15 @@ class GameState():
         frame()
 
 
-        if tick_counter <= 20 / self.dt / 30:
+        if tick_counter <= 20:
             show_text("It's a Dead End", 150, 120, 'white', font_alagard_big)
-        if tick_counter >= 25 / self.dt / 30:
+        if tick_counter >= 25:
             show_text('A Trap Appears!', 150, 120, 'red', font_alagard_big)
             show_image(hole_image, 410, 500, 7)
-        if tick_counter >= 35 / self.dt / 30:
+        if tick_counter >= 35:
             show_image(spike_image, 450, 487, 7)
 
-        if tick_counter >= 50 / self.dt / 30:
+        if tick_counter >= 50:
             # player takes damage
             Player.player.current_hp -= 1
             room_counter += 1
@@ -389,7 +389,7 @@ class GameState():
             Worldinfo.traps_triggered += 1
             self.state = 'menu'
 
-        tick_counter += 1
+        tick_counter += self.dt * 30
 
     def chest_room(self):
         global room_counter, random_items, item1_chest_button, item2_chest_button, item3_chest_button
@@ -606,14 +606,14 @@ class GameState():
     def boss_dodged(self):
         global tick_counter
         frame()
-        if tick_counter <= 70 / self.dt / 30:
+        if tick_counter <= 40:
             show_text('The Boss Dodged', 700, 200, 'red', font_alagard_medium_big)
             show_text('You Got Hit Instead', 700, 240, 'red', font_alagard_medium_big)
 
         else:
             tick_counter = 0
             self.state = 'boss_room'
-        tick_counter += 1
+        tick_counter += self.dt * 30
 
     def boss_room_killed(self):
         global room_counter, tick_counter, active_background
@@ -621,12 +621,12 @@ class GameState():
         background()
         frame()
 
-        if tick_counter <= 30 / self.dt / 30:
+        if tick_counter <= 30:
             show_text('You Killed the Boss!', 150, 120, 'red', font_alagard_big)
-        if tick_counter >= 30 / self.dt / 30:
+        if tick_counter >= 30:
             show_text('Moving Down 1 Floor', 150, 120, 'white', font_alagard_big)
 
-        if tick_counter >= 50 / self.dt / 30:
+        if tick_counter >= 50:
             Worldinfo.current_dungeon_floor += 1
             Worldinfo.bosses_slayed += 1
 
@@ -636,7 +636,7 @@ class GameState():
 
             Player.player.exp += random.randint(150, 200)
             self.state = 'menu'
-        tick_counter += 1
+        tick_counter += self.dt * 30
 
     def defeated(self):
         background()
