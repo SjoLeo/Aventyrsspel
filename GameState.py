@@ -114,7 +114,7 @@ def frame():
         Player.player.equipped_potion = 1
     show_image(gold_frame_image, selected_potion_frame_x, 0, 7.5)
 
-    # Progress Bar
+    # ======Dungeon Progress Bar======
 
     # 7.5 pixels per bakgrundspixel
     # +98 x pixels per room (verkar vara nåt konstigt som gör det inconsistent)
@@ -138,10 +138,9 @@ def frame():
     for event in pygame.event.get():
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_e:
-                # drink potion
                 Player.player.drink_potion()
 
-    # -----exp------
+    # =====EXP=====
 
     exp_percentage = Player.player.exp/Player.player.level_up_exp
 
@@ -155,6 +154,7 @@ def frame():
     # inner rectangle
     pygame.draw.rect(screen, (0, 0, 0), (exp_bar_x + 1, exp_bar_y + 1, exp_bar_width - 2, exp_bar_height - 2))
 
+    # extra stats gets added in this function
     Player.player.calculate_exp_overflow()
 
     # exp progress
@@ -230,12 +230,12 @@ door_to_boss = Buttons.Button(door_image, 500, 190, 6)
 
 
 # monster buttons
-# x och y ändras i gamestate
+# x and y changes in gamestate
 spider_button = Buttons.Button(spider_image, 0, 0, 3)
 zombie_button = Buttons.Button(zombie_image, 0, 0, 5)
 
 zombie_boss_scale = 6
-zombie_boss_x = 450
+zombie_boss_x = 500
 zombie_boss_y = 220
 zombie_boss_button = Buttons.Button(zombie_boss_image, zombie_boss_x, zombie_boss_y, zombie_boss_scale)
 
@@ -532,11 +532,10 @@ class GameState():
 
         background()
         frame()
-        boss.calculate_health_bar_image()
 
+        boss.draw_health_bar(screen, zombie_boss_x - 27, zombie_boss_y - 50)
         show_text(f'COMBO: x{Player.player.current_combo}', 100, 120, 'white', font_alagard_big)
 
-        show_image(boss.current_health_bar_image, zombie_boss_x - 20, zombie_boss_y - 50, 5)
 
         zombie_boss_button.render_image(screen)
         empty_background_button.render_image(screen)

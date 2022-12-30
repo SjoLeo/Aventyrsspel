@@ -5,8 +5,6 @@ import pygame
 import Buttons
 
 
-
-
 class Monster():
     def __init__(self):
         self.strength = (rand.randint(8, 15)) * Worldinfo.current_dungeon_floor
@@ -33,34 +31,26 @@ class Boss():
         self.hp = base_hp * Worldinfo.current_dungeon_floor
         self.current_hp = self.hp
         self.damage = base_strength * Worldinfo.current_dungeon_floor
-        self.current_health_bar_image = health_bar_100
 
         self.type = rand.choice(['zombie_boss'])
         self.vulnerable_x_coordinate = 0
         self.vulnerable_y_coordinate = 0
+        self.boss_hp_percentage = 1
 
+    def draw_health_bar(self, surface, x, y):
 
-    def calculate_health_bar_image(self):
-        percentage = self.current_hp/self.hp
-        # checks which health bar is nearest to the current health
-        if 0.94 <= percentage <= 1:
-            self.current_health_bar_image = health_bar_100
-        elif 0.82 <= percentage < 94:
-            self.current_health_bar_image = health_bar_88
-        elif 0.69 <= percentage < 0.82:
-            self.current_health_bar_image = health_bar_75
-        elif 0.57 <= percentage < 0.69:
-            self.current_health_bar_image = health_bar_63
-        elif 0.44 <= percentage < 0.57:
-            self.current_health_bar_image = health_bar_50
-        elif 0.32 <= percentage < 0.44:
-            self.current_health_bar_image = health_bar_38
-        elif 0.19 <= percentage < 0.32:
-            self.current_health_bar_image = health_bar_25
-        elif 0 < percentage < 0.19:
-            self.current_health_bar_image = health_bar_13
-        else:
-            self.current_health_bar_image = health_bar_0
+        self.boss_hp_percentage = self.current_hp/self.hp
+
+        boss_hp_bar_width = 250
+        boss_hp_bar_height = 25
+
+        # outer rectangle
+        pygame.draw.rect(surface, (0, 0, 0), (x, y, boss_hp_bar_width, boss_hp_bar_height))
+        # inner rectangle
+        pygame.draw.rect(surface, (245, 14, 14), (x + 4, y + 4, boss_hp_bar_width - 8, boss_hp_bar_height - 8))
+
+        # health loss
+        pygame.draw.rect(surface, (106, 207, 48), (x + 4, y + 4, int((boss_hp_bar_width - 8) * self.boss_hp_percentage), boss_hp_bar_height - 8))
 
     def generate_vulnerable_spot_coordinates(self, image, x, y, scale):
         width = image.get_width()
@@ -68,21 +58,5 @@ class Boss():
         self.vulnerable_x_coordinate = rand.randint(x, x + width*scale)
         self.vulnerable_y_coordinate = rand.randint(y, y + height*scale)
 
-
-
-
-
-
-
-# health bar images
-health_bar_100 = pygame.image.load('Images/health_bars/health_bar_100%.png')
-health_bar_88 = pygame.image.load('Images/health_bars/health_bar_88%.png')
-health_bar_75 = pygame.image.load('Images/health_bars/health_bar_75%.png')
-health_bar_63 = pygame.image.load('Images/health_bars/health_bar_63%.png')
-health_bar_50 = pygame.image.load('Images/health_bars/health_bar_50%.png')
-health_bar_38 = pygame.image.load('Images/health_bars/health_bar_38%.png')
-health_bar_25 = pygame.image.load('Images/health_bars/health_bar_25%.png')
-health_bar_13 = pygame.image.load('Images/health_bars/health_bar_13%.png')
-health_bar_0 = pygame.image.load('Images/health_bars/health_bar_0%.png')
 
 
