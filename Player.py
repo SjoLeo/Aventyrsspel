@@ -14,6 +14,10 @@ class Player():
         self.total_defence = base_defence
         self.current_hp = base_hp
 
+        self.exp = 0
+        # exp needed to level up
+        self.level_up_exp = 100
+
         self.lvl = lvl
         self.equipped_weapon = 0
         self.equipped_armour = 0
@@ -22,6 +26,8 @@ class Player():
         self.weapon_inventory = ['Empty', 'Empty']
         self.armour_inventory = ['Empty', 'Empty']
         self.potion_inventory = ['Empty', 'Empty']
+
+
 
 
 
@@ -46,6 +52,14 @@ class Player():
         if not self.armour_inventory[self.equipped_armour] == 'Empty':
             self.total_defence = self.armour_inventory[self.equipped_armour].defence + self.defence
 
+    def calculate_exp_overflow(self):
+        if self.exp >= self.level_up_exp:
+            self.exp = self.exp - self.level_up_exp
+            self.lvl += 1
+            self.strength += 5
+            self.defence += 5
+            self.update_player_stats()
+            self.level_up_exp += 30
 
 
     def drink_potion(self):
@@ -58,10 +72,6 @@ class Player():
                 else:
                     self.current_hp = self.hp
                     self.potion_inventory[self.equipped_potion] = 'Empty'
-
-
-    def add_lvl(self, added_lvl):
-        self.lvl += added_lvl
 
 
 player = Player(10, 10, 10, 1)

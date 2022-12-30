@@ -141,6 +141,29 @@ def frame():
                 # drink potion
                 Player.player.drink_potion()
 
+    # -----exp------
+
+    exp_percentage = Player.player.exp/Player.player.level_up_exp
+
+    exp_bar_x = 780
+    exp_bar_y = 35
+    exp_bar_width = 200
+    exp_bar_height = 20
+
+    # outer rectangle
+    pygame.draw.rect(screen, (255, 255, 255), (exp_bar_x, exp_bar_y, exp_bar_width, exp_bar_height))
+    # inner rectangle
+    pygame.draw.rect(screen, (0, 0, 0), (exp_bar_x + 1, exp_bar_y + 1, exp_bar_width - 2, exp_bar_height - 2))
+
+    Player.player.calculate_exp_overflow()
+
+    # exp progress
+    if exp_percentage < 1:
+        pygame.draw.rect(screen, (209, 133, 46), (exp_bar_x + 1, exp_bar_y + 1, int((exp_bar_width - 2) * exp_percentage), exp_bar_height - 2))
+    else:
+        pygame.draw.rect(screen, (209, 133, 46), (exp_bar_x + 1, exp_bar_y + 1, (exp_bar_width - 2), exp_bar_height - 2))
+
+    show_text('EXP', exp_bar_x + 75, exp_bar_y - 25, 'white', font_alagard_medium)
 
 
 # initiates pygame
@@ -412,7 +435,6 @@ class GameState():
         if door_button_monster_room.got_pressed():
             room_counter += 1
             self.state = 'menu'
-        #print(Player.player.strength, monster.strength)
 
         if monster_type == 'spider':
             spider_button.rect.x = monster_x
@@ -430,6 +452,7 @@ class GameState():
 
     def fight(self):
         if Player.player.damage > monster.strength:
+            Player.player.exp += random.randint(40, 70)
             self.state = 'monster_room_killed'
 
         elif Player.player.damage == monster.strength:
@@ -510,34 +533,34 @@ class GameState():
         background()
         frame()
         boss.calculate_health_bar_image()
-        show_image(boss.current_health_bar_image, zombie_boss_x - 20, zombie_boss_y - 50, 5)
+
         show_text(f'COMBO: x{Player.player.current_combo}', 100, 120, 'white', font_alagard_big)
-        if boss.type == 'zombie_boss':
 
-            zombie_boss_button.render_image(screen)
+        show_image(boss.current_health_bar_image, zombie_boss_x - 20, zombie_boss_y - 50, 5)
 
-            empty_background_button.render_image(screen)
+        zombie_boss_button.render_image(screen)
+        empty_background_button.render_image(screen)
 
-            vulnerable_spot_button.rect.x = boss.vulnerable_x_coordinate
-            vulnerable_spot_button.rect.y = boss.vulnerable_y_coordinate
-            vulnerable_spot_button.render_image(screen)
+        vulnerable_spot_button.rect.x = boss.vulnerable_x_coordinate
+        vulnerable_spot_button.rect.y = boss.vulnerable_y_coordinate
+        vulnerable_spot_button.render_image(screen)
 
-            if vulnerable_spot_button.got_pressed():
-                result = random.choice(['dodge', 'hit', 'hit', 'hit'])
-                if result == 'hit':
-                    boss.current_hp -= Player.player.damage
-                    # generate new spots
-                    boss.generate_vulnerable_spot_coordinates(zombie_boss_image, zombie_boss_x, zombie_boss_y, zombie_boss_scale)
-                    Player.player.current_combo += 1
-                    # update the damage stats
-                    Player.player.update_player_stats()
-                else:
-                    boss.generate_vulnerable_spot_coordinates(zombie_boss_image, zombie_boss_x, zombie_boss_y, zombie_boss_scale)
-                    Player.player.current_hp -= 1
-                    Player.player.current_combo = 1
-                    Player.player.update_player_stats()
+        if vulnerable_spot_button.got_pressed():
+            result = random.choice(['dodge', 'hit', 'hit', 'hit'])
+            if result == 'hit':
+                boss.current_hp -= Player.player.damage
+                # generate new spots
+                boss.generate_vulnerable_spot_coordinates(zombie_boss_image, zombie_boss_x, zombie_boss_y, zombie_boss_scale)
+                Player.player.current_combo += 1
+                # update the damage stats
+                Player.player.update_player_stats()
+            else:
+                boss.generate_vulnerable_spot_coordinates(zombie_boss_image, zombie_boss_x, zombie_boss_y, zombie_boss_scale)
+                Player.player.current_hp -= 1
+                Player.player.current_combo = 1
+                Player.player.update_player_stats()
 
-                    self.state = 'boss_dodged'
+                self.state = 'boss_dodged'
 
 
             if empty_background_button.got_pressed() and not vulnerable_spot_button.mouse_hover():
@@ -582,6 +605,8 @@ class GameState():
             room_counter = 0
             tick_counter = 0
             active_background = main_room
+
+            Player.player.exp += random.randint(150, 200)
             self.state = 'menu'
         tick_counter += 1
 

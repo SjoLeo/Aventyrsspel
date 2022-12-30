@@ -9,8 +9,8 @@ import Buttons
 
 class Monster():
     def __init__(self):
-        self.strength = (rand.randint(4, 14)) * Worldinfo.current_dungeon_floor
-        self.hp = (rand.randint(4, 14)) * Worldinfo.current_dungeon_floor
+        self.strength = (rand.randint(8, 15)) * Worldinfo.current_dungeon_floor
+        self.hp = (rand.randint(8, 15)) * Worldinfo.current_dungeon_floor
 
         monsters = ['spider', 'zombie']
         self.type = rand.choice(monsters)
