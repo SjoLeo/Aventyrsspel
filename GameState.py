@@ -373,15 +373,15 @@ class GameState():
         frame()
 
 
-        if tick_counter <= 20:
+        if tick_counter <= 20 * self.dt * 30:
             show_text("It's a Dead End", 150, 120, 'white', font_alagard_big)
-        if tick_counter >= 25:
+        if tick_counter >= 25 * self.dt * 30:
             show_text('A Trap Appears!', 150, 120, 'red', font_alagard_big)
             show_image(hole_image, 410, 500, 7)
-        if tick_counter >= 35:
+        if tick_counter >= 35 * self.dt * 30:
             show_image(spike_image, 450, 487, 7)
 
-        if tick_counter >= 50:
+        if tick_counter >= 50 * self.dt * 30:
             # player takes damage
             Player.player.current_hp -= 1
             room_counter += 1
@@ -606,7 +606,7 @@ class GameState():
     def boss_dodged(self):
         global tick_counter
         frame()
-        if tick_counter <= 70:
+        if tick_counter <= 70 * self.dt:
             show_text('The Boss Dodged', 700, 200, 'red', font_alagard_medium_big)
             show_text('You Got Hit Instead', 700, 240, 'red', font_alagard_medium_big)
 
@@ -621,12 +621,12 @@ class GameState():
         background()
         frame()
 
-        if tick_counter <= 30:
+        if tick_counter <= 30 * self.dt * 30:
             show_text('You Killed the Boss!', 150, 120, 'red', font_alagard_big)
-        if tick_counter >= 30:
+        if tick_counter >= 30 * self.dt * 30:
             show_text('Moving Down 1 Floor', 150, 120, 'white', font_alagard_big)
 
-        if tick_counter >= 50:
+        if tick_counter >= 50 * self.dt * 30:
             Worldinfo.current_dungeon_floor += 1
             Worldinfo.bosses_slayed += 1
 
@@ -649,7 +649,8 @@ class GameState():
         show_text(f'Chests Opened: {Worldinfo.chests_opened}', 150, 360, 'white', font_alagard_big)
         show_text(f'Traps Triggered: {Worldinfo.traps_triggered}', 150, 420, 'white', font_alagard_big)
 
-    def state_manager(self):
+    def state_manager(self, dt):
+        self.dt = dt
         # all scenes
         if self.state == 'start_game':
             self.start_game()
