@@ -1,3 +1,5 @@
+import time
+
 import pygame
 import GameState
 import random
@@ -16,9 +18,12 @@ game_state = GameState.GameState()
 running = True
 
 # Game Loop
+
 while running:
     #print(pygame.mouse.get_pos())
     clock.tick(60)
+    #print(clock)
 
     game_state.state_manager()
+
 
