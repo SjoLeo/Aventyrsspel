@@ -49,6 +49,14 @@ def random_room():
     return random.choice(rooms)
 
 
+def draw_inventory_hovering_image(pop_up_rect_x):
+    global pop_up_rect_y
+    pop_up_rect_y = 67
+    pop_up_rect_width = 60
+    pop_up_rect_height = 20
+
+    pygame.draw.rect(screen, (255, 255, 255), (pop_up_rect_x, pop_up_rect_y, pop_up_rect_width, pop_up_rect_height))
+    pygame.draw.rect(screen, (0, 0, 0), (pop_up_rect_x + 1, pop_up_rect_y + 1, pop_up_rect_width - 2, pop_up_rect_height - 2))
 
 def frame():
     global selected_weapon_frame_x
@@ -117,42 +125,34 @@ def frame():
     show_image(gold_frame_image, selected_potion_frame_x, 0, 7.5)
 
     # ======= hovering over slots ========
-    pop_up_rect_y = 67
-    pop_up_rect_width = 60
-    pop_up_rect_height = 20
+
 
     if empty_inv_button1.mouse_hover() and not Player.player.weapon_inventory[0] == 'Empty':
         pop_up_rect_x = 45
-        pygame.draw.rect(screen, (255, 255, 255), (pop_up_rect_x, pop_up_rect_y, pop_up_rect_width, pop_up_rect_height))
-        pygame.draw.rect(screen, (0, 0, 0), (pop_up_rect_x+1, pop_up_rect_y+1, pop_up_rect_width-2, pop_up_rect_height-2))
+        draw_inventory_hovering_image(pop_up_rect_x)
         show_text(f'STR: {Player.player.weapon_inventory[0].strength}', pop_up_rect_x + 3, pop_up_rect_y + 3, 'white', font_alagard_small)
     if empty_inv_button2.mouse_hover() and not Player.player.weapon_inventory[1] == 'Empty':
         pop_up_rect_x = 112
-        pygame.draw.rect(screen, (255, 255, 255), (pop_up_rect_x, pop_up_rect_y, pop_up_rect_width, pop_up_rect_height))
-        pygame.draw.rect(screen, (0, 0, 0), (pop_up_rect_x + 1, pop_up_rect_y + 1, pop_up_rect_width - 2, pop_up_rect_height - 2))
+        draw_inventory_hovering_image(pop_up_rect_x)
         show_text(f'STR: {Player.player.weapon_inventory[1].strength}', pop_up_rect_x + 3, pop_up_rect_y + 3, 'white', font_alagard_small)
 
     if empty_inv_button3.mouse_hover() and not Player.player.armour_inventory[0] == 'Empty':
         pop_up_rect_x = 218
-        pygame.draw.rect(screen, (255, 255, 255), (pop_up_rect_x, pop_up_rect_y, pop_up_rect_width, pop_up_rect_height))
-        pygame.draw.rect(screen, (0, 0, 0), (pop_up_rect_x + 1, pop_up_rect_y + 1, pop_up_rect_width - 2, pop_up_rect_height - 2))
+        draw_inventory_hovering_image(pop_up_rect_x)
         show_text(f'DEF: {Player.player.armour_inventory[0].defence}', pop_up_rect_x + 3, pop_up_rect_y + 3, 'white', font_alagard_small)
     if empty_inv_button4.mouse_hover() and not Player.player.armour_inventory[1] == 'Empty':
         pop_up_rect_x = 285
-        pygame.draw.rect(screen, (255, 255, 255), (pop_up_rect_x, pop_up_rect_y, pop_up_rect_width, pop_up_rect_height))
-        pygame.draw.rect(screen, (0, 0, 0), (pop_up_rect_x + 1, pop_up_rect_y + 1, pop_up_rect_width - 2, pop_up_rect_height - 2))
+        draw_inventory_hovering_image(pop_up_rect_x)
         show_text(f'DEF: {Player.player.armour_inventory[1].defence}', pop_up_rect_x + 3, pop_up_rect_y + 3, 'white', font_alagard_small)
 
     if empty_inv_button5.mouse_hover() and not Player.player.potion_inventory[0] == 'Empty':
         pop_up_rect_x = 391
-        pygame.draw.rect(screen, (255, 255, 255), (pop_up_rect_x, pop_up_rect_y, pop_up_rect_width, pop_up_rect_height))
-        pygame.draw.rect(screen, (0, 0, 0), (pop_up_rect_x + 1, pop_up_rect_y + 1, pop_up_rect_width - 2, pop_up_rect_height - 2))
+        draw_inventory_hovering_image(pop_up_rect_x)
         if Player.player.potion_inventory[0].name == 'Potion_of_health':
             show_text('HP: +3', pop_up_rect_x + 3, pop_up_rect_y + 3, 'white', font_alagard_small)
     if empty_inv_button6.mouse_hover() and not Player.player.potion_inventory[1] == 'Empty':
         pop_up_rect_x = 458
-        pygame.draw.rect(screen, (255, 255, 255), (pop_up_rect_x, pop_up_rect_y, pop_up_rect_width, pop_up_rect_height))
-        pygame.draw.rect(screen, (0, 0, 0), (pop_up_rect_x + 1, pop_up_rect_y + 1, pop_up_rect_width - 2, pop_up_rect_height - 2))
+        draw_inventory_hovering_image(pop_up_rect_x)
         if Player.player.potion_inventory[1].name == 'Potion_of_health':
             show_text('HP: +3', pop_up_rect_x + 3, pop_up_rect_y + 3, 'white', font_alagard_small)
 
@@ -326,7 +326,6 @@ class GameState():
     def __init__(self):
         self.state = 'start_game'
 
-
     def start_game(self):
         global active_background
 
@@ -335,7 +334,6 @@ class GameState():
         if new_game_button.text_button():
             active_background = main_room
             self.state = 'menu'
-
 
     def menu(self):
         global room_type, room_counter, monster, monster_type, monster_x, monster_y
@@ -368,8 +366,6 @@ class GameState():
             if room_counter == 5:
                 self.state = 'room_to_boss_room'
 
-
-
     def trap_room(self):
         global room_counter, tick_counter, room_type
 
@@ -395,8 +391,6 @@ class GameState():
 
         tick_counter += 1
 
-
-
     def chest_room(self):
         global room_counter, random_items, item1_chest_button, item2_chest_button, item3_chest_button
 
@@ -419,7 +413,6 @@ class GameState():
             item3_chest_button = Buttons.Button(random_items[2].icon, 687, 300, 4)
             Worldinfo.chests_opened += 1
             self.state = 'chest_room_opened'
-
 
     def chest_room_opened(self):
         global room_counter
@@ -462,7 +455,6 @@ class GameState():
             Player.player.update_player_stats()
 
             self.state = 'menu'
-
 
     def monster_room(self):
         global room_counter
@@ -566,8 +558,6 @@ class GameState():
 
             self.state = 'boss_room'
 
-
-
     def boss_room(self):
 
         background()
@@ -612,7 +602,6 @@ class GameState():
             Player.player.current_combo = 1
             Player.player.update_player_stats()
             self.state = 'boss_room_killed'
-
 
     def boss_dodged(self):
         global tick_counter
@@ -659,7 +648,6 @@ class GameState():
         show_text(f'Monsters Slayed: {Worldinfo.monsters_slayed}', 150, 300, 'white', font_alagard_big)
         show_text(f'Chests Opened: {Worldinfo.chests_opened}', 150, 360, 'white', font_alagard_big)
         show_text(f'Traps Triggered: {Worldinfo.traps_triggered}', 150, 420, 'white', font_alagard_big)
-
 
     def state_manager(self):
         # all scenes
