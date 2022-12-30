@@ -29,7 +29,7 @@ def random_item():
             item.strength = random.randint(3, 13) * Worldinfo.current_dungeon_floor
 
         if item.type == 'armour':
-            item.defence = random.randint(3, 13) * Worldinfo.current_dungeon_floor
+            item.defence = random.randint(1, 4) * Worldinfo.current_dungeon_floor
 
     return random_items_list
 
@@ -65,13 +65,13 @@ def frame():
     show_text(f'Player level: {Player.player.lvl}', 546, 10, 'white', font_alagard_medium)
     show_text(f'Dungeon floor: {Worldinfo.current_dungeon_floor}', 546, 30, 'white', font_alagard_medium)
 
-    # weapon icons
+    # show weapon icons
     if not Player.player.weapon_inventory[0] == 'Empty':
         show_image(Player.player.weapon_inventory[0].icon, 45, -4, 4)
     if not Player.player.weapon_inventory[1] == 'Empty':
         show_image(Player.player.weapon_inventory[1].icon, 113, -4, 4)
 
-    # empty weapon
+    # clickable slots
     if empty_inv_button1.got_pressed():
         selected_weapon_frame_x = 37.5
         Player.player.equipped_weapon = 0
@@ -82,13 +82,15 @@ def frame():
         Player.player.update_player_stats()
     show_image(gold_frame_image, selected_weapon_frame_x, 0, 7.5)
 
-    # armour icons
+
+
+    # show armour icons
     if not Player.player.armour_inventory[0] == 'Empty':
         show_image(Player.player.armour_inventory[0].icon, 215, 0, 4)
     if not Player.player.armour_inventory[1] == 'Empty':
         show_image(Player.player.armour_inventory[1].icon, 283, 0, 4)
 
-    # empty armour
+    # clickable slots
     if empty_inv_button3.got_pressed():
         selected_armour_frame_x = 210
         Player.player.equipped_armour = 0
@@ -99,13 +101,13 @@ def frame():
         Player.player.update_player_stats()
     show_image(gold_frame_image, selected_armour_frame_x, 0, 7.5)
 
-    # potion icon
+    # show potion icon
     if not Player.player.potion_inventory[0] == 'Empty':
         show_image(Player.player.potion_inventory[0].icon, 390, -4, 4)
     if not Player.player.potion_inventory[1] == 'Empty':
         show_image(Player.player.potion_inventory[1].icon, 458, -4, 4)
 
-    # empty potion
+    # clickable slots
     if empty_inv_button5.got_pressed():
         selected_potion_frame_x = 383
         Player.player.equipped_potion = 0
@@ -113,6 +115,46 @@ def frame():
         selected_potion_frame_x = 451
         Player.player.equipped_potion = 1
     show_image(gold_frame_image, selected_potion_frame_x, 0, 7.5)
+
+    # ======= hovering over slots ========
+    pop_up_rect_y = 67
+    pop_up_rect_width = 60
+    pop_up_rect_height = 20
+
+    if empty_inv_button1.mouse_hover() and not Player.player.weapon_inventory[0] == 'Empty':
+        pop_up_rect_x = 45
+        pygame.draw.rect(screen, (255, 255, 255), (pop_up_rect_x, pop_up_rect_y, pop_up_rect_width, pop_up_rect_height))
+        pygame.draw.rect(screen, (0, 0, 0), (pop_up_rect_x+1, pop_up_rect_y+1, pop_up_rect_width-2, pop_up_rect_height-2))
+        show_text(f'STR: {Player.player.weapon_inventory[0].strength}', pop_up_rect_x + 3, pop_up_rect_y + 3, 'white', font_alagard_small)
+    if empty_inv_button2.mouse_hover() and not Player.player.weapon_inventory[1] == 'Empty':
+        pop_up_rect_x = 112
+        pygame.draw.rect(screen, (255, 255, 255), (pop_up_rect_x, pop_up_rect_y, pop_up_rect_width, pop_up_rect_height))
+        pygame.draw.rect(screen, (0, 0, 0), (pop_up_rect_x + 1, pop_up_rect_y + 1, pop_up_rect_width - 2, pop_up_rect_height - 2))
+        show_text(f'STR: {Player.player.weapon_inventory[1].strength}', pop_up_rect_x + 3, pop_up_rect_y + 3, 'white', font_alagard_small)
+
+    if empty_inv_button3.mouse_hover() and not Player.player.armour_inventory[0] == 'Empty':
+        pop_up_rect_x = 218
+        pygame.draw.rect(screen, (255, 255, 255), (pop_up_rect_x, pop_up_rect_y, pop_up_rect_width, pop_up_rect_height))
+        pygame.draw.rect(screen, (0, 0, 0), (pop_up_rect_x + 1, pop_up_rect_y + 1, pop_up_rect_width - 2, pop_up_rect_height - 2))
+        show_text(f'DEF: {Player.player.armour_inventory[0].defence}', pop_up_rect_x + 3, pop_up_rect_y + 3, 'white', font_alagard_small)
+    if empty_inv_button4.mouse_hover() and not Player.player.armour_inventory[1] == 'Empty':
+        pop_up_rect_x = 285
+        pygame.draw.rect(screen, (255, 255, 255), (pop_up_rect_x, pop_up_rect_y, pop_up_rect_width, pop_up_rect_height))
+        pygame.draw.rect(screen, (0, 0, 0), (pop_up_rect_x + 1, pop_up_rect_y + 1, pop_up_rect_width - 2, pop_up_rect_height - 2))
+        show_text(f'DEF: {Player.player.armour_inventory[1].defence}', pop_up_rect_x + 3, pop_up_rect_y + 3, 'white', font_alagard_small)
+
+    if empty_inv_button5.mouse_hover() and not Player.player.potion_inventory[0] == 'Empty':
+        pop_up_rect_x = 391
+        pygame.draw.rect(screen, (255, 255, 255), (pop_up_rect_x, pop_up_rect_y, pop_up_rect_width, pop_up_rect_height))
+        pygame.draw.rect(screen, (0, 0, 0), (pop_up_rect_x + 1, pop_up_rect_y + 1, pop_up_rect_width - 2, pop_up_rect_height - 2))
+        if Player.player.potion_inventory[0].name == 'Potion_of_health':
+            show_text('HP: +3', pop_up_rect_x + 3, pop_up_rect_y + 3, 'white', font_alagard_small)
+    if empty_inv_button6.mouse_hover() and not Player.player.potion_inventory[1] == 'Empty':
+        pop_up_rect_x = 458
+        pygame.draw.rect(screen, (255, 255, 255), (pop_up_rect_x, pop_up_rect_y, pop_up_rect_width, pop_up_rect_height))
+        pygame.draw.rect(screen, (0, 0, 0), (pop_up_rect_x + 1, pop_up_rect_y + 1, pop_up_rect_width - 2, pop_up_rect_height - 2))
+        if Player.player.potion_inventory[1].name == 'Potion_of_health':
+            show_text('HP: +3', pop_up_rect_x + 3, pop_up_rect_y + 3, 'white', font_alagard_small)
 
     # ======Dungeon Progress Bar======
 
@@ -140,7 +182,7 @@ def frame():
             if event.key == pygame.K_e:
                 Player.player.drink_potion()
 
-    # =====EXP=====
+    # ====== EXP ======
 
     exp_percentage = Player.player.exp/Player.player.level_up_exp
 
@@ -198,7 +240,6 @@ frame_image = pygame.transform.scale(frame_image, (width, height))
 
 # images
 small_chest = pygame.image.load("Images/Chest.png")
-inventory_image = pygame.image.load('Images/Inventory_slot.png')
 door_image = pygame.image.load('Images/Door.png')
 hole_image = pygame.image.load('Images/Hole.png')
 spike_image = pygame.image.load('Images/spike_trap.png')
@@ -219,7 +260,6 @@ empty_background_image = pygame.image.load('Images/empty_background.png')
 
 
 # making button images
-inventory_button = Buttons.Button(inventory_image, 0, 0, 0.3)
 door_button_1 = Buttons.Button(door_image, 100, 190, 6)
 door_button_2 = Buttons.Button(door_image, 500, 190, 6)
 door_button_3 = Buttons.Button(door_image, 900, 190, 6)
@@ -518,7 +558,7 @@ class GameState():
         if door_to_boss.got_pressed():
             active_background = boss_room
             # creates the boss object
-            boss = Monster.Boss(100, 5)
+            boss = Monster.Boss(100)
             if boss.type == 'zombie_boss':
                 # generate the first spot
                 boss.generate_vulnerable_spot_coordinates(zombie_boss_image, zombie_boss_x, zombie_boss_y, zombie_boss_scale)

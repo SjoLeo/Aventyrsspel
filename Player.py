@@ -57,7 +57,7 @@ class Player():
             self.exp = self.exp - self.level_up_exp
             self.lvl += 1
             self.strength += 5
-            self.defence += 5
+            self.defence += 2
             self.update_player_stats()
             self.level_up_exp += 30
 
@@ -74,6 +74,6 @@ class Player():
                     self.potion_inventory[self.equipped_potion] = 'Empty'
 
 
-player = Player(10, 10, 10, 1)
+player = Player(10, 10, 2, 1)
 
 
