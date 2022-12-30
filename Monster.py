@@ -35,11 +35,11 @@ class Boss():
         self.type = rand.choice(['zombie_boss'])
         self.vulnerable_x_coordinate = 0
         self.vulnerable_y_coordinate = 0
-        self.boss_hp_percentage = 1
+
 
     def draw_health_bar(self, surface, x, y):
 
-        self.boss_hp_percentage = self.current_hp/self.hp
+        boss_hp_percentage = self.current_hp/self.hp
 
         boss_hp_bar_width = 250
         boss_hp_bar_height = 25
@@ -50,7 +50,7 @@ class Boss():
         pygame.draw.rect(surface, (245, 14, 14), (x + 4, y + 4, boss_hp_bar_width - 8, boss_hp_bar_height - 8))
 
         # health loss
-        pygame.draw.rect(surface, (106, 207, 48), (x + 4, y + 4, int((boss_hp_bar_width - 8) * self.boss_hp_percentage), boss_hp_bar_height - 8))
+        pygame.draw.rect(surface, (106, 207, 48), (x + 4, y + 4, int((boss_hp_bar_width - 8) * boss_hp_percentage), boss_hp_bar_height - 8))
 
     def generate_vulnerable_spot_coordinates(self, image, x, y, scale):
         width = image.get_width()
