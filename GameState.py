@@ -26,10 +26,10 @@ def random_item():
     for item in random_items_list:
 
         if item.type == 'weapon':
-            item.strength = random.randint(3, 13) * Worldinfo.current_dungeon_floor
+            item.strength = random.randint(3, 10) * Worldinfo.current_dungeon_floor
 
         if item.type == 'armour':
-            item.defence = random.randint(1, 4) * Worldinfo.current_dungeon_floor
+            item.defence = random.randint(1, 3) * Worldinfo.current_dungeon_floor
 
     return random_items_list
 
@@ -125,7 +125,6 @@ def frame():
     show_image(gold_frame_image, selected_potion_frame_x, 0, 7.5)
 
     # ======= hovering over slots ========
-
 
     if empty_inv_button1.mouse_hover() and not Player.player.weapon_inventory[0] == 'Empty':
         pop_up_rect_x = 45
@@ -338,12 +337,17 @@ class GameState():
     def menu(self):
         global room_type, room_counter, monster, monster_type, monster_x, monster_y
 
+        if Worldinfo.current_dungeon_floor >= 10:
+            self.state = 'menu_with_final_boss'
+
         background()
         frame()
 
         door_button_1.render_image(screen)
         door_button_2.render_image(screen)
         door_button_3.render_image(screen)
+
+
 
         if door_button_1.got_pressed() or door_button_2.got_pressed() or door_button_3.got_pressed():
             if room_counter < 5:
@@ -365,6 +369,43 @@ class GameState():
 
             if room_counter == 5:
                 self.state = 'room_to_boss_room'
+
+    def menu_with_final_boss(self):
+        global room_type, room_counter, monster, monster_type, monster_x, monster_y, active_background
+        background()
+        frame()
+
+        door_button_1.render_image(screen)
+        door_button_2.render_image(screen)
+        door_button_3.render_image(screen)
+        show_image(torch_image, 840, 240, 5)
+        show_image(torch_image, 1120, 240, 5)
+
+        if door_button_1.got_pressed() or door_button_2.got_pressed():
+            if room_counter < 5:
+                room_type = random_room()
+                print(room_type)
+                if room_type == 'monster':
+                    monster = Monster.Monster()
+                    monster_type = monster.type
+                    monster_x = monster.monster_position()[0]
+                    monster_y = monster.monster_position()[1]
+
+                    self.state = 'monster_room'
+
+                if room_type == 'chest':
+                    self.state = 'chest_room'
+
+                if room_type == 'trap':
+                    self.state = 'trap_room'
+
+            if room_counter == 5:
+                self.state = 'room_to_boss_room'
+
+        if door_button_3.got_pressed():
+            active_background = boss_room
+            self.state = 'final_boss'
+
 
     def trap_room(self):
         global room_counter, tick_counter, room_type
@@ -638,6 +679,17 @@ class GameState():
             self.state = 'menu'
         tick_counter += self.dt * 30
 
+    def final_boss(self):
+        global tick_counter
+        background()
+        frame()
+
+        if tick_counter <= 40:
+            show_text('THERE IS NO GOING BACK NOW!', 100, 100, 'red', font_alagard_big)
+
+
+        tick_counter += self.dt * 30
+
     def defeated(self):
         background()
         frame()
@@ -657,6 +709,9 @@ class GameState():
 
         if self.state == 'menu':
             self.menu()
+
+        if self.state == 'menu_with_final_boss':
+            self.menu_with_final_boss()
 
         if self.state == 'monster_room':
             self.monster_room()
@@ -692,6 +747,9 @@ class GameState():
 
         if self.state == 'boss_room_killed':
             self.boss_room_killed()
+
+        if self.state == 'final_boss':
+            self.final_boss()
 
         if self.state == 'defeated':
             self.defeated()
