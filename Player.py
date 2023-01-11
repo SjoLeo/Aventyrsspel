@@ -53,6 +53,15 @@ class Player():
             self.total_defence = self.armour_inventory[self.equipped_armour].defence + self.defence
 
 
+    def damage_multiplier(self, monster_type):
+            # bonus damage for monsters weak to specific weapons
+        if not player.weapon_inventory[self.equipped_weapon] == 'Empty':
+            if monster_type == "spider" and player.weapon_inventory[self.equipped_weapon].name == "crossbow":
+                player.damage = player.damage * 2
+            if monster_type == "zombie" and player.weapon_inventory[self.equipped_weapon].name == "broadsword":
+                player.damage = player.damage * 2
+
+
     def calculate_exp_overflow(self):
         if self.exp >= self.level_up_exp:
             self.exp = self.exp - self.level_up_exp
