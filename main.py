@@ -6,10 +6,6 @@ import random
 
 pygame.display.set_caption("Test Caption")
 
-# Screen
-width = 1200
-height = 675
-screen = pygame.display.set_mode((width, height))
 
 clock = pygame.time.Clock()
 
@@ -30,3 +26,4 @@ while running:
     now = time.time()
     dt = now - prev_time
     prev_time = now
+

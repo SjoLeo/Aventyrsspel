@@ -83,11 +83,11 @@ def frame():
     if empty_inv_button1.got_pressed():
         selected_weapon_frame_x = 37.5
         Player.player.equipped_weapon = 0
-        Player.player.update_player_stats()
+
     elif empty_inv_button2.got_pressed():
         selected_weapon_frame_x = 105
         Player.player.equipped_weapon = 1
-        Player.player.update_player_stats()
+
     show_image(gold_frame_image, selected_weapon_frame_x, 0, 7.5)
 
 
@@ -102,11 +102,11 @@ def frame():
     if empty_inv_button3.got_pressed():
         selected_armour_frame_x = 210
         Player.player.equipped_armour = 0
-        Player.player.update_player_stats()
+
     elif empty_inv_button4.got_pressed():
         selected_armour_frame_x = 278
         Player.player.equipped_armour = 1
-        Player.player.update_player_stats()
+
     show_image(gold_frame_image, selected_armour_frame_x, 0, 7.5)
 
     # show potion icon
@@ -214,6 +214,7 @@ pygame.init()
 width = 1200
 height = 675
 screen = pygame.display.set_mode((width, height))
+
 
 
 # Fonts
@@ -391,6 +392,7 @@ class GameState():
                     monster_x = monster.monster_position()[0]
                     monster_y = monster.monster_position()[1]
 
+
                     self.state = 'monster_room'
 
                 if room_type == 'chest':
@@ -477,7 +479,6 @@ class GameState():
         if item1_chest_button.got_pressed():
             Player.player.add_item_to_inventory(random_items[0])
             room_counter += 1
-            Player.player.update_player_stats()
 
             self.state = 'menu'
 
@@ -485,7 +486,6 @@ class GameState():
         if item2_chest_button.got_pressed():
             Player.player.add_item_to_inventory(random_items[1])
             room_counter += 1
-            Player.player.update_player_stats()
 
             self.state = 'menu'
 
@@ -493,7 +493,6 @@ class GameState():
         if item3_chest_button.got_pressed():
             Player.player.add_item_to_inventory(random_items[2])
             room_counter += 1
-            Player.player.update_player_stats()
 
             self.state = 'menu'
 
@@ -502,6 +501,8 @@ class GameState():
 
         background()
         frame()
+        print(monster.strength)
+        print(Player.player.strength)
 
         door_button_monster_room.render_image(screen)
 
@@ -616,32 +617,32 @@ class GameState():
         vulnerable_spot_button.render_image(screen)
 
         if vulnerable_spot_button.got_pressed():
-            result = random.choice(['dodge', 'hit', 'hit', 'hit'])
+            result = random.choice(['dodge', 'hit', 'hit', 'hit', 'hit'])
             if result == 'hit':
                 boss.current_hp -= Player.player.damage
                 # generate new spots
                 boss.generate_vulnerable_spot_coordinates(zombie_boss_image, zombie_boss_x, zombie_boss_y, zombie_boss_scale)
                 Player.player.current_combo += 1
                 # update the damage stats
-                Player.player.update_player_stats()
+
             else:
                 boss.generate_vulnerable_spot_coordinates(zombie_boss_image, zombie_boss_x, zombie_boss_y, zombie_boss_scale)
                 Player.player.current_hp -= 1
                 Player.player.current_combo = 1
-                Player.player.update_player_stats()
+
 
                 self.state = 'boss_dodged'
 
 
-            if empty_background_button.got_pressed() and not vulnerable_spot_button.mouse_hover():
-                Player.player.current_hp -= 1
-                Player.player.current_combo = 1
-                Player.player.update_player_stats()
-                boss.generate_vulnerable_spot_coordinates(zombie_boss_image, zombie_boss_x, zombie_boss_y, zombie_boss_scale)
+        if empty_background_button.got_pressed() and not vulnerable_spot_button.mouse_hover():
+            Player.player.current_hp -= 1
+            Player.player.current_combo = 1
+
+            boss.generate_vulnerable_spot_coordinates(zombie_boss_image, zombie_boss_x, zombie_boss_y, zombie_boss_scale)
 
         if boss.current_hp <= 0:
             Player.player.current_combo = 1
-            Player.player.update_player_stats()
+
             self.state = 'boss_room_killed'
 
     def boss_dodged(self):
@@ -686,7 +687,6 @@ class GameState():
 
         if tick_counter <= 40:
             show_text('THERE IS NO GOING BACK NOW!', 100, 100, 'red', font_alagard_big)
-
 
         tick_counter += self.dt * 30
 
@@ -770,4 +770,8 @@ class GameState():
         if Player.player.current_hp <= 0:
             self.state = 'defeated'
 
+        Player.player.update_player_stats()
+        Player.player.damage_multiplier(monster_type)
+
         pygame.display.flip()
+

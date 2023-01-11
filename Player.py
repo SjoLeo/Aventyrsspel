@@ -52,6 +52,7 @@ class Player():
         if not self.armour_inventory[self.equipped_armour] == 'Empty':
             self.total_defence = self.armour_inventory[self.equipped_armour].defence + self.defence
 
+
     def calculate_exp_overflow(self):
         if self.exp >= self.level_up_exp:
             self.exp = self.exp - self.level_up_exp
