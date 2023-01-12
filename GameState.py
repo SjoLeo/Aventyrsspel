@@ -359,7 +359,6 @@ class GameState():
                     monster_type = monster.type
                     monster_x = monster.monster_position()[0]
                     monster_y = monster.monster_position()[1]
-
                     self.state = 'monster_room'
 
                 if room_type == 'chest':
@@ -501,8 +500,7 @@ class GameState():
 
         background()
         frame()
-        print(monster.strength)
-        print(Player.player.strength)
+        #print(Player.player.damage)
 
         door_button_monster_room.render_image(screen)
 
@@ -525,8 +523,10 @@ class GameState():
                 self.state = 'fight'
 
     def fight(self):
+        global monster_type
         if Player.player.damage > monster.strength:
             Player.player.exp += random.randint(40, 70)
+
             self.state = 'monster_room_killed'
 
         elif Player.player.damage == monster.strength:
@@ -535,6 +535,8 @@ class GameState():
         else:
             Player.player.current_hp -= 1
             self.state = 'monster_room_loss'
+        monster_type = None
+
 
     def monster_room_killed(self):
         global room_counter
