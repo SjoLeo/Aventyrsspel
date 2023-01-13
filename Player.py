@@ -85,6 +85,6 @@ class Player():
                     self.potion_inventory[self.equipped_potion] = 'Empty'
 
 
-player = Player(10, 10, 2, 1)
+player = Player(10, 10, 2, 10)
 
 

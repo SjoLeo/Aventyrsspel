@@ -254,6 +254,8 @@ zombie_image = pygame.image.load('Images/zombie.png')
 spider_image = pygame.image.load('Images/spindel_prot.png')
 zombie_boss_image = pygame.image.load('Images/zombie_boss.png')
 zombie_boss_image_2 = pygame.image.load('Images/zombie_boss_2.png')
+Final_boss = pygame.image.load("Images/Final_boss.png")
+Final_boss_fade = pygame.image.load("Images/Final_boss.png")
 
 # empty background image
 empty_background_image = pygame.image.load('Images/empty_background.png')
@@ -320,6 +322,7 @@ selected_armour_frame_x = 210
 selected_potion_frame_x = 383
 
 clock = pygame.time.Clock()
+
 
 
 class GameState():
@@ -682,13 +685,21 @@ class GameState():
             self.state = 'menu'
         tick_counter += self.dt * 30
 
-    def final_boss(self):
+    def final_boss(self, image_alpha):
         global tick_counter
         background()
         frame()
 
         if tick_counter <= 40:
             show_text('THERE IS NO GOING BACK NOW!', 100, 100, 'red', font_alagard_big)
+        if tick_counter <= 50:
+            image_alpha += 10
+            print(image_alpha)
+            Final_boss_fade.set_alpha(image_alpha)
+            show_image(Final_boss_fade, 500, 220, 6)
+        if tick_counter > 50:
+            show_image(Final_boss, 500, 220, 6)
+
 
         tick_counter += self.dt * 30
 
