@@ -7,7 +7,7 @@ import Buttons
 
 class Monster():
     def __init__(self):
-        self.strength = ((rand.randint(9, 16)) * Worldinfo.current_dungeon_floor) - Player.player.total_defence
+        self.strength = ((rand.randint(13, 22)) * Worldinfo.current_dungeon_floor) - Player.player.total_defence
 
         monsters = ['spider', 'zombie']
         self.type = rand.choice(monsters)
@@ -28,10 +28,14 @@ class Monster():
 
 class Boss():
     def __init__(self, base_hp, final):
-        self.hp = base_hp * Worldinfo.current_dungeon_floor
-        self.current_hp = self.hp
+
+
         if final == False:
             self.type = rand.choice(['zombie_boss'])
+            self.hp = base_hp * Worldinfo.current_dungeon_floor
+        else:
+            self.hp = base_hp
+        self.current_hp = self.hp
         self.vulnerable_x_coordinate = 0
         self.vulnerable_y_coordinate = 0
 
