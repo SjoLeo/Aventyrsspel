@@ -68,6 +68,25 @@ def frame():
     global selected_weapon_frame_x
     global selected_armour_frame_x
     global selected_potion_frame_x
+    global inventory_input
+
+    # check for key inputs related to inventory items
+    for event in pygame.event.get():
+        print(event)
+
+        inventory_input = 0
+        if event.type == pygame.KEYUP or event.type == pygame.KEYDOWN:
+            # inventory slots
+            if event.key == pygame.K_1:
+                inventory_input = 1
+            if event.key == pygame.K_2:
+                inventory_input = 2
+            if event.key == pygame.K_3:
+                inventory_input = 3
+
+            if event.key == pygame.K_e:
+                Player.player.drink_potion()
+
 
     screen.blit(frame_image, (0, 0))
 
@@ -100,11 +119,11 @@ def frame():
         show_image(Player.player.weapon_inventory[1].icon, 113, -4, 4)
 
     # clickable slots
-    if empty_inv_button1.got_pressed():
+    if empty_inv_button1.got_pressed() or inventory_input == 1:
         selected_weapon_frame_x = 37.5
         Player.player.equipped_weapon = 0
 
-    elif empty_inv_button2.got_pressed():
+    elif empty_inv_button2.got_pressed() or inventory_input == 2:
         selected_weapon_frame_x = 105
         Player.player.equipped_weapon = 1
 
@@ -197,11 +216,8 @@ def frame():
     if room_counter > 4:
         show_image(green_progress, 960, 600, 10)
 
-    # check for key inputs related to inventory items
-    for event in pygame.event.get():
-        if event.type == pygame.KEYUP:
-            if event.key == pygame.K_e:
-                Player.player.drink_potion()
+
+
 
     # ====== EXP ======
 
@@ -334,6 +350,7 @@ room_type = None
 tick_counter = 0
 room_counter = 0
 image_alpha = 0
+inventory_input = 0
 type_of_room = None
 
 
@@ -450,7 +467,7 @@ class GameState():
         tick_counter += self.dt * 30
 
     def mimic_room(self):
-        global room_counter, tick_counter, room_type
+        global room_counter, tick_counter
 
         background()
         frame()
@@ -464,16 +481,31 @@ class GameState():
             self.state = 'menu'
 
         if small_chest_button.got_pressed() or tick_counter > 25:
-            show_image(mimic_image, 565, 426, 6)
-            show_text("It's a Trap!", 150, 120, 'red', font_alagard_big)
+            tick_counter = 0
+            self.state = 'mimic_room_opened'
+        tick_counter += self.dt * 30
 
-            if tick_counter >= 60:
-                # player takes damage
-                Player.player.current_hp -= 1
-                room_counter += 1
-                tick_counter = 0
-                Worldinfo.traps_triggered += 1
-                self.state = 'menu'
+
+    def mimic_room_opened(self):
+        global tick_counter, room_counter
+        background()
+        frame()
+
+        show_image(mimic_image, 565, 426, 6)
+        show_text("It's a Trap!", 150, 120, 'red', font_alagard_big)
+
+        door_button_chest_room.render_image(screen)
+        if door_button_chest_room.got_pressed():
+            room_counter += 1
+            self.state = 'menu'
+
+        if tick_counter >= 60:
+            # player takes damage
+            Player.player.current_hp -= 1
+            room_counter += 1
+            tick_counter = 0
+            Worldinfo.traps_triggered += 1
+            self.state = 'menu'
 
 
         tick_counter += self.dt * 30
@@ -856,6 +888,9 @@ class GameState():
 
         if self.state == 'mimic_room':
             self.mimic_room()
+
+        if self.state == 'mimic_room_opened':
+            self.mimic_room_opened()
 
         if self.state == 'room_to_boss_room':
             self.room_to_boss_room()
