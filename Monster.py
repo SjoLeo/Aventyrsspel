@@ -7,7 +7,7 @@ import Buttons
 
 class Monster():
     def __init__(self):
-        self.strength = ((rand.randint(9, 16)) * Worldinfo.current_dungeon_floor) - Player.player.total_defence
+        self.strength = ((rand.randint(13, 22)) * Worldinfo.current_dungeon_floor) - Player.player.total_defence
 
         monsters = ['spider', 'zombie']
         self.type = rand.choice(monsters)
