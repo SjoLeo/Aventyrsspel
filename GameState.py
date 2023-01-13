@@ -249,13 +249,14 @@ chest_item_frame_image = pygame.image.load("Images/chest_loot_frame.png")
 green_progress = pygame.image.load("Images/green.png")
 empty_inv_image = pygame.image.load('Images/empty_inv.png')
 torch_image = pygame.image.load('Images/torch.png')
+darkness_image = pygame.image.load("Images/Darkness.png")
+darkness_small_image = pygame.image.load("Images/Darkness_small.png")
 
 zombie_image = pygame.image.load('Images/zombie.png')
 spider_image = pygame.image.load('Images/spindel_prot.png')
 zombie_boss_image = pygame.image.load('Images/zombie_boss.png')
 zombie_boss_image_2 = pygame.image.load('Images/zombie_boss_2.png')
-Final_boss = pygame.image.load("Images/Final_boss.png")
-Final_boss_fade = pygame.image.load("Images/Final_boss.png")
+final_boss_image = pygame.image.load('Images/Final_boss.png')
 
 # empty background image
 empty_background_image = pygame.image.load('Images/empty_background.png')
@@ -280,6 +281,9 @@ zombie_boss_scale = 6
 zombie_boss_x = 500
 zombie_boss_y = 220
 zombie_boss_button = Buttons.Button(zombie_boss_image, zombie_boss_x, zombie_boss_y, zombie_boss_scale)
+
+final_boss_x = 120
+final_boss_y = 60
 
 # vulnerable spot image
 vulnerable_spot_image = pygame.image.load('Images/vulnerable_spot.png')
@@ -316,13 +320,13 @@ room_type = None
 
 tick_counter = 0
 room_counter = 0
+image_alpha = 0
 
 selected_weapon_frame_x = 37.5
 selected_armour_frame_x = 210
 selected_potion_frame_x = 383
 
 clock = pygame.time.Clock()
-
 
 
 class GameState():
@@ -374,7 +378,7 @@ class GameState():
                 self.state = 'room_to_boss_room'
 
     def menu_with_final_boss(self):
-        global room_type, room_counter, monster, monster_type, monster_x, monster_y, active_background
+        global room_type, room_counter, monster, monster_type, monster_x, monster_y, active_background, eye_of_destruction
         background()
         frame()
 
@@ -408,6 +412,7 @@ class GameState():
 
         if door_button_3.got_pressed():
             active_background = boss_room
+            eye_of_destruction = Monster.Boss(5000, True)
             self.state = 'final_boss'
 
 
@@ -540,7 +545,6 @@ class GameState():
             self.state = 'monster_room_loss'
         monster_type = None
 
-
     def monster_room_killed(self):
         global room_counter
 
@@ -597,7 +601,7 @@ class GameState():
         if door_to_boss.got_pressed():
             active_background = boss_room
             # creates the boss object
-            boss = Monster.Boss(100)
+            boss = Monster.Boss(100, False)
             if boss.type == 'zombie_boss':
                 # generate the first spot
                 boss.generate_vulnerable_spot_coordinates(zombie_boss_image, zombie_boss_x, zombie_boss_y, zombie_boss_scale)
@@ -685,22 +689,25 @@ class GameState():
             self.state = 'menu'
         tick_counter += self.dt * 30
 
-    def final_boss(self, image_alpha):
+    def final_boss(self):
         global tick_counter
+        global image_alpha
         background()
         frame()
 
-        if tick_counter <= 40:
+        if tick_counter <= 60:
             show_text('THERE IS NO GOING BACK NOW!', 100, 100, 'red', font_alagard_big)
-        if tick_counter <= 50:
-            image_alpha += 10
-            print(image_alpha)
-            Final_boss_fade.set_alpha(image_alpha)
-            show_image(Final_boss_fade, 500, 220, 6)
-        if tick_counter > 50:
-            show_image(Final_boss, 500, 220, 6)
+        elif 60 <= tick_counter <= 120:
+            image_alpha += 5
+            final_boss_image.set_alpha(image_alpha)
+            darkness_small_image.set_alpha(image_alpha)
+            show_image(final_boss_image, final_boss_x, final_boss_y, 6)
+            show_image(darkness_small_image, 0, 0, 7.5)
+        else:
 
-
+            show_image(final_boss_image, final_boss_x, final_boss_y, 6)
+            show_image(darkness_small_image, 0, 0, 7.5)
+        Monster.Boss.draw_health_bar(screen, final_boss_x - 27, final_boss_y - 50)
         tick_counter += self.dt * 30
 
     def defeated(self):

@@ -11,7 +11,6 @@ class Button():
         self.clicking = False
 
     def got_pressed(self):
-
         pos = pygame.mouse.get_pos()
         if self.rect.collidepoint(pos):
             if pygame.mouse.get_pressed()[0] == True:
@@ -30,7 +29,6 @@ class Button():
         pos = pygame.mouse.get_pos()
         if self.rect.collidepoint(pos):
             return True
-
 
     def render_image(self, surface):
         surface.blit(self.image, (self.rect.x, self.rect.y))
