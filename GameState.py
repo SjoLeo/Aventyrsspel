@@ -382,7 +382,7 @@ class GameState():
                     self.state = 'chest_room'
 
                 if room_type == 'trap':
-                    self.state = 'trap_room'
+                    self.state = random.choice(['mimic_room', 'spike_room'])
 
             if room_counter == 5:
                 self.state = 'room_to_boss_room'
@@ -424,7 +424,7 @@ class GameState():
             self.state = 'final_boss'
 
 
-    def trap_room(self):
+    def spike_room(self):
         global room_counter, tick_counter, room_type
 
         background()
@@ -448,6 +448,9 @@ class GameState():
             self.state = 'menu'
 
         tick_counter += self.dt * 30
+
+    def mimic_room(self):
+
 
     def chest_room(self):
         global room_counter, random_items, item1_chest_button, item2_chest_button, item3_chest_button
@@ -827,8 +830,12 @@ class GameState():
         if self.state == 'chest_room_opened':
             self.chest_room_opened()
 
-        if self.state == 'trap_room':
-            self.trap_room()
+        if self.state == 'spike_room':
+            self.spike_room()
+
+        if self.state == 'mimic_room':
+            self.mimic_room()
+
 
         if self.state == 'room_to_boss_room':
             self.room_to_boss_room()
