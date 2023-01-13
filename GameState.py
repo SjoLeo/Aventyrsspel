@@ -69,13 +69,18 @@ def frame():
     # displayed stats:
     show_text(f"HP: {Player.player.current_hp}/ {Player.player.hp}", 1020, 2, "white", font_alagard_small)
 
-    '''if type_of_room == 'mini_boss' or type_of_room == 'final_boss':
-        show_text(f"STR: {int(Player.player.damage / Player.player.current_combo)} x {Player.player.current_combo}", 1020, 15, "white", font_alagard_small)
+    if type_of_room == 'mini_boss' or type_of_room == 'final_boss':
+        if Player.player.current_combo != 1:
+            show_text(f"STR: {int(Player.player.damage / Player.player.current_combo)} x {Player.player.current_combo}", 1020, 15, "white", font_alagard_small)
+        else:
+            show_text(f"STR: {Player.player.damage}", 1020, 15, "white", font_alagard_small)
     else:
-        show_text(f"STR: {int(Player.player.damage / Player.player.damage_multiplier())} x {Player.player.current_combo}", 1020, 15, "white", font_alagard_small)
-    show_text(f"DEF: {Player.player.total_defence}", 1020, 28, "white", font_alagard_small)'''
+        if Player.player.damage_multiplier != 1 and not Player.player.weapon_inventory[Player.player.equipped_weapon] == 'Empty':
+            show_text(f"STR: {Player.player.damage - Player.player.weapon_inventory[Player.player.equipped_weapon].strength} + {Player.player.weapon_inventory[Player.player.equipped_weapon].strength}", 1020, 15, "white", font_alagard_small)
+        else:
+            show_text(f"STR: {Player.player.damage}", 1020, 15, "white", font_alagard_small)
 
-
+    show_text(f"DEF: {Player.player.total_defence}", 1020, 28, "white", font_alagard_small)
     show_text(f'Player level: {Player.player.lvl}', 546, 10, 'white', font_alagard_medium)
     show_text(f'Dungeon floor: {Worldinfo.current_dungeon_floor}', 546, 30, 'white', font_alagard_medium)
 
@@ -507,7 +512,7 @@ class GameState():
             self.state = 'menu'
 
     def monster_room(self):
-        global room_counter
+        global room_counter, monster_type
 
         background()
         frame()
@@ -517,6 +522,7 @@ class GameState():
 
         if door_button_monster_room.got_pressed():
             room_counter += 1
+            monster_type = None
             self.state = 'menu'
 
         if monster_type == 'spider':
@@ -864,9 +870,9 @@ class GameState():
         if Player.player.current_hp <= 0:
             self.state = 'defeated'
 
+        Player.player.calculate_damage_multiplier(monster_type)
         Player.player.update_player_stats()
-        Player.player.damage_multiplier(monster_type)
+
 
         pygame.display.flip()
-
 

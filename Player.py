@@ -46,7 +46,7 @@ class Player():
 
     def update_player_stats(self):
         # adding strength bonus to player
-        self.damage = self.strength * self.current_combo * self.damage_multiplier
+        self.damage = self.strength * self.current_combo
         if not self.weapon_inventory[self.equipped_weapon] == 'Empty':
             self.damage = (self.weapon_inventory[self.equipped_weapon].strength * self.damage_multiplier + self.strength) * self.current_combo
 
@@ -56,9 +56,8 @@ class Player():
             self.total_defence = self.armour_inventory[self.equipped_armour].defence + self.defence
 
 
-    def damage_multiplier(self, monster_type):
+    def calculate_damage_multiplier(self, monster_type):
         # bonus damage for monsters weak to specific weapons
-        self.update_player_stats()
         if not self.weapon_inventory[self.equipped_weapon] == 'Empty':
             if monster_type == "spider" and self.weapon_inventory[self.equipped_weapon].name == "Crossbow":
                 self.damage_multiplier = 2
