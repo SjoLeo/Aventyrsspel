@@ -19,6 +19,8 @@ class Player():
         self.level_up_exp = 100
 
         self.lvl = lvl
+
+        # inventory variables
         self.equipped_weapon = 0
         self.equipped_armour = 0
         self.equipped_potion = 0

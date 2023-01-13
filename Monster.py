@@ -13,6 +13,7 @@ class Monster():
         self.type = rand.choice(monsters)
 
     def monster_position(self):
+        # generate random positions
         if self.type == 'spider':
             x_coordinate = rand.randint(100, 300)
             y_coordinate = rand.randint(100, 300)
@@ -26,11 +27,11 @@ class Monster():
             return coordinates
 
 class Boss():
-    def __init__(self, base_hp):
+    def __init__(self, base_hp, final):
         self.hp = base_hp * Worldinfo.current_dungeon_floor
         self.current_hp = self.hp
-
-        self.type = rand.choice(['zombie_boss'])
+        if final == False:
+            self.type = rand.choice(['zombie_boss'])
         self.vulnerable_x_coordinate = 0
         self.vulnerable_y_coordinate = 0
 
