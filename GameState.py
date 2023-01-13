@@ -239,6 +239,7 @@ height = 675
 screen = pygame.display.set_mode((width, height))
 
 # Fonts
+font_alagard_huge = pygame.font.Font('Fonts/alagard.ttf', 150)
 font_alagard_big = pygame.font.Font("Fonts/alagard.ttf", 70)
 font_alagard_small = pygame.font.Font("Fonts/alagard.ttf", 15)
 font_alagard_medium = pygame.font.Font('Fonts/alagard.ttf', 25)
@@ -282,6 +283,7 @@ zombie_boss_image = pygame.image.load('Images/zombie_boss.png')
 zombie_boss_image_2 = pygame.image.load('Images/zombie_boss_2.png')
 final_boss_image = pygame.image.load('Images/Final_boss.png')
 mimic_image = pygame.image.load("Images/Mimic.png")
+final_boss_door = pygame.image.load('Images/final_boss_door.png')
 
 empty_background_image = pygame.image.load('Images/empty_background.png')
 
@@ -293,6 +295,7 @@ small_chest_button = Buttons.Button(small_chest, 565, 450, 6)
 door_button_chest_room = Buttons.Button(door_image, 150, 190, 6)
 door_button_monster_room = Buttons.Button(door_image, 600, 190, 6)
 door_to_boss = Buttons.Button(door_image, 500, 190, 6)
+final_boss_door_button = Buttons.Button(final_boss_door, 539, 285, 7.5)
 
 # monster buttons
 # x and y changes in gamestate
@@ -707,6 +710,7 @@ class GameState():
             self.state = 'boss_room_killed'
 
     def boss_dodged(self):
+
         global tick_counter
 
         if tick_counter <= 40:
@@ -746,6 +750,7 @@ class GameState():
 
     def final_boss(self):
         global tick_counter, image_alpha, final_boss, type_of_room, active_background, final_boss_empty_background_button
+        active_background = boss_room
         background()
         frame()
 
@@ -759,11 +764,9 @@ class GameState():
             show_image(darkness_small_image, 0, 0, 7.5)
         else:
             tick_counter = 0
-            active_background = boss_room
-            final_boss = Monster.Boss(5000, True)
+            final_boss = Monster.Boss(10000, True)
             final_boss.generate_vulnerable_spot_coordinates(final_boss_image, final_boss_x, final_boss_y, 6)
-            final_boss_empty_background_button = Buttons.Button(empty_background_image, final_boss_x - 95,
-                                                                final_boss_y - 60, 13)
+            final_boss_empty_background_button = Buttons.Button(empty_background_image, final_boss_x - 95, final_boss_y - 60, 13)
             type_of_room = 'final_boss'
             self.state = 'final_boss_fight'
 
@@ -809,6 +812,14 @@ class GameState():
         if final_boss.current_hp <= 0:
             Player.player.current_combo = 1
             Worldinfo.bosses_slayed += 1
+            self.state = 'final_boss_killed'
+
+    def final_boss_killed(self):
+        background()
+        frame()
+        final_boss_door_button.render_image(screen)
+
+        if final_boss_door_button.got_pressed():
             self.state = 'victory_room'
 
     def defeated(self):
@@ -827,12 +838,12 @@ class GameState():
         active_background = ending_background
 
         background()
-        show_text('YOU WON', 150, 120, 'yellow', font_alagard_big)
-        show_text('STATS:', 150, 180, 'white', font_alagard_big)
-        show_text(f'Bosses Slayed: {Worldinfo.bosses_slayed}', 150, 240, 'white', font_alagard_big)
-        show_text(f'Monsters Slayed: {Worldinfo.monsters_slayed}', 150, 300, 'white', font_alagard_big)
-        show_text(f'Chests Opened: {Worldinfo.chests_opened}', 150, 360, 'white', font_alagard_big)
-        show_text(f'Traps Triggered: {Worldinfo.traps_triggered}', 150, 420, 'white', font_alagard_big)
+        show_text('YOU WON', 100, 100, 'yellow', font_alagard_huge)
+        show_text('STATS:', 550, 280, 'white', font_alagard_big)
+        show_text(f'Bosses Slayed: {Worldinfo.bosses_slayed}', 550, 340, 'white', font_alagard_big)
+        show_text(f'Monsters Slayed: {Worldinfo.monsters_slayed}', 550, 400, 'white', font_alagard_big)
+        show_text(f'Chests Opened: {Worldinfo.chests_opened}', 550, 460, 'white', font_alagard_big)
+        show_text(f'Traps Triggered: {Worldinfo.traps_triggered}', 550, 520, 'white', font_alagard_big)
 
     def state_manager(self, dt):
         global inventory_input
@@ -893,6 +904,9 @@ class GameState():
 
         if self.state == 'final_boss_fight':
             self.final_boss_fight()
+
+        if self.state == 'final_boss_killed':
+            self.final_boss_killed()
 
         if self.state == 'defeated':
             self.defeated()
