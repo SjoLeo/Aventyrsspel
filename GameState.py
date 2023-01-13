@@ -68,8 +68,14 @@ def frame():
 
     # displayed stats:
     show_text(f"HP: {Player.player.current_hp}/ {Player.player.hp}", 1020, 2, "white", font_alagard_small)
-    show_text(f"STR: {int(Player.player.damage/Player.player.current_combo)} x {Player.player.current_combo}", 1020, 15, "white", font_alagard_small)
-    show_text(f"DEF: {Player.player.total_defence}", 1020, 28, "white", font_alagard_small)
+
+    '''if type_of_room == 'mini_boss' or type_of_room == 'final_boss':
+        show_text(f"STR: {int(Player.player.damage / Player.player.current_combo)} x {Player.player.current_combo}", 1020, 15, "white", font_alagard_small)
+    else:
+        show_text(f"STR: {int(Player.player.damage / Player.player.damage_multiplier())} x {Player.player.current_combo}", 1020, 15, "white", font_alagard_small)
+    show_text(f"DEF: {Player.player.total_defence}", 1020, 28, "white", font_alagard_small)'''
+
+
     show_text(f'Player level: {Player.player.lvl}', 546, 10, 'white', font_alagard_medium)
     show_text(f'Dungeon floor: {Worldinfo.current_dungeon_floor}', 546, 30, 'white', font_alagard_medium)
 
@@ -233,6 +239,9 @@ main_room = pygame.transform.scale(main_room, (width, height))
 boss_room = pygame.image.load('Images/Boss_room.png')
 boss_room = pygame.transform.scale(boss_room, (width, height))
 
+ending_background = pygame.image.load('Images/ending_background.png')
+ending_background = pygame.transform.scale(ending_background, (width, height))
+
 active_background = main_menu_background
 
 frame_image = pygame.image.load('Images/Frame.png')
@@ -251,14 +260,13 @@ empty_inv_image = pygame.image.load('Images/empty_inv.png')
 torch_image = pygame.image.load('Images/torch.png')
 darkness_image = pygame.image.load("Images/Darkness.png")
 darkness_small_image = pygame.image.load("Images/Darkness_small.png")
-
+vulnerable_spot_image = pygame.image.load('Images/vulnerable_spot.png')
 zombie_image = pygame.image.load('Images/zombie.png')
 spider_image = pygame.image.load('Images/spindel_prot.png')
 zombie_boss_image = pygame.image.load('Images/zombie_boss.png')
 zombie_boss_image_2 = pygame.image.load('Images/zombie_boss_2.png')
 final_boss_image = pygame.image.load('Images/Final_boss.png')
 
-# empty background image
 empty_background_image = pygame.image.load('Images/empty_background.png')
 
 
@@ -282,17 +290,13 @@ zombie_boss_x = 500
 zombie_boss_y = 220
 zombie_boss_button = Buttons.Button(zombie_boss_image, zombie_boss_x, zombie_boss_y, zombie_boss_scale)
 
-final_boss_x = 120
-final_boss_y = 60
+final_boss_x = 470
+final_boss_y = 180
 
-# vulnerable spot image
-vulnerable_spot_image = pygame.image.load('Images/vulnerable_spot.png')
 
 # vulnerable spot button
 # x and y changes in gamestate
 vulnerable_spot_button = Buttons.Button(vulnerable_spot_image, 0, 0, 4)
-
-
 
 # frame buttons
 empty_inv_button1 = Buttons.Button(empty_inv_image, 45, 0, 1)
@@ -321,6 +325,7 @@ room_type = None
 tick_counter = 0
 room_counter = 0
 image_alpha = 0
+type_of_room = None
 
 selected_weapon_frame_x = 37.5
 selected_armour_frame_x = 210
@@ -343,7 +348,7 @@ class GameState():
             self.state = 'menu'
 
     def menu(self):
-        global room_type, room_counter, monster, monster_type, monster_x, monster_y
+        global room_type, room_counter, monster, monster_type, monster_x, monster_y, type_of_room
 
         if Worldinfo.current_dungeon_floor >= 10:
             self.state = 'menu_with_final_boss'
@@ -360,7 +365,7 @@ class GameState():
         if door_button_1.got_pressed() or door_button_2.got_pressed() or door_button_3.got_pressed():
             if room_counter < 5:
                 room_type = random_room()
-                print(room_type)
+                type_of_room = room_type
                 if room_type == 'monster':
                     monster = Monster.Monster()
                     monster_type = monster.type
@@ -378,7 +383,7 @@ class GameState():
                 self.state = 'room_to_boss_room'
 
     def menu_with_final_boss(self):
-        global room_type, room_counter, monster, monster_type, monster_x, monster_y, active_background, eye_of_destruction
+        global room_type, room_counter, monster, monster_type, monster_x, monster_y
         background()
         frame()
 
@@ -411,8 +416,6 @@ class GameState():
                 self.state = 'room_to_boss_room'
 
         if door_button_3.got_pressed():
-            active_background = boss_room
-            eye_of_destruction = Monster.Boss(5000, True)
             self.state = 'final_boss'
 
 
@@ -588,7 +591,7 @@ class GameState():
         show_text('You lost to the monster', 150, 120, 'red', font_alagard_big)
 
     def room_to_boss_room(self):
-        global active_background, boss, vulnerable_spot_x, vulnerable_spot_y, empty_background_button
+        global active_background, boss, vulnerable_spot_x, vulnerable_spot_y, empty_background_button, type_of_room
         background()
         frame()
 
@@ -606,7 +609,7 @@ class GameState():
                 # generate the first spot
                 boss.generate_vulnerable_spot_coordinates(zombie_boss_image, zombie_boss_x, zombie_boss_y, zombie_boss_scale)
                 empty_background_button = Buttons.Button(empty_background_image, zombie_boss_x-95, zombie_boss_y-60, 13)
-
+                type_of_room = 'mini_boss'
             self.state = 'boss_room'
 
     def boss_room(self):
@@ -656,14 +659,17 @@ class GameState():
 
     def boss_dodged(self):
         global tick_counter
-        frame()
+
         if tick_counter <= 40:
             show_text('The Boss Dodged', 700, 200, 'red', font_alagard_medium_big)
             show_text('You Got Hit Instead', 700, 240, 'red', font_alagard_medium_big)
 
         else:
             tick_counter = 0
-            self.state = 'boss_room'
+            if type_of_room == 'mini_boss':
+                self.state = 'boss_room'
+            else:
+                self.state = 'final_boss_fight'
         tick_counter += self.dt * 30
 
     def boss_room_killed(self):
@@ -690,10 +696,11 @@ class GameState():
         tick_counter += self.dt * 30
 
     def final_boss(self):
-        global tick_counter
-        global image_alpha
+        global tick_counter, image_alpha, final_boss, type_of_room, active_background, final_boss_empty_background_button
         background()
         frame()
+
+
 
         if tick_counter <= 60:
             show_text('THERE IS NO GOING BACK NOW!', 100, 100, 'red', font_alagard_big)
@@ -704,11 +711,59 @@ class GameState():
             show_image(final_boss_image, final_boss_x, final_boss_y, 6)
             show_image(darkness_small_image, 0, 0, 7.5)
         else:
+            tick_counter = 0
+            active_background = boss_room
+            final_boss = Monster.Boss(5000, True)
+            final_boss.generate_vulnerable_spot_coordinates(final_boss_image, final_boss_x, final_boss_y, 6)
+            final_boss_empty_background_button = Buttons.Button(empty_background_image, final_boss_x - 95, final_boss_y - 60, 13)
+            type_of_room = 'final_boss'
+            self.state = 'final_boss_fight'
 
-            show_image(final_boss_image, final_boss_x, final_boss_y, 6)
-            show_image(darkness_small_image, 0, 0, 7.5)
-        Monster.Boss.draw_health_bar(screen, final_boss_x - 27, final_boss_y - 50)
         tick_counter += self.dt * 30
+
+
+    def final_boss_fight(self):
+        global final_boss, image_alpha
+        background()
+        frame()
+
+
+        vulnerable_spot_button.rect.x = final_boss.vulnerable_x_coordinate
+        vulnerable_spot_button.rect.y = final_boss.vulnerable_y_coordinate
+        final_boss_empty_background_button.render_image(screen)
+
+        show_image(final_boss_image, final_boss_x, final_boss_y, 6)
+        darkness_small_image.set_alpha(image_alpha)
+        show_image(darkness_small_image, 0, 0, 7.5)
+
+        final_boss.draw_health_bar(screen, final_boss_x, final_boss_y - 45)
+        vulnerable_spot_button.render_image(screen)
+
+        if vulnerable_spot_button.got_pressed():
+            result = random.choice(['dodge', 'hit', 'hit', 'hit', 'hit'])
+            if result == 'hit':
+                final_boss.current_hp -= Player.player.damage
+                # generate new spots
+                final_boss.generate_vulnerable_spot_coordinates(final_boss_image, final_boss_x, final_boss_y, 6)
+                Player.player.current_combo += 1
+                # update the damage stats
+
+            else:
+                final_boss.generate_vulnerable_spot_coordinates(final_boss_image, final_boss_x, final_boss_y, 6)
+                Player.player.current_hp -= 1
+                Player.player.current_combo = 1
+                self.state = 'boss_dodged'
+
+        if final_boss_empty_background_button.got_pressed() and not vulnerable_spot_button.mouse_hover():
+            Player.player.current_hp -= 1
+            Player.player.current_combo = 1
+
+            final_boss.generate_vulnerable_spot_coordinates(final_boss_image, final_boss_x, final_boss_y, 6)
+
+        if final_boss.current_hp <= 0:
+            Player.player.current_combo = 1
+            Worldinfo.bosses_slayed += 1
+            self.state = 'victory_room'
 
     def defeated(self):
         background()
@@ -720,6 +775,19 @@ class GameState():
         show_text(f'Monsters Slayed: {Worldinfo.monsters_slayed}', 150, 300, 'white', font_alagard_big)
         show_text(f'Chests Opened: {Worldinfo.chests_opened}', 150, 360, 'white', font_alagard_big)
         show_text(f'Traps Triggered: {Worldinfo.traps_triggered}', 150, 420, 'white', font_alagard_big)
+
+    def victory_room(self):
+        global active_background
+        active_background = ending_background
+
+        background()
+        show_text('YOU WON', 150, 120, 'yellow', font_alagard_big)
+        show_text('STATS:', 150, 180, 'white', font_alagard_big)
+        show_text(f'Bosses Slayed: {Worldinfo.bosses_slayed}', 150, 240, 'white', font_alagard_big)
+        show_text(f'Monsters Slayed: {Worldinfo.monsters_slayed}', 150, 300, 'white', font_alagard_big)
+        show_text(f'Chests Opened: {Worldinfo.chests_opened}', 150, 360, 'white', font_alagard_big)
+        show_text(f'Traps Triggered: {Worldinfo.traps_triggered}', 150, 420, 'white', font_alagard_big)
+
 
     def state_manager(self, dt):
         self.dt = dt
@@ -771,8 +839,14 @@ class GameState():
         if self.state == 'final_boss':
             self.final_boss()
 
+        if self.state == 'final_boss_fight':
+            self.final_boss_fight()
+
         if self.state == 'defeated':
             self.defeated()
+
+        if self.state == 'victory_room':
+            self.victory_room()
 
 
         # things that should be done/checked throughout the entire game
@@ -794,4 +868,5 @@ class GameState():
         Player.player.damage_multiplier(monster_type)
 
         pygame.display.flip()
+
 

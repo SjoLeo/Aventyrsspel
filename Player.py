@@ -5,6 +5,7 @@ import Monster
 class Player():
     def __init__(self, base_strength, base_hp, base_defence, lvl):
         self.current_combo = 1
+        self.damage_multiplier = 1
 
         self.strength = base_strength
         self.hp = base_hp
@@ -45,9 +46,9 @@ class Player():
 
     def update_player_stats(self):
         # adding strength bonus to player
-        self.damage = self.strength * self.current_combo
+        self.damage = self.strength * self.current_combo * self.damage_multiplier
         if not self.weapon_inventory[self.equipped_weapon] == 'Empty':
-            self.damage = (self.weapon_inventory[self.equipped_weapon].strength + self.strength) * self.current_combo
+            self.damage = (self.weapon_inventory[self.equipped_weapon].strength * self.damage_multiplier + self.strength) * self.current_combo
 
         # adding defence bonus to player
         self.total_defence = self.defence
@@ -60,10 +61,11 @@ class Player():
         self.update_player_stats()
         if not self.weapon_inventory[self.equipped_weapon] == 'Empty':
             if monster_type == "spider" and self.weapon_inventory[self.equipped_weapon].name == "Crossbow":
-                self.damage = self.damage * 2
-            if monster_type == "zombie" and self.weapon_inventory[self.equipped_weapon].name == "Broadsword":
-                self.damage = self.damage * 2
-
+                self.damage_multiplier = 2
+            elif monster_type == "zombie" and self.weapon_inventory[self.equipped_weapon].name == "Broadsword":
+                self.damage_multiplier = 2
+            else:
+                self.damage_multiplier = 1
 
     def calculate_exp_overflow(self):
         if self.exp >= self.level_up_exp:
