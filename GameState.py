@@ -249,6 +249,8 @@ chest_item_frame_image = pygame.image.load("Images/chest_loot_frame.png")
 green_progress = pygame.image.load("Images/green.png")
 empty_inv_image = pygame.image.load('Images/empty_inv.png')
 torch_image = pygame.image.load('Images/torch.png')
+darkness_image = pygame.image.load("Images/Darkness.png")
+darkness_small_image = pygame.image.load("Images/Darkness_small.png")
 
 zombie_image = pygame.image.load('Images/zombie.png')
 spider_image = pygame.image.load('Images/spindel_prot.png')
@@ -318,6 +320,7 @@ room_type = None
 
 tick_counter = 0
 room_counter = 0
+image_alpha = 0
 
 selected_weapon_frame_x = 37.5
 selected_armour_frame_x = 210
@@ -688,6 +691,7 @@ class GameState():
 
     def final_boss(self):
         global tick_counter
+        global image_alpha
         background()
         frame()
 
