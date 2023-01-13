@@ -70,23 +70,6 @@ def frame():
     global selected_potion_frame_x
     global inventory_input
 
-    # check for key inputs related to inventory items
-    for event in pygame.event.get():
-        print(event)
-
-        inventory_input = 0
-        if event.type == pygame.KEYUP or event.type == pygame.KEYDOWN:
-            # inventory slots
-            if event.key == pygame.K_1:
-                inventory_input = 1
-            if event.key == pygame.K_2:
-                inventory_input = 2
-            if event.key == pygame.K_3:
-                inventory_input = 3
-
-            if event.key == pygame.K_e:
-                Player.player.drink_potion()
-
 
     screen.blit(frame_image, (0, 0))
 
@@ -136,11 +119,11 @@ def frame():
         show_image(Player.player.armour_inventory[1].icon, 283, 0, 4)
 
     # clickable slots
-    if empty_inv_button3.got_pressed():
+    if empty_inv_button3.got_pressed() or inventory_input == 3:
         selected_armour_frame_x = 210
         Player.player.equipped_armour = 0
 
-    elif empty_inv_button4.got_pressed():
+    elif empty_inv_button4.got_pressed() or inventory_input == 4:
         selected_armour_frame_x = 278
         Player.player.equipped_armour = 1
 
@@ -153,10 +136,10 @@ def frame():
         show_image(Player.player.potion_inventory[1].icon, 458, -4, 4)
 
     # clickable slots
-    if empty_inv_button5.got_pressed():
+    if empty_inv_button5.got_pressed() or inventory_input == 5:
         selected_potion_frame_x = 383
         Player.player.equipped_potion = 0
-    elif empty_inv_button6.got_pressed():
+    elif empty_inv_button6.got_pressed() or inventory_input == 6:
         selected_potion_frame_x = 451
         Player.player.equipped_potion = 1
     show_image(gold_frame_image, selected_potion_frame_x, 0, 7.5)
@@ -852,6 +835,7 @@ class GameState():
         show_text(f'Traps Triggered: {Worldinfo.traps_triggered}', 150, 420, 'white', font_alagard_big)
 
     def state_manager(self, dt):
+        global inventory_input
         self.dt = dt
         # all scenes
         if self.state == 'start_game':
@@ -917,11 +901,30 @@ class GameState():
             self.victory_room()
 
         # things that should be done/checked throughout the entire game
-        # could also put this in main
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+
+            inventory_input = 0
+            if event.type == pygame.KEYUP or event.type == pygame.KEYDOWN:
+                # inventory slots
+                if event.key == pygame.K_1:
+                    inventory_input = 1
+                if event.key == pygame.K_2:
+                    inventory_input = 2
+                if event.key == pygame.K_3:
+                    inventory_input = 3
+                if event.key == pygame.K_4:
+                    inventory_input = 4
+                if event.key == pygame.K_5:
+                    inventory_input = 5
+                if event.key == pygame.K_6:
+                    inventory_input = 6
+
+                if event.key == pygame.K_e:
+                    Player.player.drink_potion()
 
         exit_button.render_text(screen)
         if exit_button.text_button():
