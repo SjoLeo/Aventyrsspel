@@ -19,10 +19,13 @@ def show_text(text, x, y, color, font):
     test_text = font.render(text, True, (color))
     screen.blit(test_text, (x, y))
 
+
 def random_item():
     # randomize stats for items
     # makes copy
-    random_items_list = copy.deepcopy((random.choice(random.choice(Items.items_list)), random.choice(random.choice(Items.items_list)), random.choice(random.choice(Items.items_list))))
+    random_items_list = copy.deepcopy((random.choice(random.choice(Items.items_list)),
+                                       random.choice(random.choice(Items.items_list)),
+                                       random.choice(random.choice(Items.items_list))))
     for item in random_items_list:
 
         if item.type == 'weapon':
@@ -32,6 +35,7 @@ def random_item():
             item.defence = random.randint(1, 3) * Worldinfo.current_dungeon_floor
 
     return random_items_list
+
 
 def show_image(image, x, y, scale):
     width = image.get_width()
@@ -56,13 +60,14 @@ def draw_inventory_hovering_image(pop_up_rect_x):
     pop_up_rect_height = 20
 
     pygame.draw.rect(screen, (255, 255, 255), (pop_up_rect_x, pop_up_rect_y, pop_up_rect_width, pop_up_rect_height))
-    pygame.draw.rect(screen, (0, 0, 0), (pop_up_rect_x + 1, pop_up_rect_y + 1, pop_up_rect_width - 2, pop_up_rect_height - 2))
+    pygame.draw.rect(screen, (0, 0, 0),
+                     (pop_up_rect_x + 1, pop_up_rect_y + 1, pop_up_rect_width - 2, pop_up_rect_height - 2))
+
 
 def frame():
     global selected_weapon_frame_x
     global selected_armour_frame_x
     global selected_potion_frame_x
-
 
     screen.blit(frame_image, (0, 0))
 
@@ -71,12 +76,16 @@ def frame():
 
     if type_of_room == 'mini_boss' or type_of_room == 'final_boss':
         if Player.player.current_combo != 1:
-            show_text(f"STR: {int(Player.player.damage / Player.player.current_combo)} x {Player.player.current_combo}", 1020, 15, "white", font_alagard_small)
+            show_text(f"STR: {int(Player.player.damage / Player.player.current_combo)} x {Player.player.current_combo}",
+                      1020, 15, "white", font_alagard_small)
         else:
             show_text(f"STR: {Player.player.damage}", 1020, 15, "white", font_alagard_small)
     else:
-        if Player.player.damage_multiplier != 1 and not Player.player.weapon_inventory[Player.player.equipped_weapon] == 'Empty':
-            show_text(f"STR: {Player.player.damage - Player.player.weapon_inventory[Player.player.equipped_weapon].strength} + {Player.player.weapon_inventory[Player.player.equipped_weapon].strength}", 1020, 15, "white", font_alagard_small)
+        if Player.player.damage_multiplier != 1 and not Player.player.weapon_inventory[
+                                                            Player.player.equipped_weapon] == 'Empty':
+            show_text(
+                f"STR: {Player.player.damage - Player.player.weapon_inventory[Player.player.equipped_weapon].strength} + {Player.player.weapon_inventory[Player.player.equipped_weapon].strength}",
+                1020, 15, "white", font_alagard_small)
         else:
             show_text(f"STR: {Player.player.damage}", 1020, 15, "white", font_alagard_small)
 
@@ -100,8 +109,6 @@ def frame():
         Player.player.equipped_weapon = 1
 
     show_image(gold_frame_image, selected_weapon_frame_x, 0, 7.5)
-
-
 
     # show armour icons
     if not Player.player.armour_inventory[0] == 'Empty':
@@ -140,20 +147,24 @@ def frame():
     if empty_inv_button1.mouse_hover() and not Player.player.weapon_inventory[0] == 'Empty':
         pop_up_rect_x = 45
         draw_inventory_hovering_image(pop_up_rect_x)
-        show_text(f'STR: {Player.player.weapon_inventory[0].strength}', pop_up_rect_x + 3, pop_up_rect_y + 3, 'white', font_alagard_small)
+        show_text(f'STR: {Player.player.weapon_inventory[0].strength}', pop_up_rect_x + 3, pop_up_rect_y + 3, 'white',
+                  font_alagard_small)
     if empty_inv_button2.mouse_hover() and not Player.player.weapon_inventory[1] == 'Empty':
         pop_up_rect_x = 112
         draw_inventory_hovering_image(pop_up_rect_x)
-        show_text(f'STR: {Player.player.weapon_inventory[1].strength}', pop_up_rect_x + 3, pop_up_rect_y + 3, 'white', font_alagard_small)
+        show_text(f'STR: {Player.player.weapon_inventory[1].strength}', pop_up_rect_x + 3, pop_up_rect_y + 3, 'white',
+                  font_alagard_small)
 
     if empty_inv_button3.mouse_hover() and not Player.player.armour_inventory[0] == 'Empty':
         pop_up_rect_x = 218
         draw_inventory_hovering_image(pop_up_rect_x)
-        show_text(f'DEF: {Player.player.armour_inventory[0].defence}', pop_up_rect_x + 3, pop_up_rect_y + 3, 'white', font_alagard_small)
+        show_text(f'DEF: {Player.player.armour_inventory[0].defence}', pop_up_rect_x + 3, pop_up_rect_y + 3, 'white',
+                  font_alagard_small)
     if empty_inv_button4.mouse_hover() and not Player.player.armour_inventory[1] == 'Empty':
         pop_up_rect_x = 285
         draw_inventory_hovering_image(pop_up_rect_x)
-        show_text(f'DEF: {Player.player.armour_inventory[1].defence}', pop_up_rect_x + 3, pop_up_rect_y + 3, 'white', font_alagard_small)
+        show_text(f'DEF: {Player.player.armour_inventory[1].defence}', pop_up_rect_x + 3, pop_up_rect_y + 3, 'white',
+                  font_alagard_small)
 
     if empty_inv_button5.mouse_hover() and not Player.player.potion_inventory[0] == 'Empty':
         pop_up_rect_x = 391
@@ -194,7 +205,7 @@ def frame():
 
     # ====== EXP ======
 
-    exp_percentage = Player.player.exp/Player.player.level_up_exp
+    exp_percentage = Player.player.exp / Player.player.level_up_exp
 
     exp_bar_x = 780
     exp_bar_y = 35
@@ -211,9 +222,11 @@ def frame():
 
     # exp progress
     if exp_percentage < 1:
-        pygame.draw.rect(screen, (209, 133, 46), (exp_bar_x + 1, exp_bar_y + 1, int((exp_bar_width - 2) * exp_percentage), exp_bar_height - 2))
+        pygame.draw.rect(screen, (209, 133, 46),
+                         (exp_bar_x + 1, exp_bar_y + 1, int((exp_bar_width - 2) * exp_percentage), exp_bar_height - 2))
     else:
-        pygame.draw.rect(screen, (209, 133, 46), (exp_bar_x + 1, exp_bar_y + 1, (exp_bar_width - 2), exp_bar_height - 2))
+        pygame.draw.rect(screen, (209, 133, 46),
+                         (exp_bar_x + 1, exp_bar_y + 1, (exp_bar_width - 2), exp_bar_height - 2))
 
     show_text('EXP', exp_bar_x + 75, exp_bar_y - 25, 'white', font_alagard_medium)
 
@@ -225,8 +238,6 @@ pygame.init()
 width = 1200
 height = 675
 screen = pygame.display.set_mode((width, height))
-
-
 
 # Fonts
 font_alagard_big = pygame.font.Font("Fonts/alagard.ttf", 70)
@@ -271,9 +282,9 @@ spider_image = pygame.image.load('Images/spindel_prot.png')
 zombie_boss_image = pygame.image.load('Images/zombie_boss.png')
 zombie_boss_image_2 = pygame.image.load('Images/zombie_boss_2.png')
 final_boss_image = pygame.image.load('Images/Final_boss.png')
+mimic_image = pygame.image.load("Images/Mimic.png")
 
 empty_background_image = pygame.image.load('Images/empty_background.png')
-
 
 # making button images
 door_button_1 = Buttons.Button(door_image, 100, 190, 6)
@@ -283,7 +294,6 @@ small_chest_button = Buttons.Button(small_chest, 565, 450, 6)
 door_button_chest_room = Buttons.Button(door_image, 150, 190, 6)
 door_button_monster_room = Buttons.Button(door_image, 600, 190, 6)
 door_to_boss = Buttons.Button(door_image, 500, 190, 6)
-
 
 # monster buttons
 # x and y changes in gamestate
@@ -297,7 +307,6 @@ zombie_boss_button = Buttons.Button(zombie_boss_image, zombie_boss_x, zombie_bos
 
 final_boss_x = 470
 final_boss_y = 180
-
 
 # vulnerable spot button
 # x and y changes in gamestate
@@ -313,24 +322,20 @@ empty_inv_button4 = Buttons.Button(empty_inv_image, 283, 0, 1)
 empty_inv_button5 = Buttons.Button(empty_inv_image, 390, 0, 1)
 empty_inv_button6 = Buttons.Button(empty_inv_image, 458, 0, 1)
 
-
 # making button text
 exit_button = TextButtons.TextButton(width - 100, 60, 'X', 'red', 'Fonts/alagard.ttf')
 new_game_button = TextButtons.TextButton(200, 200, 'New game', 'white', 'Fonts/alagard.ttf')
-
-
-
 
 # variables
 
 monster_type = None
 room_type = None
 
-
 tick_counter = 0
 room_counter = 0
 image_alpha = 0
 type_of_room = None
+
 
 selected_weapon_frame_x = 37.5
 selected_armour_frame_x = 210
@@ -364,8 +369,6 @@ class GameState():
         door_button_1.render_image(screen)
         door_button_2.render_image(screen)
         door_button_3.render_image(screen)
-
-
 
         if door_button_1.got_pressed() or door_button_2.got_pressed() or door_button_3.got_pressed():
             if room_counter < 5:
@@ -408,7 +411,6 @@ class GameState():
                     monster_x = monster.monster_position()[0]
                     monster_y = monster.monster_position()[1]
 
-
                     self.state = 'monster_room'
 
                 if room_type == 'chest':
@@ -423,17 +425,15 @@ class GameState():
         if door_button_3.got_pressed():
             self.state = 'final_boss'
 
-
     def spike_room(self):
         global room_counter, tick_counter, room_type
 
         background()
         frame()
 
-
         if tick_counter <= 20:
             show_text("It's a Dead End", 150, 120, 'white', font_alagard_big)
-        if tick_counter >= 25:
+        elif tick_counter >= 25:
             show_text('A Trap Appears!', 150, 120, 'red', font_alagard_big)
             show_image(hole_image, 410, 500, 7)
         if tick_counter >= 35:
@@ -450,7 +450,33 @@ class GameState():
         tick_counter += self.dt * 30
 
     def mimic_room(self):
+        global room_counter, tick_counter, room_type
 
+        background()
+        frame()
+
+        small_chest_button.render_image(screen)
+
+        door_button_chest_room.render_image(screen)
+
+        if door_button_chest_room.got_pressed():
+            room_counter += 1
+            self.state = 'menu'
+
+        if small_chest_button.got_pressed() or tick_counter > 25:
+            show_image(mimic_image, 565, 426, 6)
+            show_text("It's a Trap!", 150, 120, 'red', font_alagard_big)
+
+            if tick_counter >= 60:
+                # player takes damage
+                Player.player.current_hp -= 1
+                room_counter += 1
+                tick_counter = 0
+                Worldinfo.traps_triggered += 1
+                self.state = 'menu'
+
+
+        tick_counter += self.dt * 30
 
     def chest_room(self):
         global room_counter, random_items, item1_chest_button, item2_chest_button, item3_chest_button
@@ -467,7 +493,6 @@ class GameState():
         small_chest_button.render_image(screen)
 
         if small_chest_button.got_pressed():
-
             random_items = random_item()
             item1_chest_button = Buttons.Button(random_items[0].icon, 513, 300, 4)
             item2_chest_button = Buttons.Button(random_items[1].icon, 600, 300, 4)
@@ -519,7 +544,7 @@ class GameState():
 
         background()
         frame()
-        #print(Player.player.damage)
+        # print(Player.player.damage)
 
         door_button_monster_room.render_image(screen)
 
@@ -591,7 +616,6 @@ class GameState():
         background()
         frame()
 
-
         door_button_monster_room.render_image(screen)
         if door_button_monster_room.got_pressed():
             room_counter += 1
@@ -604,7 +628,6 @@ class GameState():
         background()
         frame()
 
-
         door_to_boss.render_image(screen)
         show_text('YOU FOUND THE BOSS', 150, 120, 'red', font_alagard_big)
         show_image(torch_image, 420, 240, 5)
@@ -616,8 +639,10 @@ class GameState():
             boss = Monster.Boss(100, False)
             if boss.type == 'zombie_boss':
                 # generate the first spot
-                boss.generate_vulnerable_spot_coordinates(zombie_boss_image, zombie_boss_x, zombie_boss_y, zombie_boss_scale)
-                empty_background_button = Buttons.Button(empty_background_image, zombie_boss_x-95, zombie_boss_y-60, 13)
+                boss.generate_vulnerable_spot_coordinates(zombie_boss_image, zombie_boss_x, zombie_boss_y,
+                                                          zombie_boss_scale)
+                empty_background_button = Buttons.Button(empty_background_image, zombie_boss_x - 95, zombie_boss_y - 60,
+                                                         13)
                 type_of_room = 'mini_boss'
             self.state = 'boss_room'
 
@@ -628,7 +653,6 @@ class GameState():
 
         boss.draw_health_bar(screen, zombie_boss_x - 27, zombie_boss_y - 50)
         show_text(f'COMBO: x{Player.player.current_combo}', 100, 120, 'white', font_alagard_big)
-
 
         zombie_boss_button.render_image(screen)
         empty_background_button.render_image(screen)
@@ -642,24 +666,25 @@ class GameState():
             if result == 'hit':
                 boss.current_hp -= Player.player.damage
                 # generate new spots
-                boss.generate_vulnerable_spot_coordinates(zombie_boss_image, zombie_boss_x, zombie_boss_y, zombie_boss_scale)
+                boss.generate_vulnerable_spot_coordinates(zombie_boss_image, zombie_boss_x, zombie_boss_y,
+                                                          zombie_boss_scale)
                 Player.player.current_combo += 1
                 # update the damage stats
 
             else:
-                boss.generate_vulnerable_spot_coordinates(zombie_boss_image, zombie_boss_x, zombie_boss_y, zombie_boss_scale)
+                boss.generate_vulnerable_spot_coordinates(zombie_boss_image, zombie_boss_x, zombie_boss_y,
+                                                          zombie_boss_scale)
                 Player.player.current_hp -= 1
                 Player.player.current_combo = 1
 
-
                 self.state = 'boss_dodged'
-
 
         if empty_background_button.got_pressed() and not vulnerable_spot_button.mouse_hover():
             Player.player.current_hp -= 1
             Player.player.current_combo = 1
 
-            boss.generate_vulnerable_spot_coordinates(zombie_boss_image, zombie_boss_x, zombie_boss_y, zombie_boss_scale)
+            boss.generate_vulnerable_spot_coordinates(zombie_boss_image, zombie_boss_x, zombie_boss_y,
+                                                      zombie_boss_scale)
 
         if boss.current_hp <= 0:
             Player.player.current_combo = 1
@@ -709,8 +734,6 @@ class GameState():
         background()
         frame()
 
-
-
         if tick_counter <= 60:
             show_text('THERE IS NO GOING BACK NOW!', 100, 100, 'red', font_alagard_big)
         elif 60 <= tick_counter <= 120:
@@ -724,18 +747,17 @@ class GameState():
             active_background = boss_room
             final_boss = Monster.Boss(5000, True)
             final_boss.generate_vulnerable_spot_coordinates(final_boss_image, final_boss_x, final_boss_y, 6)
-            final_boss_empty_background_button = Buttons.Button(empty_background_image, final_boss_x - 95, final_boss_y - 60, 13)
+            final_boss_empty_background_button = Buttons.Button(empty_background_image, final_boss_x - 95,
+                                                                final_boss_y - 60, 13)
             type_of_room = 'final_boss'
             self.state = 'final_boss_fight'
 
         tick_counter += self.dt * 30
 
-
     def final_boss_fight(self):
         global final_boss, image_alpha
         background()
         frame()
-
 
         vulnerable_spot_button.rect.x = final_boss.vulnerable_x_coordinate
         vulnerable_spot_button.rect.y = final_boss.vulnerable_y_coordinate
@@ -797,7 +819,6 @@ class GameState():
         show_text(f'Chests Opened: {Worldinfo.chests_opened}', 150, 360, 'white', font_alagard_big)
         show_text(f'Traps Triggered: {Worldinfo.traps_triggered}', 150, 420, 'white', font_alagard_big)
 
-
     def state_manager(self, dt):
         self.dt = dt
         # all scenes
@@ -836,7 +857,6 @@ class GameState():
         if self.state == 'mimic_room':
             self.mimic_room()
 
-
         if self.state == 'room_to_boss_room':
             self.room_to_boss_room()
 
@@ -861,7 +881,6 @@ class GameState():
         if self.state == 'victory_room':
             self.victory_room()
 
-
         # things that should be done/checked throughout the entire game
         # could also put this in main
         for event in pygame.event.get():
@@ -880,6 +899,4 @@ class GameState():
         Player.player.calculate_damage_multiplier(monster_type)
         Player.player.update_player_stats()
 
-
         pygame.display.flip()
-
