@@ -70,6 +70,8 @@ def frame():
     global selected_potion_frame_x
     global inventory_input
 
+    if Player.player.current_hp <= 3:
+        show_image(red_fade_small_image, 0, 0, 7.5)
 
     screen.blit(frame_image, (0, 0))
 
@@ -277,6 +279,8 @@ torch_image = pygame.image.load('Images/torch.png')
 darkness_image = pygame.image.load("Images/Darkness.png")
 darkness_small_image = pygame.image.load("Images/Darkness_small.png")
 vulnerable_spot_image = pygame.image.load('Images/vulnerable_spot.png')
+red_fade_small_image = pygame.image.load("Images/Red_fade_small.png")
+
 zombie_image = pygame.image.load('Images/zombie.png')
 spider_image = pygame.image.load('Images/spindel_prot.png')
 zombie_boss_image = pygame.image.load('Images/zombie_boss.png')
@@ -462,15 +466,14 @@ class GameState():
 
         door_button_chest_room.render_image(screen)
 
-        if door_button_chest_room.got_pressed():
+        if door_button_chest_room.got_pressed() and not small_chest_button.got_pressed():
             room_counter += 1
             self.state = 'menu'
 
-        if small_chest_button.got_pressed() or tick_counter > 25:
+        if small_chest_button.got_pressed():
             tick_counter = 0
             self.state = 'mimic_room_opened'
         tick_counter += self.dt * 30
-
 
     def mimic_room_opened(self):
         global tick_counter, room_counter
@@ -481,9 +484,6 @@ class GameState():
         show_text("It's a Trap!", 150, 120, 'red', font_alagard_big)
 
         door_button_chest_room.render_image(screen)
-        if door_button_chest_room.got_pressed():
-            room_counter += 1
-            self.state = 'menu'
 
         if tick_counter >= 60:
             # player takes damage
