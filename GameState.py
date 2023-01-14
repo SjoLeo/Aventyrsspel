@@ -326,7 +326,7 @@ empty_inv_button5 = Buttons.Button(empty_inv_image, 390, 0, 1)
 empty_inv_button6 = Buttons.Button(empty_inv_image, 458, 0, 1)
 
 # making button text
-exit_button = TextButtons.TextButton(width - 100, 60, 'X', 'red', 'Fonts/alagard.ttf', 100)
+exit_button = TextButtons.TextButton(width - 100, 80, 'X', 'red', 'Fonts/alagard.ttf', 100)
 new_game_button = TextButtons.TextButton(150, 100, 'New game', 'yellow', 'Fonts/alagard.ttf', 100)
 tutorial_button = TextButtons.TextButton(200, 200, "Tutorial", "white", "Fonts/alagard.ttf", 100)
 credits_button = TextButtons.TextButton(270, 300, "Credits", "white", "Fonts/alagard.ttf", 100)
@@ -525,6 +525,9 @@ class GameState():
         show_text("It's a Trap!", 150, 120, 'red', font_alagard_big)
 
         door_button_chest_room.render_image(screen)
+        if door_button_chest_room.got_pressed():
+            room_counter += 1
+            self.state = 'menu'
 
         if tick_counter >= 60:
             # player takes damage
