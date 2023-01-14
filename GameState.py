@@ -16,7 +16,7 @@ import Worldinfo
 
 
 def show_text(text, x, y, color, font):
-    test_text = font.render(text, True, (color))
+    test_text = font.render(text, True, color)
     screen.blit(test_text, (x, y))
 
 
@@ -201,9 +201,6 @@ def frame():
     if room_counter > 4:
         show_image(green_progress, 960, 600, 10)
 
-
-
-
     # ====== EXP ======
 
     exp_percentage = Player.player.exp / Player.player.level_up_exp
@@ -329,8 +326,11 @@ empty_inv_button5 = Buttons.Button(empty_inv_image, 390, 0, 1)
 empty_inv_button6 = Buttons.Button(empty_inv_image, 458, 0, 1)
 
 # making button text
-exit_button = TextButtons.TextButton(width - 100, 60, 'X', 'red', 'Fonts/alagard.ttf')
-new_game_button = TextButtons.TextButton(200, 200, 'New game', 'white', 'Fonts/alagard.ttf')
+exit_button = TextButtons.TextButton(width - 100, 60, 'X', 'red', 'Fonts/alagard.ttf', 100)
+new_game_button = TextButtons.TextButton(150, 100, 'New game', 'yellow', 'Fonts/alagard.ttf', 100)
+tutorial_button = TextButtons.TextButton(200, 200, "Tutorial", "white", "Fonts/alagard.ttf", 100)
+credits_button = TextButtons.TextButton(270, 300, "Credits", "white", "Fonts/alagard.ttf", 100)
+back_button = TextButtons.TextButton(700, 70, "Back", "red", "Fonts/alagard.ttf", 50)
 
 # variables
 
@@ -342,7 +342,6 @@ room_counter = 0
 image_alpha = 0
 inventory_input = 0
 type_of_room = None
-
 
 selected_weapon_frame_x = 37.5
 selected_armour_frame_x = 210
@@ -360,9 +359,51 @@ class GameState():
 
         background()
         new_game_button.render_text(screen)
+        tutorial_button.render_text(screen)
+        credits_button.render_text(screen)
+
         if new_game_button.text_button():
             active_background = main_room
             self.state = 'menu'
+
+        if tutorial_button.text_button():
+            self.state = "tutorial"
+
+        if credits_button.text_button():
+            self.state = "credits"
+
+    def tutorial(self):
+        background()
+
+        back_button.render_text(screen)
+        if back_button.text_button():
+            self.state = 'start_game'
+
+        show_text("Tutorial", 50, 45, "yellow", font_alagard_big)
+        show_text("You set foot in in a treacherous dungeon in hopes of treasure,",
+                  30, 120, "white", font_alagard_medium)
+        show_text("glory and slaying the unholy beasts who call this crypt their home.",
+                  30, 150, "white", font_alagard_medium)
+
+        show_text("Your goal is to get deep below ground to at least floor 10 and cut down",
+                  30, 210, "white", font_alagard_medium)
+        show_text("the abominable warden to escape.", 30, 240, "white", font_alagard_medium)
+
+    def credits(self):
+        background()
+
+        back_button.render_text(screen)
+        if back_button.text_button():
+            self.state = 'start_game'
+
+        show_text("Credits", 50, 45, "yellow", font_alagard_big)
+        show_text("A game made by:", 270, 120, "white", font_alagard_medium_big)
+
+        show_text("Leo Sjostrom", 260, 200, (252, 173, 3), font_alagard_big)
+        show_text("Isak Wadelius", 270, 270, (0, 124, 212), font_alagard_big)
+        show_text("Leo Nordstrand", 280, 340, (147, 6, 194), font_alagard_big)
+        show_text("..", 441, 162, (252, 173, 3), font_alagard_big)
+        show_text("..", 568, 162, (252, 173, 3), font_alagard_big)
 
     def menu(self):
         global room_type, room_counter, monster, monster_type, monster_x, monster_y, type_of_room
@@ -466,7 +507,7 @@ class GameState():
 
         door_button_chest_room.render_image(screen)
 
-        if door_button_chest_room.got_pressed() and not small_chest_button.got_pressed():
+        if door_button_chest_room.got_pressed():
             room_counter += 1
             self.state = 'menu'
 
@@ -492,7 +533,6 @@ class GameState():
             tick_counter = 0
             Worldinfo.traps_triggered += 1
             self.state = 'menu'
-
 
         tick_counter += self.dt * 30
 
@@ -752,6 +792,8 @@ class GameState():
         global tick_counter, image_alpha, final_boss, type_of_room, active_background, final_boss_empty_background_button
         active_background = boss_room
         background()
+
+        # Keep In Mind: Red outline when low hp gets hidden because of darkness effect, not sure how to fix
         frame()
 
         if tick_counter <= 60:
@@ -766,7 +808,8 @@ class GameState():
             tick_counter = 0
             final_boss = Monster.Boss(10000, True)
             final_boss.generate_vulnerable_spot_coordinates(final_boss_image, final_boss_x, final_boss_y, 6)
-            final_boss_empty_background_button = Buttons.Button(empty_background_image, final_boss_x - 95, final_boss_y - 60, 13)
+            final_boss_empty_background_button = Buttons.Button(empty_background_image, final_boss_x - 95,
+                                                                final_boss_y - 60, 13)
             type_of_room = 'final_boss'
             self.state = 'final_boss_fight'
 
@@ -851,6 +894,12 @@ class GameState():
         # all scenes
         if self.state == 'start_game':
             self.start_game()
+
+        if self.state == "tutorial":
+            self.tutorial()
+
+        if self.state == "credits":
+            self.credits()
 
         if self.state == 'menu':
             self.menu()
