@@ -280,12 +280,13 @@ red_fade_small_image = pygame.image.load("Images/Red_fade_small.png")
 
 zombie_image = pygame.image.load('Images/zombie.png')
 spider_image = pygame.image.load('Images/spindel_prot.png')
-zombie_boss_image = pygame.image.load('Images/zombie_boss.png')
-zombie_boss_image_2 = pygame.image.load('Images/zombie_boss_2.png')
+goblin_image = pygame.image.load("Images/goblin.png")
+
 final_boss_image = pygame.image.load('Images/Final_boss.png')
 mimic_image = pygame.image.load("Images/Mimic.png")
 final_boss_door = pygame.image.load('Images/final_boss_door.png')
 
+taking_damage_image = pygame.image.load('Images/taking_damage_image.png')
 empty_background_image = pygame.image.load('Images/empty_background.png')
 
 # making button images
@@ -302,11 +303,10 @@ final_boss_door_button = Buttons.Button(final_boss_door, 539, 285, 7.5)
 # x and y changes in gamestate
 spider_button = Buttons.Button(spider_image, 0, 0, 3)
 zombie_button = Buttons.Button(zombie_image, 0, 0, 5)
+goblin_button = Buttons.Button(goblin_image, 0, 0, 4)
 
-zombie_boss_scale = 6
-zombie_boss_x = 500
-zombie_boss_y = 220
-zombie_boss_button = Buttons.Button(zombie_boss_image, zombie_boss_x, zombie_boss_y, zombie_boss_scale)
+
+
 
 final_boss_x = 470
 final_boss_y = 180
@@ -346,6 +346,10 @@ type_of_room = None
 selected_weapon_frame_x = 37.5
 selected_armour_frame_x = 210
 selected_potion_frame_x = 383
+
+boss_scale = 6
+boss_x = 450
+boss_y = 220
 
 clock = pygame.time.Clock()
 
@@ -512,9 +516,7 @@ class GameState():
             self.state = 'menu'
 
         if small_chest_button.got_pressed():
-            tick_counter = 0
             self.state = 'mimic_room_opened'
-        tick_counter += self.dt * 30
 
     def mimic_room_opened(self):
         global tick_counter, room_counter
@@ -526,7 +528,9 @@ class GameState():
 
         door_button_chest_room.render_image(screen)
         if door_button_chest_room.got_pressed():
+            tick_counter = 0
             room_counter += 1
+            Player.player.current_hp -= 1
             self.state = 'menu'
 
         if tick_counter >= 60:
@@ -628,6 +632,13 @@ class GameState():
             if zombie_button.got_pressed():
                 self.state = 'fight'
 
+        if monster_type == 'goblin':
+            goblin_button.rect.x = monster_x
+            goblin_button.rect.y = monster_y
+            goblin_button.render_image(screen)
+            if goblin_button.got_pressed():
+                self.state = 'fight'
+
     def fight(self):
         global monster_type
         if Player.player.damage > monster.strength:
@@ -641,6 +652,7 @@ class GameState():
         else:
             Player.player.current_hp -= 1
             self.state = 'monster_room_loss'
+
         monster_type = None
 
     def monster_room_killed(self):
@@ -698,13 +710,14 @@ class GameState():
             active_background = boss_room
             # creates the boss object
             boss = Monster.Boss(100, False)
-            if boss.type == 'zombie_boss':
-                # generate the first spot
-                boss.generate_vulnerable_spot_coordinates(zombie_boss_image, zombie_boss_x, zombie_boss_y,
-                                                          zombie_boss_scale)
-                empty_background_button = Buttons.Button(empty_background_image, zombie_boss_x - 95, zombie_boss_y - 60,
-                                                         13)
-                type_of_room = 'mini_boss'
+
+            # generate the first spot
+            boss.generate_vulnerable_spot_coordinates(boss.image, boss_x, boss_y,
+                                                      boss_scale)
+            empty_background_button = Buttons.Button(empty_background_image, boss_x - 95, boss_y - 60,
+                                                     13)
+            type_of_room = 'mini_boss'
+
             self.state = 'boss_room'
 
     def boss_room(self):
@@ -712,10 +725,10 @@ class GameState():
         background()
         frame()
 
-        boss.draw_health_bar(screen, zombie_boss_x - 27, zombie_boss_y - 50)
+        boss.draw_health_bar(screen, boss_x + 10, boss_y - 50)
         show_text(f'COMBO: x{Player.player.current_combo}', 100, 120, 'white', font_alagard_big)
 
-        zombie_boss_button.render_image(screen)
+        show_image(boss.image, boss_x, boss_y, boss_scale)
         empty_background_button.render_image(screen)
 
         vulnerable_spot_button.rect.x = boss.vulnerable_x_coordinate
@@ -727,14 +740,14 @@ class GameState():
             if result == 'hit':
                 boss.current_hp -= Player.player.damage
                 # generate new spots
-                boss.generate_vulnerable_spot_coordinates(zombie_boss_image, zombie_boss_x, zombie_boss_y,
-                                                          zombie_boss_scale)
+                boss.generate_vulnerable_spot_coordinates(boss.image, boss_x, boss_y,
+                                                          boss_scale)
                 Player.player.current_combo += 1
                 # update the damage stats
 
             else:
-                boss.generate_vulnerable_spot_coordinates(zombie_boss_image, zombie_boss_x, zombie_boss_y,
-                                                          zombie_boss_scale)
+                boss.generate_vulnerable_spot_coordinates(boss.image, boss_x, boss_y,
+                                                          boss_scale)
                 Player.player.current_hp -= 1
                 Player.player.current_combo = 1
 
@@ -744,8 +757,8 @@ class GameState():
             Player.player.current_hp -= 1
             Player.player.current_combo = 1
 
-            boss.generate_vulnerable_spot_coordinates(zombie_boss_image, zombie_boss_x, zombie_boss_y,
-                                                      zombie_boss_scale)
+            boss.generate_vulnerable_spot_coordinates(boss.image, boss_x, boss_y,
+                                                      boss_scale)
 
         if boss.current_hp <= 0:
             Player.player.current_combo = 1

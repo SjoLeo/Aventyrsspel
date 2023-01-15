@@ -63,6 +63,8 @@ class Player():
                 self.damage_multiplier = 2
             elif monster_type == "zombie" and self.weapon_inventory[self.equipped_weapon].name == "Broadsword":
                 self.damage_multiplier = 2
+            elif monster_type == 'goblin' and self.weapon_inventory[self.equipped_weapon].name == "Sword":
+                self.damage_multiplier = 2
             else:
                 self.damage_multiplier = 1
 
