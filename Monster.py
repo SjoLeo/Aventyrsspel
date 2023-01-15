@@ -9,7 +9,7 @@ class Monster():
     def __init__(self):
         self.strength = ((rand.randint(13, 22)) * Worldinfo.current_dungeon_floor) - Player.player.total_defence
 
-        monsters = ['spider', 'zombie']
+        monsters = ["goblin"]
         self.type = rand.choice(monsters)
 
     def monster_position(self):
@@ -26,6 +26,11 @@ class Monster():
             coordinates = [x_coordinate, y_coordinate]
             return coordinates
 
+        if self.type == "goblin":
+            x_coordinate = rand.randint(100, 400)
+            y_coordinate = rand.randint(320, 357)
+            coordinates = [x_coordinate, y_coordinate]
+            return coordinates
 class Boss():
     def __init__(self, base_hp, final):
 

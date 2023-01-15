@@ -286,6 +286,7 @@ final_boss_image = pygame.image.load('Images/Final_boss.png')
 mimic_image = pygame.image.load("Images/Mimic.png")
 final_boss_door = pygame.image.load('Images/final_boss_door.png')
 
+
 taking_damage_image = pygame.image.load('Images/taking_damage_image.png')
 empty_background_image = pygame.image.load('Images/empty_background.png')
 
