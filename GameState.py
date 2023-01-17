@@ -810,8 +810,6 @@ class GameState():
         active_background = boss_room
         background()
 
-        # Keep In Mind: Red outline when low hp gets hidden because of darkness effect, not sure how to fix
-        frame()
 
         if tick_counter <= 60:
             show_text('THERE IS NO GOING BACK NOW!', 100, 100, 'red', font_alagard_big)
@@ -831,11 +829,12 @@ class GameState():
             self.state = 'final_boss_fight'
 
         tick_counter += self.dt * 30
+        frame()
 
     def final_boss_fight(self):
         global final_boss, image_alpha
         background()
-        frame()
+
 
         vulnerable_spot_button.rect.x = final_boss.vulnerable_x_coordinate
         vulnerable_spot_button.rect.y = final_boss.vulnerable_y_coordinate
@@ -873,6 +872,9 @@ class GameState():
             Player.player.current_combo = 1
             Worldinfo.bosses_slayed += 1
             self.state = 'final_boss_killed'
+
+        frame()
+        show_text(f'COMBO: x{Player.player.current_combo}', 100, 120, 'white', font_alagard_big)
 
     def final_boss_killed(self):
         background()

@@ -9,7 +9,7 @@ class Monster():
     def __init__(self):
         self.strength = ((rand.randint(13, 22)) * Worldinfo.current_dungeon_floor) - Player.player.total_defence
 
-        monsters = ["goblin"]
+        monsters = ['zombie', 'spider', "goblin"]
         self.type = rand.choice(monsters)
 
     def monster_position(self):
