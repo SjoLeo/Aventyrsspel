@@ -1,17 +1,12 @@
-import Animation
 import Buttons
 import Items
 import Monster
 import TextButtons
 import Player
-
 import random
 import pygame
 import sys
 import copy
-
-import time
-
 import Worldinfo
 
 
@@ -21,7 +16,7 @@ def show_text(text, x, y, color, font):
 
 
 def random_item():
-    # randomize stats for items
+    # randomize items and stats for them
     # makes copy
     random_items_list = copy.deepcopy((random.choice(random.choice(Items.items_list)),
                                        random.choice(random.choice(Items.items_list)),
@@ -54,6 +49,8 @@ def random_room():
 
 
 def draw_inventory_hovering_image(pop_up_rect_x):
+    # takes the x value of the inventory slot and draws a pop-up image below
+    # (and later shows the stats of that item within the box)
     global pop_up_rect_y
     pop_up_rect_y = 67
     pop_up_rect_width = 60
@@ -70,14 +67,16 @@ def frame():
     global selected_potion_frame_x
     global inventory_input
 
+    # low hp image/background
     if Player.player.current_hp <= 3:
         show_image(red_fade_small_image, 0, 0, 7.5)
 
     screen.blit(frame_image, (0, 0))
 
-    # displayed stats:
+    # display player stats:
     show_text(f"HP: {Player.player.current_hp}/ {Player.player.hp}", 1020, 2, "white", font_alagard_small)
 
+    # display player strength and combos/damage multiplier
     if type_of_room == 'mini_boss' or type_of_room == 'final_boss':
         if Player.player.current_combo != 1:
             show_text(f"STR: {int(Player.player.damage / Player.player.current_combo)} x {Player.player.current_combo}",
@@ -88,7 +87,8 @@ def frame():
         if Player.player.damage_multiplier != 1 and not Player.player.weapon_inventory[
                                                             Player.player.equipped_weapon] == 'Empty':
             show_text(
-                f"STR: {Player.player.damage - Player.player.weapon_inventory[Player.player.equipped_weapon].strength} + {Player.player.weapon_inventory[Player.player.equipped_weapon].strength}",
+                f"STR: {Player.player.damage - Player.player.weapon_inventory[Player.player.equipped_weapon].strength} "
+                f"+ {Player.player.weapon_inventory[Player.player.equipped_weapon].strength}",
                 1020, 15, "white", font_alagard_small)
         else:
             show_text(f"STR: {Player.player.damage}", 1020, 15, "white", font_alagard_small)
@@ -183,9 +183,8 @@ def frame():
 
     # ======Dungeon Progress Bar======
 
-    # 7.5 pixels per bakgrundspixel
-    # +98 x pixels per room (verkar vara nåt konstigt som gör det inconsistent)
-    # (borde gå att göra mer clean med nån class eller nåt)
+    # 7.5 pixels per background pixel
+    # +98 x pixels per room (is inconsistent)
     if room_counter > 0:
         show_image(green_progress, 570, 600, 10)
 
@@ -259,6 +258,7 @@ ending_background = pygame.transform.scale(ending_background, (width, height))
 
 active_background = main_menu_background
 
+# frame image
 frame_image = pygame.image.load('Images/Frame.png')
 frame_image = pygame.transform.scale(frame_image, (width, height))
 
@@ -277,20 +277,18 @@ darkness_image = pygame.image.load("Images/Darkness.png")
 darkness_small_image = pygame.image.load("Images/Darkness_small.png")
 vulnerable_spot_image = pygame.image.load('Images/vulnerable_spot.png')
 red_fade_small_image = pygame.image.load("Images/Red_fade_small.png")
+mimic_image = pygame.image.load("Images/Mimic.png")
+final_boss_door = pygame.image.load('Images/final_boss_door.png')
+empty_background_image = pygame.image.load('Images/empty_background.png')
 
+# monster images (the other bosses are in the monster file)
 zombie_image = pygame.image.load('Images/zombie.png')
 spider_image = pygame.image.load('Images/spindel_prot.png')
 goblin_image = pygame.image.load("Images/goblin.png")
-
 final_boss_image = pygame.image.load('Images/Final_boss.png')
-mimic_image = pygame.image.load("Images/Mimic.png")
-final_boss_door = pygame.image.load('Images/final_boss_door.png')
 
 
-taking_damage_image = pygame.image.load('Images/taking_damage_image.png')
-empty_background_image = pygame.image.load('Images/empty_background.png')
-
-# making button images
+# making buttons
 door_button_1 = Buttons.Button(door_image, 100, 190, 6)
 door_button_2 = Buttons.Button(door_image, 500, 190, 6)
 door_button_3 = Buttons.Button(door_image, 900, 190, 6)
@@ -307,11 +305,6 @@ zombie_button = Buttons.Button(zombie_image, 0, 0, 5)
 goblin_button = Buttons.Button(goblin_image, 0, 0, 4)
 
 
-
-
-final_boss_x = 470
-final_boss_y = 180
-
 # vulnerable spot button
 # x and y changes in gamestate
 vulnerable_spot_button = Buttons.Button(vulnerable_spot_image, 0, 0, 4)
@@ -326,7 +319,7 @@ empty_inv_button4 = Buttons.Button(empty_inv_image, 283, 0, 1)
 empty_inv_button5 = Buttons.Button(empty_inv_image, 390, 0, 1)
 empty_inv_button6 = Buttons.Button(empty_inv_image, 458, 0, 1)
 
-# making button text
+# making text buttons
 exit_button = TextButtons.TextButton(width - 100, 80, 'X', 'red', 'Fonts/alagard.ttf', 100)
 new_game_button = TextButtons.TextButton(150, 100, 'New game', 'yellow', 'Fonts/alagard.ttf', 100)
 tutorial_button = TextButtons.TextButton(200, 200, "Tutorial", "white", "Fonts/alagard.ttf", 100)
@@ -334,25 +327,26 @@ credits_button = TextButtons.TextButton(270, 300, "Credits", "white", "Fonts/ala
 back_button = TextButtons.TextButton(700, 70, "Back", "red", "Fonts/alagard.ttf", 50)
 
 # variables
-
 monster_type = None
-room_type = None
+random_generated_room = None
+type_of_room = None
 
 tick_counter = 0
 room_counter = 0
 image_alpha = 0
-inventory_input = 0
-type_of_room = None
 
+# inventory variables
+inventory_input = 0
 selected_weapon_frame_x = 37.5
 selected_armour_frame_x = 210
 selected_potion_frame_x = 383
 
+# boss variables
+final_boss_x = 470
+final_boss_y = 180
 boss_scale = 6
 boss_x = 450
 boss_y = 220
-
-clock = pygame.time.Clock()
 
 
 class GameState():
@@ -367,21 +361,21 @@ class GameState():
         tutorial_button.render_text(screen)
         credits_button.render_text(screen)
 
-        if new_game_button.text_button():
+        if new_game_button.text_button_got_pressed():
             active_background = main_room
             self.state = 'menu'
 
-        if tutorial_button.text_button():
+        if tutorial_button.text_button_got_pressed():
             self.state = "tutorial"
 
-        if credits_button.text_button():
+        if credits_button.text_button_got_pressed():
             self.state = "credits"
 
     def tutorial(self):
         background()
 
         back_button.render_text(screen)
-        if back_button.text_button():
+        if back_button.text_button_got_pressed():
             self.state = 'start_game'
 
         show_text("Tutorial", 50, 45, "yellow", font_alagard_big)
@@ -398,7 +392,7 @@ class GameState():
         background()
 
         back_button.render_text(screen)
-        if back_button.text_button():
+        if back_button.text_button_got_pressed():
             self.state = 'start_game'
 
         show_text("Credits", 50, 45, "yellow", font_alagard_big)
@@ -411,7 +405,7 @@ class GameState():
         show_text("..", 568, 162, (252, 173, 3), font_alagard_big)
 
     def menu(self):
-        global room_type, room_counter, monster, monster_type, monster_x, monster_y, type_of_room
+        global random_generated_room, room_counter, monster, monster_type, monster_x, monster_y, type_of_room
 
         if Worldinfo.current_dungeon_floor >= 10:
             self.state = 'menu_with_final_boss'
@@ -425,26 +419,26 @@ class GameState():
 
         if door_button_1.got_pressed() or door_button_2.got_pressed() or door_button_3.got_pressed():
             if room_counter < 5:
-                room_type = random_room()
-                type_of_room = room_type
-                if room_type == 'monster':
+                random_generated_room = random_room()
+                type_of_room = random_generated_room
+                if random_generated_room == 'monster':
                     monster = Monster.Monster()
                     monster_type = monster.type
                     monster_x = monster.monster_position()[0]
                     monster_y = monster.monster_position()[1]
                     self.state = 'monster_room'
 
-                if room_type == 'chest':
+                if random_generated_room == 'chest':
                     self.state = 'chest_room'
 
-                if room_type == 'trap':
+                if random_generated_room == 'trap':
                     self.state = random.choice(['mimic_room', 'spike_room'])
 
             if room_counter == 5:
                 self.state = 'room_to_boss_room'
 
     def menu_with_final_boss(self):
-        global room_type, room_counter, monster, monster_type, monster_x, monster_y
+        global random_generated_room, room_counter, monster, monster_type, monster_x, monster_y
         background()
         frame()
 
@@ -456,9 +450,8 @@ class GameState():
 
         if door_button_1.got_pressed() or door_button_2.got_pressed():
             if room_counter < 5:
-                room_type = random_room()
-                print(room_type)
-                if room_type == 'monster':
+                random_generated_room = random_room()
+                if random_generated_room == 'monster':
                     monster = Monster.Monster()
                     monster_type = monster.type
                     monster_x = monster.monster_position()[0]
@@ -466,10 +459,10 @@ class GameState():
 
                     self.state = 'monster_room'
 
-                if room_type == 'chest':
+                if random_generated_room == 'chest':
                     self.state = 'chest_room'
 
-                if room_type == 'trap':
+                if random_generated_room == 'trap':
                     self.state = random.choice(['mimic_room', 'spike_room'])
 
             if room_counter == 5:
@@ -479,7 +472,7 @@ class GameState():
             self.state = 'final_boss'
 
     def spike_room(self):
-        global room_counter, tick_counter, room_type
+        global room_counter, tick_counter, random_generated_room
 
         background()
         frame()
@@ -493,7 +486,6 @@ class GameState():
             show_image(spike_image, 450, 487, 7)
 
         if tick_counter >= 50:
-            # player takes damage
             Player.player.current_hp -= 1
             room_counter += 1
             tick_counter = 0
@@ -1009,7 +1001,7 @@ class GameState():
                     Player.player.drink_potion()
 
         exit_button.render_text(screen)
-        if exit_button.text_button():
+        if exit_button.text_button_got_pressed():
             pygame.quit()
             sys.exit()
 

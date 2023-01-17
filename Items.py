@@ -1,5 +1,4 @@
 import pygame
-import Player
 import copy
 
 class Item():
@@ -35,7 +34,7 @@ chestplate_image = pygame.image.load("Images/Basic_armor.png")
 
 hp_potion_image = pygame.image.load("Images/Health_potion.png")
 
-# stats change in gamestate loot chest
+# stats change in game state loot chest
 # weapons
 Sword = Item(0, 0, 0, sword_image, 'weapon', 'Sword')
 BroadSword = Item(0, 0, 0, broad_sword_image, 'weapon', 'Broadsword')

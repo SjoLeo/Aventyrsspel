@@ -51,7 +51,6 @@ class Player():
         if not self.armour_inventory[self.equipped_armour] == 'Empty':
             self.total_defence = self.armour_inventory[self.equipped_armour].defence + self.defence
 
-
     def calculate_damage_multiplier(self, monster_type):
         # bonus damage for monsters weak to specific weapons
         if not self.weapon_inventory[self.equipped_weapon] == 'Empty':
