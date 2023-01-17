@@ -470,7 +470,7 @@ class GameState():
                     self.state = 'chest_room'
 
                 if room_type == 'trap':
-                    self.state = 'trap_room'
+                    self.state = random.choice(['mimic_room', 'spike_room'])
 
             if room_counter == 5:
                 self.state = 'room_to_boss_room'
