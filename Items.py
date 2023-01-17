@@ -26,7 +26,6 @@ class Item():
         return _copy
 
 
-
 # icons
 sword_image = pygame.image.load("Images/Sword.png")
 broad_sword_image = pygame.image.load("Images/BroadSword.png")

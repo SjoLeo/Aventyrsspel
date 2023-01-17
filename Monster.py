@@ -77,6 +77,7 @@ class Boss():
         self.vulnerable_y_coordinate = rand.randint(y + width/2 - 20*scale, y + height/2 + 20*scale)
 
 
+# boss images
 zombie_boss_image = pygame.image.load('Images/zombie_boss.png')
 archangel_boss_image = pygame.image.load("Images/Archangel.png")
 knight_boss_image = pygame.image.load("Images/Knight.png")

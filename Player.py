@@ -30,10 +30,6 @@ class Player():
         self.armour_inventory = ['Empty', 'Empty']
         self.potion_inventory = ['Empty', 'Empty']
 
-
-
-
-
     def add_item_to_inventory(self, item):
         if item.type == 'weapon':
             self.weapon_inventory[self.equipped_weapon] = item
@@ -76,7 +72,6 @@ class Player():
             self.defence += 2
             self.update_player_stats()
             self.level_up_exp += 30
-
 
     def drink_potion(self):
         if not self.potion_inventory[self.equipped_potion] == 'Empty':
