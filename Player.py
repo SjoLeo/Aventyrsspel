@@ -32,13 +32,34 @@ class Player():
 
     def add_item_to_inventory(self, item):
         if item.type == 'weapon':
-            self.weapon_inventory[self.equipped_weapon] = item
+            if self.weapon_inventory[0] == "Empty":
+                self.weapon_inventory[0] = item
+
+            elif self.weapon_inventory[1] == "Empty":
+                self.weapon_inventory[1] = item
+
+            else:
+                self.weapon_inventory[self.equipped_weapon] = item
 
         if item.type == 'armour':
-            self.armour_inventory[self.equipped_armour] = item
+            if self.armour_inventory[0] == "Empty":
+                self.armour_inventory[0] = item
+
+            elif self.armour_inventory[1] == "Empty":
+                self.armour_inventory[1] = item
+
+            else:
+                self.armour_inventory[self.equipped_armour] = item
 
         if item.type == 'potion':
-            self.potion_inventory[self.equipped_potion] = item
+            if self.potion_inventory[0] == "Empty":
+                self.potion_inventory[0] = item
+
+            elif self.potion_inventory[1] == "Empty":
+                self.potion_inventory[1] = item
+
+            else:
+                self.potion_inventory[self.equipped_potion] = item
 
     def update_player_stats(self):
         # adding strength bonus to player
