@@ -384,9 +384,9 @@ class GameState():
         show_text("glory and slaying the unholy beasts who call this crypt their home.",
                   30, 150, "white", font_alagard_medium)
 
-        show_text("Your goal is to get deep below ground to at least floor 10 and cut down",
+        show_text("Your goal is to get deep below ground and level up to level 10 ",
                   30, 210, "white", font_alagard_medium)
-        show_text("the abominable warden to escape.", 30, 240, "white", font_alagard_medium)
+        show_text("and cut down the abominable warden to escape.", 30, 240, "white", font_alagard_medium)
 
     def credits(self):
         background()
@@ -407,7 +407,7 @@ class GameState():
     def menu(self):
         global random_generated_room, room_counter, monster, monster_type, monster_x, monster_y, type_of_room
 
-        if Worldinfo.current_dungeon_floor >= 10:
+        if Player.player.lvl >= 10:
             self.state = 'menu_with_final_boss'
 
         background()
